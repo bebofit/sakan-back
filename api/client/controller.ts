@@ -1,10 +1,9 @@
 import { Response } from 'express';
 import { CREATED } from 'http-status';
 import { IRequest } from '../../Interfaces';
-
+import joi from '../../lib/joi';
 import * as clientsService from './service';
 import * as clientsValidations from './validations';
-import joi from '../../lib/joi';
 
 async function createClient(req: IRequest, res: Response): Promise<any> {
   const body = validateBody(req.body, clientsValidations.CREATE);

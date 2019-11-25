@@ -1,24 +1,16 @@
 import { Model } from 'mongoose';
-// // import { BaseRepository } from '../../common/classes';
+import { MainRepository } from '../../database/mainrepo';
 import { Client, IClient } from '../../database/models';
-// // import { DBQueryOptions } from '../../common/types';
+import { QueryParams } from '../../Interfaces';
 
-// class ClientRepository extends BaseRepository<IClient> {
-//   constructor(protected model: Model<IClient>) {
-//     super(model);
-//   }
+class ClientRepository extends MainRepository<IClient> {
+  constructor(protected model: Model<IClient>) {
+    super(model);
+  }
 
-//   // findAll(options?: DBQueryOptions): Promise<IClient[]> {
-//   //   return super.find({}, options);
-//   // }
+  findAll(options?: QueryParams): Promise<IClient[]> {
+    return super.find({}, options);
+  }
+}
 
-//   // countAll(options?: DBQueryOptions): Promise<number> {
-//   //   return super.count({}, options);
-//   // }
-// }
-
-// export default new ClientRepository(Client);
-
-const create = (body: IClient): Promise<IClient> => Client.create(body);
-
-export { create };
+export default new ClientRepository(Client);
