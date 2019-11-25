@@ -1,0 +1,69 @@
+{
+  "name": "sakan",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node server.ts",
+    "watch": "nodemon"
+  },
+  "nodemonConfig": {
+    "watch": ".",
+    "ext": "ts",
+    "ignore": [
+      "*.spec.ts"
+    ],
+    "legacyWatch": true,
+    "delay": "3",
+    "exec": "npm run start"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "npm run lint",
+      "npm run format",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "dependencies": {
+    "@hapi/joi": "^16.1.7",
+    "@types/morgan": "^1.7.37",
+    "bcrypt": "^3.0.7",
+    "cors": "^2.8.5",
+    "date-fns": "^2.7.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-async-handler": "^1.1.4",
+    "helmet": "^3.21.2",
+    "http-status": "^1.4.1",
+    "joi-objectid": "^3.0.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.7.11",
+    "mongoose-lean-virtuals": "^0.5.0",
+    "morgan": "^1.9.1"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "@types/cors": "^2.8.6",
+    "@types/dotenv": "^6.1.1",
+    "@types/express": "^4.17.2",
+    "@types/hapi__joi": "^16.0.3",
+    "@types/http-status": "^0.2.30",
+    "@types/jsonwebtoken": "^8.3.5",
+    "@types/mongoose": "^5.5.32",
+    "husky": "^3.1.0",
+    "lint-staged": "^9.4.3",
+    "nodemon": "^1.19.4",
+    "ts-node": "^8.5.2",
+    "tslint": "^5.20.1",
+    "tslint-config-airbnb": "^5.11.2",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.7.2"
+  },
+  "author": "Abdelrahman Soliman",
+  "license": "ISC"
+}
