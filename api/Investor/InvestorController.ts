@@ -2,14 +2,14 @@ import { Response } from 'express';
 import { CREATED } from 'http-status';
 import { IRequest } from '../../Interfaces';
 import joi from '../../lib/joi';
-import * as clientsService from './service';
-import * as clientsValidations from './validations';
+import * as investorService from './InvestorService';
+import * as investorValidations from './InvestorValidations';
 
-async function createClient(req: IRequest, res: Response): Promise<any> {
-  const body = validateBody(req.body, clientsValidations.CREATE);
-  const client = await clientsService.createClient(body);
+async function createInvestor(req: IRequest, res: Response): Promise<any> {
+  const body = validateBody(req.body, investorValidations.CREATE);
+  const investor = await investorService.createInvestor(body);
   res.status(CREATED).json({
-    data: client
+    data: investor
   });
 }
 
@@ -29,4 +29,4 @@ function validateBody(body: any, schema: joi.Schema): any {
   return value;
 }
 
-export { createClient };
+export { createInvestor };

@@ -1,5 +1,5 @@
 import { Model } from 'mongoose';
-import { MainRepository } from '../../database/mainrepo';
+import { MainRepository } from '../../database/MainRepo';
 import { Client, IClient } from '../../database/models';
 import { QueryParams } from '../../Interfaces';
 
