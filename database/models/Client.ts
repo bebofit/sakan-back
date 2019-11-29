@@ -1,10 +1,10 @@
 import { Schema, Document } from 'mongoose';
 // @ts-ignore
-import { User, IUser } from './user';
+import { User, IUser } from './User';
 
 const { ObjectId } = Schema.Types;
 
-interface IClient extends IUser , Document {
+interface IClient extends IUser {
   favorites?: string[];
 }
 
