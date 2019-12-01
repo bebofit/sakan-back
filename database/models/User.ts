@@ -11,17 +11,77 @@ interface IUser extends Document {
 
 const userSchema = new Schema(
   {
-    firstName: {
+    _id: Schema.Types.ObjectId,
+    type: {
       type: String,
-      required: true
+      enum : ['client', 'investor']
     },
-    lastName: {
-      type: String,
-      required: true
+    name: {
+      firstName: {
+        type: String,
+        required: true
+      },
+      lastName: {
+        type: String,
+        required: true
+      }
     },
     email: {
       type: String,
+      required: true,
+      unique: true
+    },
+    password: {
+      type: String,
       required: true
+    },
+    phoneNumber: {
+      type: String,
+      required: true,
+      unique: true
+    },
+    gender: {
+      type: String,
+      enum : ['male', 'female']
+    },
+    birthDate: {
+      type: Date
+    },
+    governmentId: {
+      type: String,
+      required: true
+    },
+    isVerified: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    isDeleted: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    profileStatus: {
+      type: Number,
+      default: 0
+    },
+    profilePic: {
+      type: String
+    },
+    resetPasswordToken: {
+      type: String
+    },
+    verificationToken:{
+      type: String
+    },
+    wallet: {
+      _id: Schema.Types.ObjectId,
+      value: {
+        type: Number,
+        required: true,
+        default: 0
+      },
+      currency: String
     }
   },
   {

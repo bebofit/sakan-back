@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import errorHandler from 'express-async-handler';
-import * as controller from './ClientController';
+import * as clientController from './ClientController';
 
 const router = Router();
 
-router.post('/', errorHandler(controller.createClient));
+router.post('/', errorHandler(clientController.createClient));
 
 export default router;

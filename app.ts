@@ -4,6 +4,7 @@ import { INTERNAL_SERVER_ERROR, UNPROCESSABLE_ENTITY } from 'http-status';
 import logger from 'morgan';
 import routes from './api';
 import { IRequest } from './Interfaces';
+require('dotenv').config();
 
 const app = express();
 //configure app
