@@ -27,9 +27,13 @@ app.use((err: any, req: IRequest, res: Response, next: NextFunction) => {
   console.log('qaz');
 
   if (process.env.NODE_ENV !== 'production') {
+    console.log('env error');
+    
     console.error(err);
   }
   if (err.validationError) {
+    console.log('validation error');
+    
     return res.status(UNPROCESSABLE_ENTITY).json(err);
   }
   const statusCode = err.statusCode || INTERNAL_SERVER_ERROR;

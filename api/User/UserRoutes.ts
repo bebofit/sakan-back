@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import errorHandler from 'express-async-handler';
-import * as investorController from './InvestorController';
+import * as userController from './UserController';
 
 const router = Router();
 
-router.post('/', errorHandler(investorController.createInvestor));
+router.post('/', errorHandler(userController.createUser));
 
 export default router;

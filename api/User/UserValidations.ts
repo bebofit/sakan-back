@@ -39,8 +39,7 @@ const CREATE = joi.object({
     .max(14)
     .alphanum(),
     profileStatus: joi
-    .number()
-    .positive(),
+    .number(),
     wallet: joi
     .object({
       value: joi

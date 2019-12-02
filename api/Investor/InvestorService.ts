@@ -1,4 +1,4 @@
-import { IClient } from '../../database/models';
+import { IInvestor } from '../../database/models';
 import repository from './InvestorRepository';
 
 const createInvestor = (body: IInvestor): Promise<IInvestor> =>

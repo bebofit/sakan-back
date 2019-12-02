@@ -5,11 +5,11 @@ import { User, IUser } from './User';
 const { ObjectId } = Schema.Types;
 
 interface IClient extends IUser {
-  favorites?: string[];
+  favProps?: string[];
 }
 
 const clientSchema = new Schema({
-  favorites: [
+  favProps: [
     {
       type: ObjectId,
       ref: 'Property'

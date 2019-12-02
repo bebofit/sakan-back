@@ -8,6 +8,11 @@ class ClientRepository extends MainRepository<IClient> {
     super(model);
   }
 
+  create(body: any): Promise<IClient> {
+    console.log('create client model');
+    return super.create(body);
+  }
+
   findAll(options?: QueryParams): Promise<IClient[]> {
     return super.find({}, options);
   }

@@ -4,27 +4,38 @@ import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
 
 interface IUser extends Document {
   _id: string;
+  userType: string;
   firstName: string;
   lastName: string;
   email: string;
+  password: string;
+  phoneNumber: string;
+  gender?: string;
+  birthDate?: Date;
+  governmentId: string;
+  isVerified: boolean;
+  isDeleted?: boolean;
+  profileStatus: number;
+  profilePic?: string;
+  resetPasswordToken?: string;
+  verificationToken?: string;
+  wallet: object;
 }
 
 const userSchema = new Schema(
   {
-    _id: Schema.Types.ObjectId,
-    type: {
+    // _id: Schema.Types.ObjectId,
+    userType: {
       type: String,
-      enum : ['client', 'investor']
+      enum: ['client', 'investor']
     },
-    name: {
-      firstName: {
-        type: String,
-        required: true
-      },
-      lastName: {
-        type: String,
-        required: true
-      }
+    firstName: {
+      type: String,
+      required: true
+    },
+    lastName: {
+      type: String,
+      required: true
     },
     email: {
       type: String,
@@ -42,7 +53,7 @@ const userSchema = new Schema(
     },
     gender: {
       type: String,
-      enum : ['male', 'female']
+      enum: ['male', 'female']
     },
     birthDate: {
       type: Date
@@ -53,12 +64,10 @@ const userSchema = new Schema(
     },
     isVerified: {
       type: Boolean,
-      required: true,
       default: false
     },
     isDeleted: {
       type: Boolean,
-      required: true,
       default: false
     },
     profileStatus: {
@@ -71,7 +80,7 @@ const userSchema = new Schema(
     resetPasswordToken: {
       type: String
     },
-    verificationToken:{
+    verificationToken: {
       type: String
     },
     wallet: {
@@ -81,13 +90,17 @@ const userSchema = new Schema(
         required: true,
         default: 0
       },
-      currency: String
+      currency: {
+        type: String,
+        default: 'EGP'
+      }
     }
   },
   {
     timestamps: true,
     toJSON: { virtuals: true },
-    discriminatorKey: 'type'
+    discriminatorKey: 'type',
+    collection: 'users'
   }
 );
 
@@ -96,7 +109,21 @@ userSchema.plugin(mongooseLeanVirtuals);
 userSchema.index({
   firstName: 'text',
   lastName: 'text',
-  email: 'text'
+  email: 'text',
+  password: 'text',
+  userType: 'text',
+  phoneNumber: 'text',
+  gender: 'text',
+  birthDate: 'date',
+  governmentId: 'text',
+  isVerified: 'text',
+  isDeleted: 'text',
+  profileStatus: 'number',
+  profilePic: 'text',
+  resetPasswordToken: 'text',
+  verificationToken: 'text',
+  wallet: 'object'
+
 });
 
 const User = model<IUser>('User', userSchema);

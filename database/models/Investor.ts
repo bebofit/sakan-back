@@ -5,11 +5,11 @@ import { User, IUser } from './User';
 const { ObjectId } = Schema.Types;
 
 interface IInvestor extends IUser {
-  favorites?: string[];
+  ownedProps?: string[];
 }
 
 const investorSchema = new Schema({
-  favorites: [
+  ownedProps: [
     {
       type: ObjectId,
       ref: 'Property'

@@ -2,16 +2,16 @@ import { Response } from 'express';
 import { CREATED } from 'http-status';
 import { IRequest } from '../../Interfaces';
 import joi from '../../lib/joi';
-import * as clientsService from './ClientService';
-import * as clientsValidations from './ClientValidations';
+import * as userService from './UserService';
+import * as userValidations from './UserValidations';
 
-async function createClient(req: IRequest, res: Response): Promise<any> {
-  console.log('Creating Client...');
+async function createUser(req: IRequest, res: Response): Promise<any> {
+  console.log('Creating User...');  
   
-  // const body = validateBody(req.body, clientsValidations.CREATE);
-  const client = await clientsService.createClient(req.body);
+  const body = validateBody(req.body, userValidations.CREATE);
+  const user = await userService.createUser(body);
   res.status(CREATED).json({
-    data: client
+    data: user
   });
 }
 
@@ -31,4 +31,4 @@ function validateBody(body: any, schema: joi.Schema): any {
   return value;
 }
 
-export { createClient };
+export { createUser };

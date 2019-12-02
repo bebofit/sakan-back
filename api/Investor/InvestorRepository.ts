@@ -8,6 +8,11 @@ class InvestorRepository extends MainRepository<IInvestor> {
     super(model);
   }
 
+  create(body: any): Promise<IInvestor> {
+    console.log('create investor model');
+    return super.create(body);
+  }
+
   findAll(options?: QueryParams): Promise<IInvestor[]> {
     return super.find({}, options);
   }
