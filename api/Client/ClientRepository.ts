@@ -16,6 +16,20 @@ class ClientRepository extends MainRepository<IClient> {
   findAll(options?: QueryParams): Promise<IClient[]> {
     return super.find({}, options);
   }
+  
+
+  findById(id: string): Promise<IClient> {
+    return super.findById(id);
+  }
+
+  findByIdAndUpdate(id: string, body: IClient): Promise<IClient> {
+    return super.findByIdAndUpdate(id, body);
+  }
+
+  softDeleteById(id: string): Promise<boolean> {
+    return super.softDeleteById(id);
+  }
+
 }
 
 export default new ClientRepository(Client);

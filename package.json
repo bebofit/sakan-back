@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node server.ts",
-    "watch": "nodemon",
+    "watch": "ts-node-dev --respawn --transpileOnly --clear --debounce --exit-child server.ts",
     "lint": "",
     "format": ""
   },
@@ -61,6 +61,7 @@
     "lint-staged": "^9.4.3",
     "nodemon": "^1.19.4",
     "ts-node": "^8.5.2",
+    "ts-node-dev": "^1.0.0-pre.44",
     "tslint": "^5.20.1",
     "tslint-config-airbnb": "^5.11.2",
     "tslint-config-prettier": "^1.18.0",

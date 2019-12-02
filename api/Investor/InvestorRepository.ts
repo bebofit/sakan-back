@@ -16,6 +16,20 @@ class InvestorRepository extends MainRepository<IInvestor> {
   findAll(options?: QueryParams): Promise<IInvestor[]> {
     return super.find({}, options);
   }
+
+  findById(id: string): Promise<IInvestor> {
+    return super.findById(id);
+  }
+
+  findByIdAndUpdate(id: string, body: IInvestor): Promise<IInvestor> {
+    return super.findByIdAndUpdate(id, body);
+  }
+
+  softDeleteById(id: string): Promise<boolean> {
+    return super.softDeleteById(id);
+  }
+
+
 }
 
 export default new InvestorRepository(Investor);

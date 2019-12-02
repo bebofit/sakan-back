@@ -1,32 +1,61 @@
 import { Response } from 'express';
-import { CREATED } from 'http-status';
+import * as httpStatus from 'http-status';
 import { IRequest } from '../../Interfaces';
 import joi from '../../lib/joi';
-import * as investorService from './InvestorService';
 import * as investorValidations from './InvestorValidations';
+import * as userValidations from '../User/UserValidations';
+import investorService from './InvestorService';
+import validation from '../Utils/Validation';
 
-async function createInvestor(req: IRequest, res: Response): Promise<any> {
-  // const body = validateBody(req.body, investorValidations.CREATE);
-  const investor = await investorService.createInvestor(req.body);
-  res.status(CREATED).json({
-    data: investor
-  });
-}
+class InvestorContoller {
 
-function validateBody(body: any, schema: joi.Schema): any {
-  const { error: errors, value } = schema.validate(body, {
-    stripUnknown: true
-  });
-  if (errors) {
-    console.log('validation errors henaa');
-
-    throw {
-      errors,
-      type: 'REQUEST_BODY',
-      validationError: true
-    };
+  constructor() {
   }
-  return value;
+
+  async createInvestor(req: IRequest, res: Response): Promise<any> {
+    console.log('Creating Investor...');
+    let body = validation.validateBody(req.body, investorValidations.CREATE);
+    body = validation.validateBody(req.body, userValidations.CREATE);
+    const investor = await investorService.createInvestor(body);
+    res.status(httpStatus.CREATED).json({
+      data: investor,
+      message: "Investor Created Successfully"
+    });
+  }
+
+  async getAllInvestors(req: IRequest, res: Response): Promise<any> {
+    let investors = await investorService.getAllInvestors();
+    res.status(httpStatus.OK).json({
+      data: investors,
+      message: "Investors Found"
+    });
+  }
+
+  async getInvestor(req: IRequest, res: Response): Promise<any> {
+    let investor = await investorService.getInvestor(req.params.id);
+    res.status(httpStatus.OK).json({
+      data: investor,
+      message: "Investor Found"
+    });
+  }
+
+  async updateInvestor(req: IRequest, res: Response): Promise<any> {
+    let body = validation.validateBody(req.body, investorValidations.CREATE);
+    body = validation.validateBody(req.body, userValidations.CREATE);
+    let investor = await investorService.updateInvestor(req.params.id, body);
+    res.status(httpStatus.OK).json({
+      data: investor,
+      message: "Investor Data Updated Successfully"
+    });
+  }
+
+  async deleteInvestor(req: IRequest, res: Response): Promise<any> {
+    let investor = await investorService.deleteInvestor(req.params.id);
+    res.status(httpStatus.OK).json({
+      data: investor,
+      message: "Investor Deleted Successfully"
+    });
+  }
 }
 
-export { createInvestor };
+export default new InvestorContoller();

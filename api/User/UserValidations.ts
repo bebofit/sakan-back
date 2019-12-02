@@ -15,39 +15,39 @@ const CREATE = joi.object({
     .email()
     .lowercase()
     .required(),
-    password: joi
+  password: joi
     .string()
     .required()
     .min(8),
-    userType: joi
+  userType: joi
     .string()
     .required()
     .valid('client', 'investor'),
-    phoneNumber: joi
+  phoneNumber: joi
     .string()
     .required()
     .regex(/[0-9]+/)
     .min(11)
     .max(14),
-    gender: joi
+  gender: joi
     .string()
     .valid('male', 'female'),
-    birthDate: joi.date(),
-    governmentId: joi
+  birthDate: joi.date(),
+  governmentId: joi
     .string()
     .required()
     .max(14)
     .alphanum(),
-    profileStatus: joi
+  profileStatus: joi
     .number(),
-    wallet: joi
+  wallet: joi
     .object({
       value: joi
-      .number()
-      .positive()
-      .required(),
+        .number()
+        .positive()
+        .required(),
       currency: joi
-      .string()
+        .string()
     })
 });
 
