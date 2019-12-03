@@ -9,7 +9,6 @@ class InvestorRepository extends MainRepository<IInvestor> {
   }
 
   create(body: any): Promise<IInvestor> {
-    console.log('create investor model');
     return super.create(body);
   }
 
