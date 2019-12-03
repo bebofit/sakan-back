@@ -78,13 +78,14 @@ const userSchema = new Schema(
       type: String
     },
     resetPasswordToken: {
-      type: String
+      type: String,
+      default: null
     },
     verificationToken: {
-      type: String
+      type: String,
+      default: null
     },
     wallet: {
-      _id: Schema.Types.ObjectId,
       value: {
         type: Number,
         required: true,

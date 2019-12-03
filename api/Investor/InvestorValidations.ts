@@ -4,7 +4,6 @@ const CREATE = joi.object({
   ownedProps: joi
   .array()
   .items((joi as any).objectId())
-  .required()
 });
 
 const UPDATE = joi.object({

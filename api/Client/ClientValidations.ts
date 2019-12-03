@@ -4,7 +4,6 @@ const CREATE = joi.object({
   favProps: joi
   .array()
   .items((joi as any).objectId())
-  .required()
 });
 
 const UPDATE = joi.object({
