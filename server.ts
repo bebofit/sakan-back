@@ -32,10 +32,10 @@ function onError(error: any): void {
     server.on('error', onError);
     server.on('listening', () => console.log(`started on port ${PORT}`));
     //handle closing of server
-    process.on('SIGHUP', stopDB);
-    process.on('SIGTERM', stopDB);
-    process.on('SIGINT', stopDB);
-    process.once('SIGUSR2', stopDB);
+    // process.on('SIGHUP', stopDB);
+    // process.on('SIGTERM', stopDB);
+    // process.on('SIGINT', stopDB);
+    // process.once('SIGUSR2', stopDB);
   } catch (err) {
     console.error(err);
     process.exit(1);

@@ -4,12 +4,12 @@ import { User, IUser } from './User';
 
 const { ObjectId } = Schema.Types;
 
-interface IClient extends IUser {
-  favProps?: string[];
+interface IInvestor extends IUser {
+  ownedProps?: string[];
 }
 
-const clientSchema = new Schema({
-  favProps: [
+const investorSchema = new Schema({
+  ownedProps: [
     {
       type: ObjectId,
       ref: 'Property'
@@ -18,6 +18,6 @@ const clientSchema = new Schema({
 });
 
 // tslint:disable-next-line: variable-name
-const Client = User.discriminator<IClient>('Client', clientSchema);
+const Investor = User.discriminator<IInvestor>('Investor', investorSchema);
 
-export { Client, IClient };
+export { Investor, IInvestor };

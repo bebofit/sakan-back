@@ -23,6 +23,8 @@ abstract class MainRepository<modelType extends Document> {
   }
 
   create(body: any): Promise<modelType> {
+    console.log('inside super repo', body);
+    
     return this.model.create(body);
   }
 

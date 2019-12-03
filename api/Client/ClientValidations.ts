@@ -1,20 +1,9 @@
 import joi from '../../lib/joi';
 
 const CREATE = joi.object({
-  firstName: joi
-    .string()
-    .trim()
-    .required(),
-  lastName: joi
-    .string()
-    .trim()
-    .required(),
-  email: joi
-    .string()
-    .trim()
-    .email()
-    .lowercase()
-    .required()
+  favProps: joi
+  .array()
+  .items((joi as any).objectId())
 });
 
 const UPDATE = joi.object({

@@ -2,7 +2,7 @@ import mongoose, { Mongoose } from 'mongoose';
 
 const startDB = (): Promise<Mongoose> =>
   mongoose.connect(
-    `mongodb+srv://nourhany:Nourhany@cluster0-ifrtn.mongodb.net/sakanDB?retryWrites=true`,
+    process.env.DB_CONNECTION_STRING,
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
