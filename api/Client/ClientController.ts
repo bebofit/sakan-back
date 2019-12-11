@@ -1,13 +1,12 @@
 import { Response } from 'express';
 import * as httpStatus from 'http-status';
 import { IRequest } from '../../Interfaces';
-import joi from '../../lib/joi';
 import * as clientsValidations from './ClientValidations';
 import * as userValidations from '../User/UserValidations';
 import clientService from './ClientService';
 import validation from '../Utils/Validation';
 
-class ClientContoller {
+class ClientController {
 
   constructor() {
   }
@@ -58,4 +57,4 @@ class ClientContoller {
   }
 }
 
-export default new ClientContoller();
+export default new ClientController();

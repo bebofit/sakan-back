@@ -7,7 +7,7 @@ import * as userValidations from '../User/UserValidations';
 import investorService from './InvestorService';
 import validation from '../Utils/Validation';
 
-class InvestorContoller {
+class InvestorController {
 
   constructor() {
   }
@@ -58,4 +58,4 @@ class InvestorContoller {
   }
 }
 
-export default new InvestorContoller();
+export default new InvestorController();

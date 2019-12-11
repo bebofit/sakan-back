@@ -1,6 +1,7 @@
 import { Document, model, Schema } from 'mongoose';
 // @ts-ignore
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
+import { ObjectId } from 'bson';
 
 interface IProperty extends Document {
   _id: string;
@@ -8,10 +9,10 @@ interface IProperty extends Document {
   address: object;
   title: string;
   description?: string;
-  bedroomNum: number;
-  bathroomNum: number;
+  bedroomNum: string;
+  bathroomNum: string;
   owner: string;
-  unitArea: number;
+  unitArea: string;
   rentValue: number;
   buyValue: number;
   geospace?: string;
@@ -24,74 +25,82 @@ const propertySchema = new Schema(
     // _id: Schema.Types.ObjectId,
     propType: {
       type: String,
-      enum: ['client', 'investor']
-    },
-    firstName: {
-      type: String,
-      required: true
-    },
-    lastName: {
-      type: String,
-      required: true
-    },
-    email: {
-      type: String,
       required: true,
-      unique: true
+      enum: ['apartment', 'duplex', 'penthouse', 'villa', 'townhouse']
     },
-    password: {
-      type: String,
-      required: true
-    },
-    phoneNumber: {
-      type: String,
-      required: true,
-      unique: true
-    },
-    gender: {
-      type: String,
-      enum: ['male', 'female']
-    },
-    birthDate: {
-      type: Date
-    },
-    governmentId: {
-      type: String,
-      required: true
-    },
-    isVerified: {
-      type: Boolean,
-      default: false
-    },
-    isDeleted: {
-      type: Boolean,
-      default: false
-    },
-    profileStatus: {
-      type: Number,
-      default: 0
-    },
-    profilePic: {
-      type: String
-    },
-    resetPasswordToken: {
-      type: String,
-      default: null
-    },
-    verificationToken: {
-      type: String,
-      default: null
-    },
-    wallet: {
-      value: {
-        type: Number,
-        required: true,
-        default: 0
-      },
-      currency: {
+    address: {
+      unit: {
         type: String,
-        default: 'EGP'
+        required: true
+      },
+      street: {
+        type: String,
+        required: true
+      },
+      district: {
+        type: String,
+        default: null
+      },
+      city: {
+        type: String,
+        required: true
+      },
+      region: {
+        type: String,
+        default: null
+      },
+      country: {
+        type: String,
+        required: true
       }
+    },
+    title: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      default: null
+    },
+    bedroomNum: {
+      type: String,
+      required: true,
+      default: '0'
+    },
+    bathroomNum: {
+      type: String,
+      required: true,
+      default: '0'
+    },
+    owner: {
+      type: ObjectId,
+      required: true,
+      ref: 'User'
+    },
+    unitArea: {
+      type: String,
+      required: true
+    },
+    rentValue: {
+      type: Number,
+      required: function() { return this.buyValue === null; } // Only required if buyValue equals null
+    },
+    buyValue: {
+      type: String,
+      required: function() { return this.rentValue === null; } // Only required if rentValue equals null
+    },
+    geospace: {
+      type: String,
+      default: null
+    },
+    photos: {
+      type: String,
+      default: null
+    },
+    isApproved: {
+      type: Boolean,
+      required: true,
+      default: false
     }
   },
   {
@@ -104,23 +113,19 @@ const propertySchema = new Schema(
 propertySchema.plugin(mongooseLeanVirtuals);
 
 propertySchema.index({
-  firstName: 'text',
-  lastName: 'text',
-  email: 'text',
-  password: 'text',
-  userType: 'text',
-  phoneNumber: 'text',
-  gender: 'text',
-  birthDate: 'date',
-  governmentId: 'text',
-  isVerified: 'text',
-  isDeleted: 'text',
-  profileStatus: 'number',
-  profilePic: 'text',
-  resetPasswordToken: 'text',
-  verificationToken: 'text',
-  wallet: 'object'
-
+  propType: 'text',
+  address: 'object',
+  title: 'text',
+  description: 'text',
+  bedroomNum: 'text',
+  bathroomNum: 'text',
+  owner: 'text',
+  unitArea: 'text',
+  rentValue: 'number',
+  buyValue: 'number',
+  geospace: 'text',
+  photos: 'text',
+  isApproved: 'boolean'
 });
 
 const Property = model<IProperty>('Property', propertySchema);

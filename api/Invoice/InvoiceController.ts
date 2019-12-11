@@ -7,7 +7,7 @@ import * as userValidations from '../User/UserValidations';
 import invoiceService from './InvoiceService';
 import validation from '../Utils/Validation';
 
-class InvoiceContoller {
+class InvoiceController {
 
   constructor() {
   }
@@ -58,4 +58,4 @@ class InvoiceContoller {
   }
 }
 
-export default new InvoiceContoller();
+export default new InvoiceController();

@@ -7,7 +7,7 @@ import * as userValidations from '../User/UserValidations';
 import propertyService from './PropertyService';
 import validation from '../Utils/Validation';
 
-class PropertyContoller {
+class PropertyController {
 
   constructor() {
   }
@@ -58,4 +58,4 @@ class PropertyContoller {
   }
 }
 
-export default new PropertyContoller();
+export default new PropertyController();

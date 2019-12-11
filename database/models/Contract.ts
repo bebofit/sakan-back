@@ -2,17 +2,16 @@ import { Document, model, Schema } from 'mongoose';
 // @ts-ignore
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
 
-interface IInvoice extends Document {
+interface IContract extends Document {
   _id: string;
   property: string;
-  InvoiceNum: number;
   dueDate: Date;
   value: number;
   penaltyValue: number;
   isPaid: boolean;
 }
 
-const invoiceSchema = new Schema(
+const contractSchema = new Schema(
   {
     // _id: Schema.Types.ObjectId,
     property: {
@@ -90,15 +89,13 @@ const invoiceSchema = new Schema(
   {
     timestamps: true,
     toJSON: { virtuals: true },
-    collection: 'invoices'
+    collection: 'contracts'
   }
 );
 
-invoiceSchema.plugin(mongooseLeanVirtuals);
+contractSchema.plugin(mongooseLeanVirtuals);
 
-invoiceSchema.index({
-  invoiceSchema: 'text',
-  lastName: 'text',
+contractSchema.index({
   email: 'text',
   password: 'text',
   userType: 'text',
@@ -116,6 +113,6 @@ invoiceSchema.index({
 
 });
 
-const Invoice = model<IInvoice>('Invoice', invoiceSchema);
+const Contract = model<IContract>('Contract', contractSchema);
 
-export { Invoice, IInvoice };
+export { Contract, IContract };
