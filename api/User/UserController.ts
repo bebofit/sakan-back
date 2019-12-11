@@ -1,34 +1,24 @@
-import { Response } from 'express';
+import {Response} from 'express';
 import * as httpStatus from 'http-status';
 import { IRequest } from '../../Interfaces';
 import joi from '../../lib/joi';
 import * as userService from './UserService';
-import * as userValidations from './UserValidations';
+import jwt from 'jsonwebtoken';
+import { promises as fs } from 'fs';
+import path from 'path';
 
-// async function createUser(req: IRequest, res: Response): Promise<any> {
-//   console.log('Creating User...');  
-  
-//   const body = validateBody(req.body, userValidations.CREATE);
-//   const user = await userService.createUser(body);
-//   res.status(httpStatus.).json({
-//     data: user
-//   });
-// }
 
-// function validateBody(body: any, schema: joi.Schema): any {
-//   const { error: errors, value } = schema.validate(body, {
-//     stripUnknown: true
-//   });
-//   if (errors) {
-//     console.log('validation errors henaa');
+class UserController {
+    constructor() {
+    }
 
-//     throw {
-//       errors,
-//       type: 'REQUEST_BODY',
-//       validationError: true
-//     };
-//   }
-//   return value;
-// }
+    async login(request: IRequest, response: Response): Promise<any>{
+        let privateKey = await fs.readFile(path.join(__dirname, '../../keys/jwtRS256.key'));
+        let token = await jwt.sign({ foo: 'bar' }, privateKey, { algorithm: 'RS256'});
+        let publicKey = await fs.readFile(path.join(__dirname, '../../keys/jwtRS256.key.pub'));
+        let decoded = await jwt.verify(token, publicKey);
+        return response.send(decoded);
+    }
+}
 
-// export { createUser };
+export default new UserController();

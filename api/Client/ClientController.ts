@@ -7,7 +7,7 @@ import * as userValidations from '../User/UserValidations';
 import clientService from './ClientService';
 import validation from '../Utils/Validation';
 
-class ClientContoller {
+class ClientController {
 
   constructor() {
   }
@@ -58,4 +58,4 @@ class ClientContoller {
   }
 }
 
-export default new ClientContoller();
+export default new ClientController();
