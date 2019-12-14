@@ -1,90 +1,71 @@
 import { Document, model, Schema } from 'mongoose';
 // @ts-ignore
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
+import { ObjectId } from 'bson';
 
 interface IContract extends Document {
   _id: string;
+  contractType: string;
+  duration: Number;
   property: string;
-  dueDate: Date;
-  value: number;
-  penaltyValue: number;
-  isPaid: boolean;
+  owner: string;
+  client: string;
+  invoice: string[];
 }
 
 const contractSchema = new Schema(
   {
     // _id: Schema.Types.ObjectId,
-    property: {
+    contractType: {
       type: String,
-      ref: 'Contract'
-    },
-    firstName: {
-      type: String,
+      enum: ['buy', 'rent'],
       required: true
     },
-    lastName: {
-      type: String,
-      required: true
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true
-    },
-    password: {
-      type: String,
-      required: true
-    },
-    phoneNumber: {
-      type: String,
-      required: true,
-      unique: true
-    },
-    gender: {
-      type: String,
-      enum: ['male', 'female']
-    },
-    birthDate: {
-      type: Date
-    },
-    governmentId: {
-      type: String,
-      required: true
-    },
-    isVerified: {
-      type: Boolean,
-      default: false
-    },
-    isDeleted: {
-      type: Boolean,
-      default: false
-    },
-    profileStatus: {
+    duration: {
       type: Number,
-      default: 0
+      required: true,
+      default: 365
     },
-    profilePic: {
-      type: String
+    property: {
+      type: ObjectId,
+      ref: 'Property',
+      required: true
     },
-    resetPasswordToken: {
-      type: String,
-      default: null
+    owner: {
+      type: ObjectId,
+      ref: 'User',
+      required: true
     },
-    verificationToken: {
-      type: String,
-      default: null
+    client: {
+      type: ObjectId,
+      ref: 'User',
+      required: true
     },
-    wallet: {
+    invoice: [
+      {
+      invoiceNumber: {
+        type: Number,
+        required: true
+      },
+      dueDate: {
+        type: Date,
+        required: true
+      },
+      isPaid: {
+        type: Boolean,
+        required: true,
+        default: false
+      },
       value: {
         type: Number,
-        required: true,
-        default: 0
+        required: true
       },
-      currency: {
-        type: String,
-        default: 'EGP'
+      penaltyValue: {
+        type: Number,
+        default: 0
       }
     }
+  ]
   },
   {
     timestamps: true,
@@ -96,21 +77,12 @@ const contractSchema = new Schema(
 contractSchema.plugin(mongooseLeanVirtuals);
 
 contractSchema.index({
-  email: 'text',
-  password: 'text',
-  userType: 'text',
-  phoneNumber: 'text',
-  gender: 'text',
-  birthDate: 'date',
-  governmentId: 'text',
-  isVerified: 'text',
-  isDeleted: 'text',
-  profileStatus: 'number',
-  profilePic: 'text',
-  resetPasswordToken: 'text',
-  verificationToken: 'text',
-  wallet: 'object'
-
+  contractType: 'text',
+  duration: 'number',
+  property: 'text',
+  owner: 'text',
+  client: 'text',
+  invoice: 'object'
 });
 
 const Contract = model<IContract>('Contract', contractSchema);
