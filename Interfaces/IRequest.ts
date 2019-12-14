@@ -6,4 +6,5 @@ export interface IRequest extends Request {
     isAdmin?: boolean;
     isSuperAdmin?: boolean;
   };
+  user?: object;
 }

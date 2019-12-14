@@ -7,8 +7,6 @@ class Validation {
             stripUnknown: true
         });
         if (errors) {
-            console.log('validation errors henaa');
-
             throw {
                 errors,
                 type: 'REQUEST_BODY',
