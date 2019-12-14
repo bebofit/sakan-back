@@ -113,19 +113,8 @@ const propertySchema = new Schema(
 propertySchema.plugin(mongooseLeanVirtuals);
 
 propertySchema.index({
-  propType: 'text',
   address: 'object',
   title: 'text',
-  description: 'text',
-  bedroomNum: 'text',
-  bathroomNum: 'text',
-  owner: 'text',
-  unitArea: 'text',
-  rentValue: 'number',
-  buyValue: 'number',
-  geospace: 'text',
-  photos: 'text',
-  isApproved: 'boolean'
 });
 
 const Property = model<IProperty>('Property', propertySchema);

@@ -110,21 +110,7 @@ userSchema.plugin(mongooseLeanVirtuals);
 userSchema.index({
   firstName: 'text',
   lastName: 'text',
-  email: 'text',
-  password: 'text',
-  userType: 'text',
-  phoneNumber: 'text',
-  gender: 'text',
-  birthDate: 'date',
-  governmentId: 'text',
-  isVerified: 'text',
-  isDeleted: 'text',
-  profileStatus: 'number',
-  profilePic: 'text',
-  resetPasswordToken: 'text',
-  verificationToken: 'text',
-  wallet: 'object'
-
+  email: 'text'
 });
 
 const User = model<IUser>('User', userSchema);

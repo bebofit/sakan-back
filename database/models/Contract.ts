@@ -1,7 +1,6 @@
 import { Document, model, Schema } from 'mongoose';
 // @ts-ignore
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
-import { ObjectId } from 'bson';
 
 interface IContract extends Document {
   _id: string;
@@ -12,6 +11,39 @@ interface IContract extends Document {
   client: string;
   invoice: string[];
 }
+
+interface Iinvoice extends Document {
+  _id: string;
+  invoicNumber: number;
+  dueDate: Date;
+  isPaid: boolean;
+  value: number;
+  penaltyValue: number;
+}
+
+const invoiceSchema = new Schema({
+  invoiceNumber: {
+    type: Number,
+    required: true
+  },
+  dueDate: {
+    type: Date,
+    required: true
+  },
+  isPaid: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  value: {
+    type: Number,
+    required: true
+  },
+  penaltyValue: {
+    type: Number,
+    default: 0
+  }
+})
 
 const contractSchema = new Schema(
   {
@@ -27,45 +59,21 @@ const contractSchema = new Schema(
       default: 365
     },
     property: {
-      type: ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'Property',
       required: true
     },
     owner: {
-      type: ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'User',
       required: true
     },
     client: {
-      type: ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'User',
       required: true
     },
-    invoice: [
-      {
-      invoiceNumber: {
-        type: Number,
-        required: true
-      },
-      dueDate: {
-        type: Date,
-        required: true
-      },
-      isPaid: {
-        type: Boolean,
-        required: true,
-        default: false
-      },
-      value: {
-        type: Number,
-        required: true
-      },
-      penaltyValue: {
-        type: Number,
-        default: 0
-      }
-    }
-  ]
+    invoice: [invoiceSchema]
   },
   {
     timestamps: true,
@@ -77,14 +85,9 @@ const contractSchema = new Schema(
 contractSchema.plugin(mongooseLeanVirtuals);
 
 contractSchema.index({
-  contractType: 'text',
-  duration: 'number',
-  property: 'text',
-  owner: 'text',
-  client: 'text',
-  invoice: 'object'
+  contractType: 'text'
 });
 
 const Contract = model<IContract>('Contract', contractSchema);
 
-export { Contract, IContract };
+export { Contract, IContract, Iinvoice };
