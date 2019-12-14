@@ -12,7 +12,7 @@ interface IContract extends Document {
   invoice: string[];
 }
 
-interface Iinvoice extends Document {
+interface IInvoice extends Document {
   _id: string;
   invoicNumber: number;
   dueDate: Date;
@@ -90,4 +90,4 @@ contractSchema.index({
 
 const Contract = model<IContract>('Contract', contractSchema);
 
-export { Contract, IContract, Iinvoice };
+export { Contract, IContract, IInvoice };

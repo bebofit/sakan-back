@@ -28,6 +28,7 @@ class ContractRepository extends MainRepository<IContract> {
     return super.softDeleteById(id);
   }
 
+
 }
 
 export default new ContractRepository(Contract);
