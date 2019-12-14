@@ -1,9 +1,11 @@
 import { Router } from 'express';
 import errorHandler from 'express-async-handler';
-import * as userController from './UserController';
+import userController from './UserController';
+import isAuthenticated from "../../middleware/isAuthenticated";
 
 const router = Router();
 
-// router.post('/', errorHandler(userController.createUser));
+router.use([isAuthenticated]);
+router.post('/login', errorHandler(userController.login));
 
 export default router;
