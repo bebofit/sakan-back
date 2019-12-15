@@ -1,7 +1,27 @@
 import { IUser } from '../../database/models';
-import repository from './UserRepository';
+import clientRepository from '../Client/ClientRepository';
+import investorRepository from '../Investor/InvestorRepository';
 
-const createUser = (body: IUser): Promise<IUser> =>
-  repository.create(body);
+class UserService {
 
-export { createUser };
+  async createUser(body: IUser): Promise<IUser> {
+    let newUser;
+    //check if user is client or investor
+    switch (body.userType) {
+      case 'client': {
+        newUser = clientRepository.create(body);
+        break;
+      }
+      case 'investor': {
+        newUser = investorRepository.create(body);
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+    return newUser;
+  }
+}
+
+export default new UserService();

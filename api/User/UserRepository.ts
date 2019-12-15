@@ -9,7 +9,6 @@ class UserRepository extends MainRepository<IUser> {
   }
 
   create(body: any): Promise<IUser> {
-    console.log('create user model');
     return super.create(body);
   }
 

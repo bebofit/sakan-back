@@ -5,20 +5,20 @@ import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
 interface IContract extends Document {
   _id: string;
   contractType: string;
-  duration: Number;
-  property: string;
-  owner: string;
-  client: string;
-  invoice: string[];
+  duration: number;
+  propertyId: string;
+  ownerId: string;
+  clientId: string;
+  invoice: object[];
 }
 
 interface IInvoice extends Document {
   _id: string;
-  invoicNumber: number;
+  invoiceNumber: number;
   dueDate: Date;
   isPaid: boolean;
   value: number;
-  penaltyValue: number;
+  penaltyValue?: number;
 }
 
 const invoiceSchema = new Schema({
@@ -58,17 +58,17 @@ const contractSchema = new Schema(
       required: true,
       default: 365
     },
-    property: {
+    propertyId: {
       type: Schema.Types.ObjectId,
       ref: 'Property',
       required: true
     },
-    owner: {
+    ownerId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true
     },
-    client: {
+    clientId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true

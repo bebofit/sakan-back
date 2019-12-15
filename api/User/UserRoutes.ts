@@ -5,7 +5,8 @@ import isAuthenticated from "../../middleware/isAuthenticated";
 
 const router = Router();
 
-router.use([isAuthenticated]);
-router.post('/login', errorHandler(userController.login));
+// router.use([isAuthenticated]);
+router.post('/signup', errorHandler(userController.signup));
+// router.post('/login', errorHandler(userController.login));
 
 export default router;

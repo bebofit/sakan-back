@@ -2,7 +2,13 @@ import { Document, model, Schema } from 'mongoose';
 // @ts-ignore
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
 
-interface IProperty extends Document {
+interface IAddPropertyRequest extends Document {
+  _id: string;
+  property: object;
+  isApproved: boolean;
+}
+
+interface IPendingProperty extends Document {
   _id: string;
   propType: string;
   address: object;
@@ -16,10 +22,9 @@ interface IProperty extends Document {
   buyValue: number;
   geospace?: string;
   photos?: string[];
-  isApproved: boolean;
 }
 
-const propertySchema = new Schema(
+const pendingPropertySchema = new Schema(
   {
     // _id: Schema.Types.ObjectId,
     propType: {
@@ -95,27 +100,31 @@ const propertySchema = new Schema(
     photos: [{
       type: String,
       default: null
-    }],
+    }]
+  }
+);
+
+const addPropertyRequestSchema = new Schema(
+  {
+    // _id: Schema.Types.ObjectId,
+    property: pendingPropertySchema,
     isApproved: {
       type: Boolean,
-      required: true,
       default: false
     }
   },
   {
     timestamps: true,
     toJSON: { virtuals: true },
-    collection: 'properties'
+    collection: 'addpropertyrequests'
   }
 );
 
-propertySchema.plugin(mongooseLeanVirtuals);
+addPropertyRequestSchema.plugin(mongooseLeanVirtuals);
 
-propertySchema.index({
-  address: 'object',
-  title: 'text',
+addPropertyRequestSchema.index({
 });
 
-const Property = model<IProperty>('Property', propertySchema);
+const AddPropertyRequest = model<IAddPropertyRequest>('AddPropertyRequest', addPropertyRequestSchema);
 
-export { Property, IProperty };
+export { AddPropertyRequest, IAddPropertyRequest, IPendingProperty };

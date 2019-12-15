@@ -2,8 +2,6 @@ import { Schema, Document } from 'mongoose';
 // @ts-ignore
 import { User, IUser } from './User';
 
-const { ObjectId } = Schema.Types;
-
 interface IInvestor extends IUser {
   ownedProps?: string[];
 }
@@ -11,7 +9,7 @@ interface IInvestor extends IUser {
 const investorSchema = new Schema({
   ownedProps: [
     {
-      type: ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'Property'
     }
   ]
