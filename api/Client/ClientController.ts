@@ -9,10 +9,8 @@ import Codes = require('../Constants/Codes');
 import Messages = require('../Constants/Messages');
 import ConflictException from '../../exception/ConflictException';
 import Http from '../Utils/Http';
-import NotFoundException from '../../exception/NotFoundException';
 
 class ClientController {
-
   constructor() {
   }
 

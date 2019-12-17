@@ -25,7 +25,7 @@ const CREATE = joi.object({
   phoneNumber: joi
     .string()
     .required()
-    .regex(/[0-9]+/)
+    .regex(/^[0-9]*$/)
     .min(11)
     .max(14),
   gender: joi
@@ -58,7 +58,7 @@ const UPDATE = joi.object({
     .trim(),
   phoneNumber: joi
     .string()
-    .regex(/[0-9]+/)
+    .regex(/^[0-9]*$/)
     .min(11)
     .max(14),
   gender: joi

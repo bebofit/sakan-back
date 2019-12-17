@@ -1,60 +1,64 @@
 import { Response } from 'express';
 import * as httpStatus from 'http-status';
 import { IRequest } from '../../Interfaces';
-import joi from '../../lib/joi';
-import * as propertyValidations from './PropertyValidations';
-import * as userValidations from '../User/UserValidations';
+import * as propertysValidations from './PropertyValidations';
 import propertyService from './PropertyService';
 import validation from '../Utils/Validation';
+import Codes = require('../Constants/Codes');
+import Messages = require('../Constants/Messages');
+import ConflictException from '../../exception/ConflictException';
+import Http from '../Utils/Http';
 
 class PropertyController {
-
   constructor() {
   }
 
-  async createProperty(req: IRequest, res: Response): Promise<any> {
-    console.log('Creating Property...');
-    let body = validation.validateBody(req.body, propertyValidations.CREATE);
-    body = validation.validateBody(req.body, userValidations.CREATE);
-    const property = await propertyService.createProperty(body);
-    res.status(httpStatus.CREATED).json({
-      data: property,
-      message: "Property Created Successfully"
-    });
+  async createProperty(request: IRequest, response: Response): Promise<any> {
+    let property;
+    try {
+      //validating json object
+      let body = validation.validateBody(request.body, propertysValidations.CREATE);
+      //creating the new property
+      property = await propertyService.createProperty(body);
+    } catch (error) {
+      if (Number(error.code) === Number(Codes.Error.Database.uniqueViolation)) {
+        if (!error.keyPattern.email) {
+          throw new ConflictException(Messages.user.error.phoneUnique);
+        }
+        throw new ConflictException(Messages.user.error.emailUnique);
+      }
+      throw error;
+    }
+    //sending response
+    return Http.sendResponse(response, httpStatus.CREATED, property, "Property Created Successfully");
   }
 
-  async getAllProperties(req: IRequest, res: Response): Promise<any> {
+  async getAllProperties(request: IRequest, response: Response): Promise<any> {
     let properties = await propertyService.getAllProperties();
-    res.status(httpStatus.OK).json({
-      data: properties,
-      message: "Properties Found"
-    });
+    //sending response
+    return Http.sendResponse(response, httpStatus.OK, properties, "Properties Found");
   }
 
-  async getProperty(req: IRequest, res: Response): Promise<any> {
-    let property = await propertyService.getProperty(req.params.id);
-    res.status(httpStatus.OK).json({
-      data: property,
-      message: "Property Found"
-    });
+  async getProperty(request: IRequest, response: Response): Promise<any> {
+    let properties = await propertyService.getProperty(request.params.id);
+    //sending response
+    return Http.sendResponse(response, httpStatus.OK, properties, "Property Found");
   }
 
-  async updateProperty(req: IRequest, res: Response): Promise<any> {
-    let body = validation.validateBody(req.body, propertyValidations.CREATE);
-    body = validation.validateBody(req.body, userValidations.CREATE);
-    let property = await propertyService.updateProperty(req.params.id, body);
-    res.status(httpStatus.OK).json({
-      data: property,
-      message: "Property Data Updated Successfully"
-    });
+  async updateProperty(request: IRequest, response: Response): Promise<any> {
+    let property;
+    //validating json object
+    let body = validation.validateBody(request.body, propertysValidations.UPDATE);
+    //update Property
+    property = await propertyService.updateProperty(request.params.id, body);
+    //sending response
+    return Http.sendResponse(response, httpStatus.OK, property, "Property Data Updated Successfully");
   }
 
-  async deleteProperty(req: IRequest, res: Response): Promise<any> {
-    let property = await propertyService.deleteProperty(req.params.id);
-    res.status(httpStatus.OK).json({
-      data: property,
-      message: "Property Deleted Successfully"
-    });
+  async deleteProperty(request: IRequest, response: Response): Promise<any> {
+    let property = await propertyService.deleteProperty(request.params.id);
+    //sending response
+    return Http.sendResponse(response, httpStatus.OK, property, "Property Deleted Successfully");
   }
 }
 
