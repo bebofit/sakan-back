@@ -82,22 +82,25 @@ export = {
     },
     user: {
         general: {
-            verificationToken: 'Device Verification Token',
-            confirmEmail: 'Please Confirm Your Email',
-            checkEmail: 'Please Check Your Email',
-            checkPhone: 'Please Check Your Phone'
+          verificationToken: 'Device Verification Token',
+          confirmEmail: 'Please Confirm Your Email',
+          checkEmail: 'Please Check Your Email',
+          checkPhone: 'Please Check Your Phone'
         },
         success: {
-            signup: 'Registeration successful',
-            login: 'Login successful',
-            userProfile: 'User profile',
-            editProfile: 'Profile updated successfully',
-            supportEmail: 'Your email was sent successfully, we will get back to you shortly'
+          signup: 'Registeration successful',
+          login: 'Login successful',
+          userProfile: 'User profile',
+          editProfile: 'Profile updated successfully',
+          supportEmail: 'Your email was sent successfully, we will get back to you shortly'
         },
         error: {
-            incorrectCred: 'Incorrect email or password',
-            emailUnique: 'Email already exists',
-            phoneUnique: 'Phone number already exists'
+          incorrectCred: 'Incorrect email or password',
+          incorrectEmail: 'Incorrect email, User not found',
+          incorrectPassword: 'Password is incorrect',
+          emailUnique: 'Email already exists',
+          phoneUnique: 'Phone number already exists',
+          userNotFound: 'User not found'
         }
-    }
+      }
 };

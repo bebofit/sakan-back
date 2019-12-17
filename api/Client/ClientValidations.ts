@@ -7,13 +7,9 @@ const CREATE = joi.object({
 });
 
 const UPDATE = joi.object({
-  firstName: joi.string().trim(),
-  lastName: joi.string().trim(),
-  email: joi
-    .string()
-    .trim()
-    .email()
-    .lowercase()
+  favProps: joi
+  .array()
+  .items((joi as any).objectId())
 });
 
 export { CREATE, UPDATE };
