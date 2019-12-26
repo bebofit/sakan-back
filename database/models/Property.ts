@@ -17,6 +17,8 @@ interface IProperty extends Document {
   geospace?: string;
   photos?: string[];
   isApproved: boolean;
+  isDeleted?: boolean;
+  deletedAt?: Date;
 }
 
 const propertySchema = new Schema(
@@ -75,7 +77,7 @@ const propertySchema = new Schema(
       type: Schema.Types.ObjectId,
       required: true,
       unique: true,
-      ref: 'User'
+      ref: 'Investor'
     },
     unitArea: {
       type: String,
@@ -101,6 +103,13 @@ const propertySchema = new Schema(
       type: Boolean,
       required: true,
       default: false
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false
+    },
+    deletedAt:{
+      type: Date
     }
   },
   {
