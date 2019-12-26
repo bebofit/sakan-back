@@ -49,8 +49,6 @@ const userSchema = new Schema(
     },
     phoneNumber: {
       type: String,
-      default: null,
-      unique: true
     },
     gender: {
       type: String,
