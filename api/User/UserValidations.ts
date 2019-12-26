@@ -24,7 +24,6 @@ const CREATE = joi.object({
     .valid('client', 'investor'),
   phoneNumber: joi
     .string()
-    .required()
     .regex(/^[0-9]*$/)
     .min(11)
     .max(14),
