@@ -49,7 +49,7 @@ class UserController {
         validation.validateBody(request.body, userValidations.LOGIN);
         let token = await userService.login(request.body.email.toLowerCase(), request.body.password);
         //sending response
-        return Http.sendResponse(response, httpStatus.OK, { token: token }, "Login Successful");
+        return Http.sendResponse(response, httpStatus.OK, token, "Login Successful");
     }
 
     async forgetPassword(request: IRequest, response: Response): Promise<any> {
