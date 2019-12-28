@@ -7,22 +7,14 @@ const CREATE = joi.object({
     .valid('apartment', 'duplex', 'penthouse', 'villa', 'townhouse'),
   address: joi
     .object({
-      unit: joi
-        .string()
-        .required(),
       street: joi
         .string()
         .required(),
-      district: joi
-        .string(),
       city: joi
         .string()
         .required(),
-      region: joi
-        .string(),
       country: joi
         .string()
-        .required()
     }),
   title: joi
     .string()
@@ -68,22 +60,14 @@ const UPDATE = joi.object({
     .valid('apartment', 'duplex', 'penthouse', 'villa', 'townhouse'),
   address: joi
     .object({
-      unit: joi
-        .string()
-        .required(),
       street: joi
         .string()
         .required(),
-      district: joi
-        .string(),
       city: joi
         .string()
         .required(),
-      region: joi
-        .string(),
       country: joi
         .string()
-        .required()
     }),
   title: joi
     .string()

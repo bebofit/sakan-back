@@ -1,65 +1,61 @@
 import { Response } from 'express';
 import * as httpStatus from 'http-status';
-import { IRequest } from '../../Interfaces';
-import * as propertysValidations from './AddPropertyRequestValidations';
-import propertyService from './AddPropertyRequestService';
-import validation from '../Utils/Validation';
-import Codes = require('../Constants/Codes');
-import Messages = require('../Constants/Messages');
-import ConflictException from '../../exception/ConflictException';
-import Http from '../Utils/Http';
+import { IRequest } from '../../../Interfaces';
+import * as addPropReqValidations from './AddPropertyRequestValidations';
+import addPropReqService from './AddPropertyRequestService';
+import validation from '../../Utils/Validation';
+import Codes = require('../../Constants/Codes');
+import Messages = require('../../Constants/Messages');
+import ConflictException from '../../../exception/ConflictException';
+import Http from '../../Utils/Http';
 
 class AddPropertyRequestController {
   constructor() {
   }
 
   async createAddPropertyRequest(request: IRequest, response: Response): Promise<any> {
-    let property;
+    let addPropReq;
     try {
       //validating json object
-      let body = validation.validateBody(request.body, propertysValidations.CREATE);
-      //creating the new property
-      property = await propertyService.createProperty(body);
+      let body = validation.validateBody(request.body, addPropReqValidations.CREATE);
+      //creating the new add request
+      addPropReq = await addPropReqService.createRequest(body);
     } catch (error) {
       if (Number(error.code) === Number(Codes.Error.Database.uniqueViolation)) {
-        if (!error.keyPattern.email) {
-          throw new ConflictException(Messages.user.error.phoneUnique);
-        }
-        throw new ConflictException(Messages.user.error.emailUnique);
+        throw new ConflictException(Messages.user.error.addressUnique);
       }
       throw error;
     }
     //sending response
-    return Http.sendResponse(response, httpStatus.CREATED, property, "Property Created Successfully");
+    return Http.sendResponse(response, httpStatus.CREATED, addPropReq, "Add Property Request Created Successfully");
   }
 
   async getAllAddPropertyRequests(request: IRequest, response: Response): Promise<any> {
-    let properties = await propertyService.getAllProperties();
+    let  addPropReqs = await addPropReqService.getAllRequests();
     //sending response
-    return Http.sendResponse(response, httpStatus.OK, properties, "Properties Found");
+    return Http.sendResponse(response, httpStatus.OK, addPropReqs, "Add Property Requests Found");
   }
 
-  async getProperty(request: IRequest, response: Response): Promise<any> {
-    let properties = await propertyService.getProperty(request.params.id);
+  async getAddPropertyRequest(request: IRequest, response: Response): Promise<any> {
+    let addPropReq = await addPropReqService.getRequest(request.params.id);
     //sending response
-    return Http.sendResponse(response, httpStatus.OK, properties, "Property Found");
+    return Http.sendResponse(response, httpStatus.OK, addPropReq, "Add Property Request Found");
   }
 
-  async updateProperty(request: IRequest, response: Response): Promise<any> {
-    let property;
+  async updateAddPropertyRequest(request: IRequest, response: Response): Promise<any> {
+    let addPropReq;
     //validating json object
-    let body = validation.validateBody(request.body, propertysValidations.UPDATE);
-    //update Property
-    property = await propertyService.updateProperty(request.params.id, body);
+    let body = validation.validateBody(request.body, addPropReqValidations.UPDATE);
+    //update client
+    addPropReq = await addPropReqService.updateRequest(request.params.id, body);
     //sending response
-    return Http.sendResponse(response, httpStatus.OK, property, "Property Data Updated Successfully");
+    return Http.sendResponse(response, httpStatus.OK, addPropReq, "Add Property Request Updated Successfully");
   }
 
-  async deleteProperty(request: IRequest, response: Response): Promise<any> {
-    let property = await propertyService.deleteProperty(request.params.id);
+  async deleteAddPropertyRequest(request: IRequest, response: Response): Promise<any> {
+    let addPropReq = await addPropReqService.deleteRequest(request.params.id);
     //sending response
-    return Http.sendResponse(response, httpStatus.OK, property, "Property Deleted Successfully");
+    return Http.sendResponse(response, httpStatus.OK, addPropReq, "Add Property Request Deleted Successfully");
   }
 }
-
 export default new AddPropertyRequestController();

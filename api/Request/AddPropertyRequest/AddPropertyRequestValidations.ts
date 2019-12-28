@@ -1,4 +1,4 @@
-import joi from '../../lib/joi';
+import joi from '../../../lib/joi';
 
 const CREATE = joi.object({
   propType: joi
@@ -7,22 +7,16 @@ const CREATE = joi.object({
     .valid('apartment', 'duplex', 'penthouse', 'villa', 'townhouse'),
   address: joi
     .object({
-      unit: joi
-        .string()
-        .required(),
       street: joi
         .string()
+        .trim()
+        .lowercase()
         .required(),
-      district: joi
-        .string(),
       city: joi
         .string()
         .required(),
-      region: joi
-        .string(),
       country: joi
         .string()
-        .required()
     }),
   title: joi
     .string()
@@ -58,52 +52,40 @@ const CREATE = joi.object({
     .string(),
   photos: joi
     .array()
-    .items(joi.string())
+    .items(joi.string()),
+  isApproved: joi
+    .boolean()
 });
 
 const UPDATE = joi.object({
   propType: joi
     .string()
-    .required()
     .valid('apartment', 'duplex', 'penthouse', 'villa', 'townhouse'),
   address: joi
     .object({
-      unit: joi
-        .string()
-        .required(),
       street: joi
         .string()
-        .required(),
-      district: joi
-        .string(),
+        .trim()
+        .lowercase(),
       city: joi
-        .string()
-        .required(),
-      region: joi
         .string(),
       country: joi
         .string()
-        .required()
     }),
   title: joi
     .string()
-    .required()
     .max(20),
   description: joi
     .string()
-    .required()
     .max(200),
   bedroomNum: joi
     .string()
-    .required()
     .regex(/^[0-9]*$/),
   bathroomNum: joi
     .string()
-    .required()
     .regex(/^[0-9]*$/),
   unitArea: joi
     .string()
-    .required()
     .max(5)
     .regex(/^[0-9]*$/),
   rentValue: joi
@@ -116,7 +98,9 @@ const UPDATE = joi.object({
     .string(),
   photos: joi
     .array()
-    .items(joi.string())
+    .items(joi.string()),
+  isApproved: joi
+    .boolean()
 });
 
 export { CREATE, UPDATE };

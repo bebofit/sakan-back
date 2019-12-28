@@ -2,13 +2,8 @@ import { Document, model, Schema } from 'mongoose';
 // @ts-ignore
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
 
-interface IAddPropertyRequest extends Document {
-  _id: string;
-  property: object;
-  isApproved: boolean;
-}
 
-interface IPendingProperty extends Document {
+interface IAddPropertyRequest extends Document {
   _id: string;
   propType: string;
   address: object;
@@ -22,9 +17,12 @@ interface IPendingProperty extends Document {
   buyValue: number;
   geospace?: string;
   photos?: string[];
+  isDeleted?: boolean;
+  deletedAt?: Date;
+  isApproved: boolean;
 }
 
-const pendingPropertySchema = new Schema(
+const addPropertyRequestSchema = new Schema(
   {
     // _id: Schema.Types.ObjectId,
     propType: {
@@ -33,29 +31,18 @@ const pendingPropertySchema = new Schema(
       enum: ['apartment', 'duplex', 'penthouse', 'villa', 'townhouse']
     },
     address: {
-      unit: {
-        type: String,
-        required: true
-      },
       street: {
         type: String,
-        required: true
-      },
-      district: {
-        type: String,
-        default: null
+        required: true,
+        unique: true
       },
       city: {
         type: String,
         required: true
       },
-      region: {
-        type: String,
-        default: null
-      },
       country: {
         type: String,
-        required: true
+        default: 'Egypt'
       }
     },
     title: {
@@ -100,17 +87,17 @@ const pendingPropertySchema = new Schema(
     photos: [{
       type: String,
       default: null
-    }]
-  }
-);
-
-const addPropertyRequestSchema = new Schema(
-  {
-    // _id: Schema.Types.ObjectId,
-    property: pendingPropertySchema,
+    }],
     isApproved: {
       type: Boolean,
       default: false
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false
+    },
+    deletedAt:{
+      type: Date
     }
   },
   {
@@ -127,4 +114,4 @@ addPropertyRequestSchema.index({
 
 const AddPropertyRequest = model<IAddPropertyRequest>('AddPropertyRequest', addPropertyRequestSchema);
 
-export { AddPropertyRequest, IAddPropertyRequest, IPendingProperty };
+export { AddPropertyRequest, IAddPropertyRequest };

@@ -30,29 +30,18 @@ const propertySchema = new Schema(
       enum: ['apartment', 'duplex', 'penthouse', 'villa', 'townhouse']
     },
     address: {
-      unit: {
-        type: String,
-        required: true
-      },
       street: {
         type: String,
-        required: true
-      },
-      district: {
-        type: String,
-        default: null
+        required: true,
+        unique: true
       },
       city: {
         type: String,
         required: true
       },
-      region: {
-        type: String,
-        default: null
-      },
       country: {
         type: String,
-        required: true
+        default: 'Egypt'
       }
     },
     title: {
@@ -85,11 +74,11 @@ const propertySchema = new Schema(
     },
     rentValue: {
       type: Number,
-      required: function() { return this.buyValue === null; } // Only required if buyValue equals null
+      required: function () { return this.buyValue === null; } // Only required if buyValue equals null
     },
     buyValue: {
       type: Number,
-      required: function() { return this.rentValue === null; } // Only required if rentValue equals null
+      required: function () { return this.rentValue === null; } // Only required if rentValue equals null
     },
     geospace: {
       type: String,
@@ -108,7 +97,7 @@ const propertySchema = new Schema(
       type: Boolean,
       default: false
     },
-    deletedAt:{
+    deletedAt: {
       type: Date
     }
   },

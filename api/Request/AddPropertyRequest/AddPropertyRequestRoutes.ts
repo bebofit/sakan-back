@@ -1,13 +1,13 @@
 import { Router } from 'express';
 import errorHandler from 'express-async-handler';
-import propertyController from './AddPropertyRequestController';
+import addPropertyRequestController from './AddPropertyRequestController';
 
 const router = Router();
 
-router.post('/', errorHandler(propertyController.createAddPropertyRequest));
-router.get('/', errorHandler(propertyController.getAllAddPropertyRequests));
-router.get('/:id', errorHandler(propertyController.getAddPropertyRequest));
-router.patch('/:id', errorHandler(propertyController.updateAddPropertyRequest));
-router.delete('/:id', errorHandler(propertyController.deleteAddPropertyRequest));
+router.post('/', errorHandler(addPropertyRequestController.createAddPropertyRequest));
+router.get('/', errorHandler(addPropertyRequestController.getAllAddPropertyRequests));
+router.get('/:id', errorHandler(addPropertyRequestController.getAddPropertyRequest));
+router.patch('/:id', errorHandler(addPropertyRequestController.updateAddPropertyRequest));
+router.delete('/:id', errorHandler(addPropertyRequestController.deleteAddPropertyRequest));
 
 export default router;

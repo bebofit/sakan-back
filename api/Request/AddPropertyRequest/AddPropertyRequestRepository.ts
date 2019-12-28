@@ -1,27 +1,27 @@
 import { Model } from 'mongoose';
-import { MainRepository } from '../../database/MainRepo';
-import { Property, IProperty } from '../../database/models';
-import { QueryParams } from '../../Interfaces';
+import { MainRepository } from '../../../database/MainRepo';
+import { AddPropertyRequest, IAddPropertyRequest } from '../../../database/models';
+import { QueryParams } from '../../../Interfaces';
 
-class PropertyRepository extends MainRepository<IProperty> {
-  constructor(protected model: Model<IProperty>) {
+class IAddPropertyRequestRepository extends MainRepository<IAddPropertyRequest> {
+  constructor(protected model: Model<IAddPropertyRequest>) {
     super(model);
   }
 
-  create(body: any): Promise<IProperty> {
+  create(body: any): Promise<IAddPropertyRequest> {
     return super.create(body);
   }
 
-  findAll(options?: QueryParams): Promise<IProperty[]> {
+  findAll(options?: QueryParams): Promise<IAddPropertyRequest[]> {
     return super.find({}, options);
   }
 
-  findById(id: string): Promise<IProperty> {
+  findById(id: string): Promise<IAddPropertyRequest> {
     return super.findById(id);
   }
 
-  findByIdAndUpdate(id: string, body: IProperty): Promise<IProperty> {
-    return super.findByIdAndUpdate(id, body);
+  findByIdAndUpdate(id: string, update: any): Promise<IAddPropertyRequest> {
+    return super.findByIdAndUpdate(id, update);
   }
 
   softDeleteById(id: string): Promise<boolean> {
@@ -30,4 +30,4 @@ class PropertyRepository extends MainRepository<IProperty> {
 
 }
 
-export default new PropertyRepository(Property);
+export default new IAddPropertyRequestRepository(AddPropertyRequest);

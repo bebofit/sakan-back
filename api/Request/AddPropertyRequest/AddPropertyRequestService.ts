@@ -1,29 +1,47 @@
-import { IProperty } from '../../database/models';
+import { IAddPropertyRequest } from '../../../database/models';
 import repository from './AddPropertyRequestRepository';
+import NotFoundException from '../../../exception/NotFoundException';
 
-class PropertyService {
+class AddPropertyRequestService {
 
   constructor(){}
 
-  async createProperty(body: IProperty): Promise<IProperty> {
-    return repository.create(body);
+  async createRequest(body: IAddPropertyRequest): Promise<IAddPropertyRequest> {
+    return await repository.create(body);
   }
 
-  async getAllProperties(): Promise<IProperty[]> {
-    return repository.findAll();
+  async getAllRequests(): Promise<IAddPropertyRequest[]> {
+    let addPropReqs = await repository.findAll();
+    if(addPropReqs.length === 0){
+      throw new NotFoundException("No Requests Found");
+    }
+    return addPropReqs;
   }
 
-  async getProperty(id: string): Promise<IProperty> {
-    return repository.findById(id);
+  async getRequest(id: string): Promise<IAddPropertyRequest> {
+    let addPropReq = await repository.findById(id);
+    if(!addPropReq){
+      throw new NotFoundException("Request not found");
+    }
+    return addPropReq;
   }
 
-  async updateProperty(id: string, body: IProperty): Promise<IProperty> {
-    return repository.findByIdAndUpdate(id, body);
+  async updateRequest(id: string, body: IAddPropertyRequest): Promise<IAddPropertyRequest> {
+    let addPropReq = await repository.findByIdAndUpdate(id, body);
+    if(!addPropReq){
+      throw new NotFoundException("Request not found");
+    }
+    return addPropReq;
   }
 
-  async deleteProperty(id: string): Promise<boolean> {
-    return repository.softDeleteById(id);
+  async deleteRequest(id: string): Promise<boolean> {
+    let isDeleted = await repository.softDeleteById(id);
+    if(!isDeleted){
+      throw new NotFoundException("Request not found");
+    }
+    await repository.findByIdAndUpdate(id, { isDeleted: true });
+    return isDeleted;
   }
 }
 
-export default new PropertyService();
+export default new AddPropertyRequestService();

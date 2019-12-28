@@ -100,6 +100,7 @@ export = {
           incorrectPassword: 'Password is incorrect',
           emailUnique: 'Email already exists',
           phoneUnique: 'Phone number already exists',
+          addressUnique: 'Property Address already exists',
           userNotFound: 'User not found'
         }
       }
