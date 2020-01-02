@@ -13,6 +13,6 @@ router.use('/client', clientRoutes);
 router.use('/investor', investorRoutes);
 router.use('/property', propertyRoutes);
 router.use('/contract', contractRoutes);
-router.use('/request/addPropery', addPropertyRequestRoutes)
+router.use('/request/addProperty', addPropertyRequestRoutes)
 
 export default router;

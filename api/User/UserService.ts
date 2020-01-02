@@ -42,7 +42,7 @@ class UserService {
     }
     //Generate JWT Token
     let privateKey = await fs.readFile(path.join(__dirname, '../../keys/jwtRS256.key'));
-    return await { token: jwt.sign({ user: 'user1' }, privateKey, { algorithm: 'RS256' }), userType: user.userType};
+    return await { token: jwt.sign(user, privateKey, { algorithm: 'RS256' }), userType: user.userType};
   }
 
   async getUser(query: object): Promise<any> {
