@@ -13,7 +13,6 @@ const CREATE = joi.object({
     .string()
     .trim()
     .email()
-    .lowercase()
     .required(),
   password: joi
     .string()
@@ -26,7 +25,7 @@ const CREATE = joi.object({
   phoneNumber: joi
     .string()
     .required()
-    .regex(/[0-9]+/)
+    .regex(/^[0-9]*$/)
     .min(11)
     .max(14),
   gender: joi
@@ -35,7 +34,6 @@ const CREATE = joi.object({
   birthDate: joi.date(),
   governmentId: joi
     .string()
-    .required()
     .max(14)
     .alphanum(),
   profileStatus: joi
@@ -52,13 +50,71 @@ const CREATE = joi.object({
 });
 
 const UPDATE = joi.object({
-  firstName: joi.string().trim(),
-  lastName: joi.string().trim(),
+  firstName: joi
+    .string()
+    .trim(),
+  lastName: joi
+    .string()
+    .trim(),
+  phoneNumber: joi
+    .string()
+    .regex(/^[0-9]*$/)
+    .min(11)
+    .max(14),
+  gender: joi
+    .string()
+    .valid('male', 'female'),
+  birthDate: joi.date(),
+  governmentId: joi
+    .string()
+    .max(14)
+    .alphanum(),
+  profileStatus: joi
+    .number(),
+  wallet: joi
+    .object({
+      value: joi
+        .number()
+        .positive(),
+      currency: joi
+        .string()
+    })
+});
+
+const LOGIN = joi.object({
   email: joi
     .string()
     .trim()
     .email()
-    .lowercase()
+    .required(),
+  password: joi
+    .string()
+    .required()
+    .min(8)
 });
 
-export { CREATE, UPDATE };
+const EMAIL = joi.object({
+  email: joi
+    .string()
+    .trim()
+    .email()
+    .required()
+});
+
+const RESETPW = joi.object({
+  token: joi
+    .string()
+    .required(),
+  password: joi
+    .string()
+    .required()
+    .min(8)
+});
+
+const TOKEN = joi.object({
+  token: joi
+    .string()
+    .required()
+});
+
+export { CREATE, UPDATE, LOGIN, EMAIL, RESETPW, TOKEN };

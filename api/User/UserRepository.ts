@@ -9,12 +9,19 @@ class UserRepository extends MainRepository<IUser> {
   }
 
   create(body: any): Promise<IUser> {
-    console.log('create user model');
     return super.create(body);
   }
 
   findAll(options?: QueryParams): Promise<IUser[]> {
     return super.find({}, options);
+  }
+
+  findOne(query: object): Promise<any> {
+    return super.findOne(query);
+  }
+
+  findByIdAndUpdate(id: string, update: any): Promise<IUser> {
+    return super.findByIdAndUpdate(id, update);
   }
 }
 

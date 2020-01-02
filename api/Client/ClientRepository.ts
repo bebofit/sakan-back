@@ -9,21 +9,19 @@ class ClientRepository extends MainRepository<IClient> {
   }
 
   create(body: any): Promise<IClient> {
-    console.log('create client model');
     return super.create(body);
   }
 
   findAll(options?: QueryParams): Promise<IClient[]> {
     return super.find({}, options);
   }
-  
 
   findById(id: string): Promise<IClient> {
     return super.findById(id);
   }
 
-  findByIdAndUpdate(id: string, body: IClient): Promise<IClient> {
-    return super.findByIdAndUpdate(id, body);
+  findByIdAndUpdate(id: string, update: any): Promise<IClient> {
+    return super.findByIdAndUpdate(id, update);
   }
 
   softDeleteById(id: string): Promise<boolean> {

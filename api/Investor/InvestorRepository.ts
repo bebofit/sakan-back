@@ -9,7 +9,6 @@ class InvestorRepository extends MainRepository<IInvestor> {
   }
 
   create(body: any): Promise<IInvestor> {
-    console.log('create investor model');
     return super.create(body);
   }
 
@@ -21,8 +20,8 @@ class InvestorRepository extends MainRepository<IInvestor> {
     return super.findById(id);
   }
 
-  findByIdAndUpdate(id: string, body: IInvestor): Promise<IInvestor> {
-    return super.findByIdAndUpdate(id, body);
+  findByIdAndUpdate(id: string, update: any): Promise<IInvestor> {
+    return super.findByIdAndUpdate(id, update);
   }
 
   softDeleteById(id: string): Promise<boolean> {

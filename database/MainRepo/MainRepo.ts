@@ -2,7 +2,7 @@ import { Document, Model } from 'mongoose';
 import { QueryParams } from '../../Interfaces';
 
 abstract class MainRepository<modelType extends Document> {
-  constructor(protected model: Model<modelType>) {}
+  constructor(protected model: Model<modelType>) { }
 
   protected parseQueryOptions(options: QueryParams): any {
     const result: any = { new: true };
@@ -23,8 +23,6 @@ abstract class MainRepository<modelType extends Document> {
   }
 
   create(body: any): Promise<modelType> {
-    console.log('inside super repo', body);
-    
     return this.model.create(body);
   }
 

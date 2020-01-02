@@ -28,10 +28,10 @@ app.use((err: any, req: IRequest, res: Response, next: NextFunction) => {
     console.error(err);
   }
   if (err.validationError) {
-    console.log('validation error');
+    console.log('validation error', err.errors.details[0].message);
     return res.status(UNPROCESSABLE_ENTITY).json({
       data: null,
-      message: err.message || err
+      message: err.errors.details[0].message.replace(/"/g, '') || err.message || err
     });
   }
   const statusCode = err.statusCode || INTERNAL_SERVER_ERROR;
