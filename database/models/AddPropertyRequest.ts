@@ -20,6 +20,7 @@ interface IAddPropertyRequest extends Document {
   isDeleted?: boolean;
   deletedAt?: Date;
   isApproved: boolean;
+  status: string;
 }
 
 const addPropertyRequestSchema = new Schema(
@@ -98,7 +99,12 @@ const addPropertyRequestSchema = new Schema(
     },
     deletedAt:{
       type: Date
-    }
+    },
+    status: {
+      type: String,
+      default: 'pending approval',
+      enum: ['rejected', 'pending approval']
+    },
   },
   {
     timestamps: true,

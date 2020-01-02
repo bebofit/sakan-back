@@ -54,7 +54,10 @@ const CREATE = joi.object({
     .array()
     .items(joi.string()),
   isApproved: joi
-    .boolean()
+    .boolean(),
+  status: joi
+    .string()
+    .valid('rejected', 'pending approval'),
 });
 
 const UPDATE = joi.object({
@@ -100,7 +103,10 @@ const UPDATE = joi.object({
     .array()
     .items(joi.string()),
   isApproved: joi
-    .boolean()
+    .boolean(),
+  status: joi
+    .string()
+    .valid('rejected', 'pending approval')
 });
 
 export { CREATE, UPDATE };
