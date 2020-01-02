@@ -6,7 +6,6 @@ interface IProperty extends Document {
   _id: string;
   propType: string;
   address: object;
-  title: string;
   description?: string;
   bedroomNum: string;
   bathroomNum: string;
@@ -43,10 +42,6 @@ const propertySchema = new Schema(
         type: String,
         default: 'Egypt'
       }
-    },
-    title: {
-      type: String,
-      required: true
     },
     description: {
       type: String,
@@ -112,7 +107,6 @@ propertySchema.plugin(mongooseLeanVirtuals);
 
 propertySchema.index({
   address: 'object',
-  title: 'text',
 });
 
 const Property = model<IProperty>('Property', propertySchema);

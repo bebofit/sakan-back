@@ -7,7 +7,6 @@ interface IAddPropertyRequest extends Document {
   _id: string;
   propType: string;
   address: object;
-  title: string;
   description?: string;
   bedroomNum: string;
   bathroomNum: string;
@@ -46,10 +45,6 @@ const addPropertyRequestSchema = new Schema(
         default: 'Egypt'
       }
     },
-    title: {
-      type: String,
-      required: true
-    },
     description: {
       type: String,
       default: null
@@ -66,7 +61,6 @@ const addPropertyRequestSchema = new Schema(
     },
     owner: {
       type: Schema.Types.ObjectId,
-      required: true,
       ref: 'User'
     },
     unitArea: {

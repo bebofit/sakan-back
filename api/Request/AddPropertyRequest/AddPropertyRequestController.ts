@@ -17,7 +17,8 @@ class AddPropertyRequestController {
     let addPropReq;
     try {
       //validating json object
-      let body = validation.validateBody(request.body, addPropReqValidations.CREATE);
+      const body = validation.validateBody(request.body, addPropReqValidations.CREATE);
+      Object.assign(body, {owner: request.user.id});
       //creating the new add request
       addPropReq = await addPropReqService.createRequest(body);
     } catch (error) {

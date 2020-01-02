@@ -1,4 +1,5 @@
 import { Request } from 'express';
+import { IUser } from '../database/models';
 
 export interface IRequest extends Request {
   token?: {
@@ -6,5 +7,5 @@ export interface IRequest extends Request {
     isAdmin?: boolean;
     isSuperAdmin?: boolean;
   };
-  user?: object;
+  user?: IUser;
 }

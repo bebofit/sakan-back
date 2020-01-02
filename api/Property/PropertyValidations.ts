@@ -16,10 +16,6 @@ const CREATE = joi.object({
       country: joi
         .string()
     }),
-  title: joi
-    .string()
-    .required()
-    .max(20),
   description: joi
     .string()
     .required()
@@ -69,10 +65,6 @@ const UPDATE = joi.object({
       country: joi
         .string()
     }),
-  title: joi
-    .string()
-    .required()
-    .max(20),
   description: joi
     .string()
     .required()

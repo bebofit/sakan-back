@@ -18,10 +18,6 @@ const CREATE = joi.object({
       country: joi
         .string()
     }),
-  title: joi
-    .string()
-    .required()
-    .max(20),
   description: joi
     .string()
     .required()
@@ -35,8 +31,7 @@ const CREATE = joi.object({
     .required()
     .regex(/^[0-9]*$/),
   owner: (joi as any)
-    .objectId()
-    .required(),
+    .objectId(),
   unitArea: joi
     .string()
     .required()
@@ -75,9 +70,6 @@ const UPDATE = joi.object({
       country: joi
         .string()
     }),
-  title: joi
-    .string()
-    .max(20),
   description: joi
     .string()
     .max(200),
