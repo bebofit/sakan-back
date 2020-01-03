@@ -117,4 +117,4 @@ const TOKEN = joi.object({
     .required()
 });
 
-export { CREATE, UPDATE, LOGIN, EMAIL, RESETPW, TOKEN };
+export { CREATE, UPDATE, LOGIN, EMAIL, RESETPW,  };
