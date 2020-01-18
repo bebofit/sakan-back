@@ -10,6 +10,7 @@ import * as clientsValidations from '../Client/ClientValidations';
 import * as investorsValidations from '../Investor/InvestorValidations';
 import * as userValidations from './UserValidations';
 import Http from '../Utils/Http';
+import { IUser } from '../../database/models';
 
 class UserController {
     constructor() { }
@@ -71,6 +72,11 @@ class UserController {
         await userService.resetPassword(user, request.body.token, request.body.password);
         //sending response
         return Http.sendResponse(response, httpStatus.OK, null, 'Password Changed Successfully');
+    }
+
+    async getWalletValue(request: IRequest, response: Response): Promise<any>{
+        let user: IUser = await userService.getUser({ _id: request.user._id});
+        return Http.sendResponse(response, httpStatus.OK, user.wallet, 'User wallet');
     }
 
 }

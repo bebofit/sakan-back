@@ -64,6 +64,20 @@ class ClientController {
     //sending response
     return Http.sendResponse(response, httpStatus.OK, client, "Client Deleted Successfully");
   }
+
+  async getFavoriteProperties(request: IRequest, response: Response): Promise<any>{
+
+  }
+
+  async addToFavorites(request: IRequest, response: Response): Promise<any>{
+
+  }
+
+  async removeFromFavorites(request: IRequest, response: Response): Promise<any>{
+
+  }
+
+  
 }
 
 export default new ClientController();

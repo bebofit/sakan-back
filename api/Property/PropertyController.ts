@@ -60,6 +60,14 @@ class PropertyController {
     //sending response
     return Http.sendResponse(response, httpStatus.OK, property, "Property Deleted Successfully");
   }
+
+  async reserve(request: IRequest, response: Response): Promise<any>{
+
+  }
+
+  async getByFilter(request: IRequest, response: Response): Promise<any>{
+    
+  }
 }
 
 export default new PropertyController();

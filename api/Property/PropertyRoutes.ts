@@ -9,5 +9,8 @@ router.get('/', errorHandler(propertyController.getAllProperties));
 router.get('/:id', errorHandler(propertyController.getProperty));
 router.patch('/:id', errorHandler(propertyController.updateProperty));
 router.delete('/:id', errorHandler(propertyController.deleteProperty));
+router.post('/get/filter', errorHandler(propertyController.getByFilter));
+router.post('/reserve', errorHandler(propertyController.reserve));
+
 
 export default router;
