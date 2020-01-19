@@ -20,9 +20,10 @@ class ContractRepository extends MainRepository<IContract> {
     return super.findById(id);
   }
 
-  findByIdAndUpdate(id: string, body: IContract): Promise<IContract> {
-    return super.findByIdAndUpdate(id, body);
+  findByIdAndUpdate(id: string, update: any): Promise<IContract> {
+    return super.findByIdAndUpdate(id, update);
   }
+
 
   softDeleteById(id: string): Promise<boolean> {
     return super.softDeleteById(id);

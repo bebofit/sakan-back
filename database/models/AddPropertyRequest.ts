@@ -97,7 +97,7 @@ const addPropertyRequestSchema = new Schema(
     status: {
       type: String,
       default: 'pending approval',
-      enum: ['rejected', 'pending approval']
+      enum: ['rejected', 'pending approval', 'accepted']
     },
   },
   {

@@ -1,19 +1,72 @@
 import joi from '../../lib/joi';
 
 const CREATE = joi.object({
-  favProps: joi
-  .array()
-  .items((joi as any).objectId())
+  contractType: joi
+    .string()
+    .required()
+    .valid('buy', 'rent'),
+  duration: joi
+    .number()
+    .positive(),
+  propertyId: (joi as any)
+    .objectId()
+    .required(),
+  ownerId: (joi as any)
+    .objectId()
+    .required(),
+  clientId: (joi as any)
+    .objectId()
+    .required(),
+  invoice: joi
+    .object({
+      invoiceNumber: joi
+        .number()
+        .positive()
+        .required(),
+      dueDate: joi
+        .date()
+        .required(),
+      isPaid: joi
+        .boolean()
+        .required(),
+      value: joi
+        .number()
+        .positive()
+        .required(),
+      penaltyValue: joi
+        .number()
+        .positive()
+    }),
 });
 
 const UPDATE = joi.object({
-  firstName: joi.string().trim(),
-  lastName: joi.string().trim(),
-  email: joi
+  contractType: joi
     .string()
-    .trim()
-    .email()
-    .lowercase()
+    .required()
+    .valid('buy', 'rent'),
+  duration: joi
+    .number()
+    .positive(),
+  invoice: joi
+    .object({
+      invoiceNumber: joi
+        .number()
+        .positive()
+        .required(),
+      dueDate: joi
+        .date()
+        .required(),
+      isPaid: joi
+        .boolean()
+        .required(),
+      value: joi
+        .number()
+        .positive()
+        .required(),
+      penaltyValue: joi
+        .number()
+        .positive()
+    }),
 });
 
 export { CREATE, UPDATE };
