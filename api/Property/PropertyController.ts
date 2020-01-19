@@ -8,6 +8,7 @@ import Codes = require('../Constants/Codes');
 import Messages = require('../Constants/Messages');
 import ConflictException from '../../exception/ConflictException';
 import Http from '../Utils/Http';
+import Email from '../Utils/Mail';
 
 class PropertyController {
   constructor() {
@@ -62,7 +63,9 @@ class PropertyController {
   }
 
   async reserve(request: IRequest, response: Response): Promise<any>{
-
+    //trying out mail
+    await (new Email(['youssef.nabil.mustafa@gmail.com'], 'test email', 'hello world')).sendEmail();
+    response.send('ok');
   }
 
   async getByFilter(request: IRequest, response: Response): Promise<any>{
