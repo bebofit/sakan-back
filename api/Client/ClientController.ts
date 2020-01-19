@@ -66,15 +66,21 @@ class ClientController {
   }
 
   async getFavoriteProperties(request: IRequest, response: Response): Promise<any>{
-
+    let favoriteProps = await clientService.getFavoriteProperties(request.user.id);
+    return Http.sendResponse(response, httpStatus.OK, favoriteProps, "Property added successfully");
   }
 
   async addToFavorites(request: IRequest, response: Response): Promise<any>{
-
+    //validating property id 
+    validation.validateBody(request.body, clientsValidations.PROPID);
+    await clientService.addToFavorites(request.user.id, request.body.propertyId);
+    return Http.sendResponse(response, httpStatus.OK, null, "Property added successfully");
   }
 
   async removeFromFavorites(request: IRequest, response: Response): Promise<any>{
-
+    validation.validateBody(request.body, clientsValidations.PROPID);
+    await clientService.removeFromFavorites(request.user.id, request.body.propertyId);
+    return Http.sendResponse(response, httpStatus.OK, null, "Property removed successfully");
   }
 
   

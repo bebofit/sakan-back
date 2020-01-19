@@ -12,4 +12,8 @@ const UPDATE = joi.object({
   .items((joi as any).objectId())
 });
 
-export { CREATE, UPDATE };
+const PROPID = joi.object({
+  propertyId: (joi as any).objectId()
+})
+
+export { CREATE, UPDATE, PROPID };

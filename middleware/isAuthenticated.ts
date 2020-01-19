@@ -7,8 +7,6 @@ import jwt from "jsonwebtoken";
 class IsAuthenticated implements IMiddleware{
 
     async handle(request: any, response: any, next: any): Promise<any> {
-        console.log('AUTH', request.headers);
-        
         let token = request.headers['authorization'].replace('Bearer','').trim();
         try {
             let publicKey = await fs.readFile(path.join(__dirname, '../keys/jwtRS256.key.pub'));
