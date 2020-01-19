@@ -24,8 +24,8 @@ class PropertyRepository extends MainRepository<IProperty> {
     return super.findById(id);
   }
 
-  findByIdAndUpdate(id: string, body: IProperty): Promise<IProperty> {
-    return super.findByIdAndUpdate(id, body);
+  findByIdAndUpdate(id: string, update: any): Promise<IProperty> {
+    return super.findByIdAndUpdate(id, update);
   }
 
   softDeleteById(id: string): Promise<boolean> {
