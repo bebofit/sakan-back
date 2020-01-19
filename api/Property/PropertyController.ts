@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import * as httpStatus from 'http-status';
 import { IRequest } from '../../Interfaces';
-import * as propertysValidations from './PropertyValidations';
+import * as propertyValidations from './PropertyValidations';
 import propertyService from './PropertyService';
 import validation from '../Utils/Validation';
 import Codes = require('../Constants/Codes');
@@ -18,15 +18,16 @@ class PropertyController {
     let property;
     try {
       //validating json object
-      let body = validation.validateBody(request.body, propertysValidations.CREATE);
+      let body = validation.validateBody(request.body, propertyValidations.CREATE);
       //creating the new property
       property = await propertyService.createProperty(body);
     } catch (error) {
       if (Number(error.code) === Number(Codes.Error.Database.uniqueViolation)) {
-        if (!error.keyPattern.email) {
-          throw new ConflictException(Messages.user.error.phoneUnique);
-        }
-        throw new ConflictException(Messages.user.error.emailUnique);
+        throw new ConflictException(error);
+        // if (!error.keyPattern.email) {
+        //   throw new ConflictException(Messages.user.error.phoneUnique);
+        // }
+        // throw new ConflictException(Messages.user.error.emailUnique);
       }
       throw error;
     }
@@ -49,7 +50,7 @@ class PropertyController {
   async updateProperty(request: IRequest, response: Response): Promise<any> {
     let property;
     //validating json object
-    let body = validation.validateBody(request.body, propertysValidations.UPDATE);
+    let body = validation.validateBody(request.body, propertyValidations.UPDATE);
     //update Property
     property = await propertyService.updateProperty(request.params.id, body);
     //sending response
@@ -68,8 +69,12 @@ class PropertyController {
     response.send('ok');
   }
 
+  // filters that applies:
+  // [address: {street, city}, bedroomNum, bathroomNum, propType, unitArea, rentValue, buyValue]
   async getByFilter(request: IRequest, response: Response): Promise<any>{
-    
+    validation.validateBody(request.body, propertyValidations.FILTER);
+    let result = await propertyService.getByFilter(request.body);
+    return Http.sendResponse(response, httpStatus.OK, result, 'Properties');
   }
 }
 

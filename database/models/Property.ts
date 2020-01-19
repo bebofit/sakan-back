@@ -61,7 +61,7 @@ const propertySchema = new Schema(
     owner: {
       type: Schema.Types.ObjectId,
       required: true,
-      unique: true,
+      // unique: true, //implies that an investor can only have one property
       ref: 'Investor'
     },
     unitArea: {
@@ -104,6 +104,7 @@ const propertySchema = new Schema(
       reservedBy: {
         type: Schema.Types.ObjectId,
         unique: true,
+        sparse: true,
         ref: 'Client'
       },
       reservedAt: {

@@ -24,6 +24,13 @@ class PropertyService {
   async deleteProperty(id: string): Promise<boolean> {
     return repository.softDeleteById(id);
   }
+
+  async getByFilter(filterObject: any){
+    let { street, city, ...filters } = filterObject;
+    street? filters['address.street'] = street: null;
+    city? filters['address.city'] = city: null;
+    return await repository.find(filters);
+  }
 }
 
 export default new PropertyService();

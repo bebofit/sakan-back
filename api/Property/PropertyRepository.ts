@@ -12,6 +12,10 @@ class PropertyRepository extends MainRepository<IProperty> {
     return super.create(body);
   }
 
+  find(conditions: any = {}, options: QueryParams = {}): Promise<IProperty[]>{
+    return super.find(conditions, options);
+  }
+
   findAll(options?: QueryParams): Promise<IProperty[]> {
     return super.find({}, options);
   }

@@ -95,4 +95,17 @@ const UPDATE = joi.object({
     .items(joi.string())
 });
 
-export { CREATE, UPDATE };
+// fields
+// [street, city, bedroomNum, bathroomNum, propType, unitArea, rentValue, buyValue]
+const FILTER = joi.object({
+  street: joi.string(),
+  city: joi.string(),
+  bedroomNum: joi.number(),
+  bathroomNum: joi.number(),
+  propType: joi.string().valid('apartment', 'duplex', 'penthouse', 'villa', 'townhouse'),
+  unitArea: joi.number(),
+  rentValue: joi.number(),
+  buyValue: joi.number()
+});
+
+export { CREATE, UPDATE, FILTER };
