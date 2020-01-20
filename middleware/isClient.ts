@@ -7,7 +7,7 @@ class IsClient implements IMiddleware {
     async handle(request: any, response: any, next: any): Promise<any> {
         let user = request.user;
         if(user.userType !== 'client'){
-            throw new UnauthorizedException('User must be a client');
+            throw new UnauthorizedException('User must be a client', response);
         }
         next();
     }

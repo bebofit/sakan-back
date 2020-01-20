@@ -8,8 +8,9 @@ class IsAuthenticated implements IMiddleware {
 
     async handle(request: any, response: any, next: any): Promise<any> {
         let token = request.headers['authorization'];
-        if (!token)
-            throw new UnauthorizedException('No token found, please login');
+        if (!token){
+            throw new UnauthorizedException('No token found, please login', response);
+        }
         token = request.headers['authorization'].replace('Bearer', '').trim();
         try {
             let publicKey = await fs.readFile(path.join(__dirname, '../keys/jwtRS256.key.pub'));
@@ -17,7 +18,7 @@ class IsAuthenticated implements IMiddleware {
             request.user = decoded;
             next();
         } catch (error) {
-            throw new UnauthorizedException('Wrong Credentials');
+            throw new UnauthorizedException('Wrong Credentials', response);
         }
     }
 }

@@ -25,6 +25,7 @@ app.use(
 app.use('/api', routes);
 
 app.use((err: any, req: IRequest, res: Response, next: NextFunction) => {
+  console.log('error express middleware block reached');
   if (process.env.NODE_ENV !== 'production') {
     console.error(err);
   }
@@ -35,6 +36,7 @@ app.use((err: any, req: IRequest, res: Response, next: NextFunction) => {
       message: err.errors.details[0].message.replace(/"/g, '') || err.message || err
     });
   }
+  console.log('general error', err);
   const statusCode = err.statusCode || INTERNAL_SERVER_ERROR;
   res.status(statusCode).json({
     data: null,
