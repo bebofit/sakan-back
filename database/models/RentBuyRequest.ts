@@ -8,7 +8,10 @@ interface IRentBuyRequest extends Document {
   ownerId: string;
   clientId: string;
   propertyId: string;
+  isDeleted?: boolean;
+  deletedAt?: Date;
   isApproved: boolean;
+  status: string;
 }
 
 const rentBuyRequestSchema = new Schema(
@@ -37,6 +40,18 @@ const rentBuyRequestSchema = new Schema(
     isApproved: {
       type: Boolean,
       default: false
+    },
+    status: {
+      type: String,
+      default: 'pending approval',
+      enum: ['rejected', 'pending approval', 'accepted']
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false
+    },
+    deletedAt:{
+      type: Date
     }
   },
   {

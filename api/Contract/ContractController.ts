@@ -2,58 +2,62 @@ import { Response } from 'express';
 import * as httpStatus from 'http-status';
 import { IRequest } from '../../Interfaces';
 import * as contractValidations from './ContractValidations';
-import * as userValidations from '../User/UserValidations';
 import contractService from './ContractService';
 import validation from '../Utils/Validation';
+import Codes = require('../Constants/Codes');
+import Messages = require('../Constants/Messages');
+import ConflictException from '../../exception/ConflictException';
+import Http from '../Utils/Http';
+
 
 class ContractController {
 
   constructor() {
   }
 
-  async createContract(req: IRequest, res: Response): Promise<any> {
-    console.log('Creating Contract...');
-    let body = validation.validateBody(req.body, contractValidations.CREATE);
-    body = validation.validateBody(req.body, userValidations.CREATE);
-    const contract = await contractService.createContract(body);
-    res.status(httpStatus.CREATED).json({
-      data: contract,
-      message: "Contract Created Successfully"
-    });
+  async createContract(request: IRequest, response: Response): Promise<any> {
+    let contract;
+    try{
+      //validating json object
+      const body = validation.validateBody(request.body, contractValidations.CREATE);
+      //creating the new contract
+      contract = await contractService.createContract(body);
+    } catch (error) {
+      // if (Number(error.code) === Number(Codes.Error.Database.uniqueViolation)) {
+      //   throw new ConflictException(Messages.user.error.addressUnique);
+      // }
+      throw error;
+    }
+    //sending response
+    return Http.sendResponse(response, httpStatus.CREATED, contract, "Contract Created Successfully");
   }
 
-  async getAllContracts(req: IRequest, res: Response): Promise<any> {
+  async getAllContracts(request: IRequest, response: Response): Promise<any> {
     let contracts = await contractService.getAllContracts();
-    res.status(httpStatus.OK).json({
-      data: contracts,
-      message: "Contracts Found"
-    });
+    //sending response
+    return Http.sendResponse(response, httpStatus.OK, contracts, "Contracts Found");
   }
 
-  async getContract(req: IRequest, res: Response): Promise<any> {
-    let contract = await contractService.getContract(req.params.id);
-    res.status(httpStatus.OK).json({
-      data: contract,
-      message: "Contract Found"
-    });
+  async getContract(request: IRequest, response: Response): Promise<any> {
+    let contract = await contractService.getContract(request.params.id);
+    //sending response
+    return Http.sendResponse(response, httpStatus.OK, contract, "Contract Found");
   }
 
-  async updateContract(req: IRequest, res: Response): Promise<any> {
-    let body = validation.validateBody(req.body, contractValidations.CREATE);
-    body = validation.validateBody(req.body, userValidations.CREATE);
-    let contract = await contractService.updateContract(req.params.id, body);
-    res.status(httpStatus.OK).json({
-      data: contract,
-      message: "Contract Data Updated Successfully"
-    });
+  async updateContract(request: IRequest, response: Response): Promise<any> {
+    let contract;
+    //validating json object
+    let body = validation.validateBody(request.body, contractValidations.UPDATE);
+    //update contract
+    contract = await contractService.updateContract(request.params.id, body);
+    //sending response
+    return Http.sendResponse(response, httpStatus.OK, contract, "Contract Updated Successfully");
   }
 
-  async deleteContract(req: IRequest, res: Response): Promise<any> {
-    let contract = await contractService.deleteContract(req.params.id);
-    res.status(httpStatus.OK).json({
-      data: contract,
-      message: "Contract Deleted Successfully"
-    });
+  async deleteContract(request: IRequest, response: Response): Promise<any> {
+    let contract = await contractService.deleteContract(request.params.id);
+    //sending response
+    return Http.sendResponse(response, httpStatus.OK, contract, "Contract Deleted Successfully");
   }
 }
 

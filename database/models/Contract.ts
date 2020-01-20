@@ -10,40 +10,9 @@ interface IContract extends Document {
   ownerId: string;
   clientId: string;
   invoice: object[];
+  isDeleted?: boolean;
+  deletedAt?: Date;
 }
-
-interface IInvoice extends Document {
-  _id: string;
-  invoiceNumber: number;
-  dueDate: Date;
-  isPaid: boolean;
-  value: number;
-  penaltyValue?: number;
-}
-
-const invoiceSchema = new Schema({
-  invoiceNumber: {
-    type: Number,
-    required: true
-  },
-  dueDate: {
-    type: Date,
-    required: true
-  },
-  isPaid: {
-    type: Boolean,
-    required: true,
-    default: false
-  },
-  value: {
-    type: Number,
-    required: true
-  },
-  penaltyValue: {
-    type: Number,
-    default: 0
-  }
-})
 
 const contractSchema = new Schema(
   {
@@ -73,7 +42,36 @@ const contractSchema = new Schema(
       ref: 'User',
       required: true
     },
-    invoice: [invoiceSchema]
+    isDeleted: {
+      type: Boolean,
+      default: false
+    },
+    deletedAt:{
+      type: Date
+    },
+    invoice: [{
+      invoiceNumber: {
+        type: Number,
+        required: true
+      },
+      dueDate: {
+        type: Date,
+        required: true
+      },
+      isPaid: {
+        type: Boolean,
+        required: true,
+        default: false
+      },
+      value: {
+        type: Number,
+        required: true
+      },
+      penaltyValue: {
+        type: Number,
+        default: 0
+      }
+    }]
   },
   {
     timestamps: true,
@@ -90,4 +88,4 @@ contractSchema.index({
 
 const Contract = model<IContract>('Contract', contractSchema);
 
-export { Contract, IContract, IInvoice };
+export { Contract, IContract };
