@@ -44,9 +44,11 @@ class PropertyService {
   }
 
   async getByFilter(filterObject: any){
-    let { street, city, ...filters } = filterObject;
+    let { rentValue, unitArea, street, city, ...filters } = filterObject;
     street? filters['address.street'] = street: null;
     city? filters['address.city'] = city: null;
+    rentValue? filters.rentValue = {$gte: rentValue.min, $lte: rentValue.max}: null;
+    unitArea? filters.unitArea = { $gte: unitArea}: null;
     return await repository.find(filters);
   }
 }
