@@ -14,6 +14,6 @@ router.delete('/:id', errorHandler(clientController.deleteClient));
 router.get('/fetch/favorites',isAuth, isClient, errorHandler(clientController.getFavoriteProperties));
 router.post('/add/favorite',isAuth, isClient, errorHandler(clientController.addToFavorites));
 router.delete('/remove/favorite',isAuth, isClient, errorHandler(clientController.removeFromFavorites));
-
+router.post('/reserve', isAuth, isClient, errorHandler(clientController.reserveProperty));
 
 export default router;

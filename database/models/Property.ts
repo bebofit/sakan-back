@@ -18,7 +18,11 @@ interface IProperty extends Document {
   isApproved: boolean;
   isDeleted?: boolean;
   deletedAt?: Date;
-  reservation?: object;
+  reservation?: {
+    isReserved: boolean,
+    reservedBy?: string,
+    reservedAt?: Date
+  };
 }
 
 const propertySchema = new Schema(

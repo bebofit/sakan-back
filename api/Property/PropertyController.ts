@@ -63,12 +63,6 @@ class PropertyController {
     return Http.sendResponse(response, httpStatus.OK, property, "Property Deleted Successfully");
   }
 
-  async reserve(request: IRequest, response: Response): Promise<any>{
-    //trying out mail
-    await (new Email(['youssef.nabil.mustafa@gmail.com'], 'test email', 'hello world')).sendEmail();
-    response.send('ok');
-  }
-
   // filters that applies:
   // [address: {street, city}, bedroomNum, bathroomNum, propType, unitArea, rentValue, buyValue]
   async getByFilter(request: IRequest, response: Response): Promise<any>{

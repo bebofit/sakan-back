@@ -1,7 +1,9 @@
-import { IClient } from '../../database/models';
+import { IClient, IProperty } from '../../database/models';
 import repository from './ClientRepository';
+import propertyService from './../Property/PropertyService';
 import NotFoundException from '../../exception/NotFoundException';
 import InvalidInputException from '../../exception/InvalidInputException';
+import ConflictException from '../../exception/ConflictException';
 
 class ClientService {
 
@@ -64,6 +66,21 @@ class ClientService {
     let user = await repository.findById(userId);
     user = await user.populate('favProps').execPopulate();
     return user.favProps;
+  }
+
+  async reserveProperty(propId: any, userId: string): Promise<any>{
+    let property: IProperty = await propertyService.getProperty(propId);
+    if(property.reservation.isReserved){
+      throw new ConflictException('The property is already reserved');
+    }
+    await propertyService.updateProperty(propId, {
+      reservation: {
+        isReserved: true,
+        reservedBy: userId,
+        reservedAt: new Date(),
+      }
+    } as IProperty);
+    return propId;
   }
 }
 

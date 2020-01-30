@@ -83,6 +83,11 @@ class ClientController {
     return Http.sendResponse(response, httpStatus.OK, null, "Property removed successfully");
   }
 
+  async reserveProperty(request: IRequest, response: Response): Promise<any>{
+    validation.validateBody(request.body, clientsValidations.PROPID);
+    await clientService.reserveProperty(request.body.propId, request.user._id);
+    return Http.sendResponse(response, httpStatus.OK, null, 'property reserved');
+  }
   
 }
 
