@@ -92,7 +92,7 @@ class ClientController {
 
   async rentRequest(request: IRequest, response: Response): Promise<any>{
     validation.validateBody(request.body, clientsValidations.PROPID);
-    await clientService.newRentRequest();
+    await clientService.newRentRequest(request.body.propId, request.user._id);
     return Http.sendResponse(response, httpStatus.OK, null, 'Rent request is awaiting confirmation');
   }
   
