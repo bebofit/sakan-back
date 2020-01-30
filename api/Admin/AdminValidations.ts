@@ -1,10 +1,16 @@
 import joi from '../../lib/joi';
 
 // example 
-const CREATE = joi.object({
-  favProps: joi
-  .array()
-  .items((joi as any).objectId())
+const LOGIN = joi.object({
+  email: joi
+    .string()
+    .trim()
+    .email()
+    .required(),
+  password: joi
+    .string()
+    .required()
+    .min(8)
 });
 
-export { CREATE };
+export { LOGIN };

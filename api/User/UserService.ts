@@ -58,7 +58,7 @@ class UserService {
     let user = await this.getUser({verificationToken: token});
     //checking if the 2 token matched
     if (!user)
-      throw new CustomException('Invalid Token');
+      throw new CustomException('Invalid Token', 400);
     //updating the user to be verified and deleting verification token
     await userRepo.findByIdAndUpdate(user.id, { isVerified: true, verificationToken: null });
   }
@@ -77,7 +77,7 @@ class UserService {
   async resetPassword(user: IUser, token: string, password:string) {
     //check if the two tokens matches
     if (token !== user.resetPasswordToken){
-      throw new CustomException('Invalid Token');
+      throw new CustomException('Invalid Token', 400);
     }
     //updating new password and destroying the token
     let reset = await userRepo.findByIdAndUpdate(user.id, { password: (await await bcrypt.hash(password, 10)), resetPasswordToken: null });

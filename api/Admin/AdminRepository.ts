@@ -28,6 +28,10 @@ class AdminRepository extends MainRepository<IAdmin> {
     return super.softDeleteById(id);
   }
 
+  findOne(conditions: any, options: QueryParams = {}): Promise<IAdmin>{
+    return super.findOne(conditions, options);
+  }
+
 }
 
 export default new AdminRepository(Admin);

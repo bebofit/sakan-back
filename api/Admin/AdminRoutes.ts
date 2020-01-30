@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import errorHandler from 'express-async-handler';
 import { isAuth, IsAdmin } from '../../middleware';
+import AdminController from './AdminController';
 
 const router = Router();
 
-//routes go here
+router.post('/login', errorHandler(AdminController.login));
 
 export default router;

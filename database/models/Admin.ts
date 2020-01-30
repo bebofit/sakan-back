@@ -30,6 +30,10 @@ const adminSchema = new Schema(
             type: String,
             required: true
         },
+        type: {
+            type: String,
+            enum: ['admin', 'superAdmin']
+        },
         isDeleted: {
             type: Boolean,
             default: false
@@ -49,15 +53,15 @@ const adminSchema = new Schema(
         timestamps: true,
         toJSON: { virtuals: true },
         discriminatorKey: 'type',
-        collection: 'users'
+        collection: 'admins'
     }
 );
 
 adminSchema.plugin(mongooseLeanVirtuals);
 
 adminSchema.index({
-  name: 'text',
-  email: 'text'
+    name: 'text',
+    email: 'text'
 });
 
 const Admin = model<IAdmin>('Admin', adminSchema);
