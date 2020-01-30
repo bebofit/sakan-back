@@ -5,6 +5,7 @@ import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
 interface IContract extends Document {
   _id: string;
   contractType: string;
+  status: string;
   duration: number;
   propertyId: string;
   ownerId: string;
@@ -20,6 +21,11 @@ const contractSchema = new Schema(
     contractType: {
       type: String,
       enum: ['buy', 'rent'],
+      required: true
+    },
+    status: {
+      type: String,
+      enum: ['active', 'closed'],
       required: true
     },
     duration: {

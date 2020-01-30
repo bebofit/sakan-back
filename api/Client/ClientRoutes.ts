@@ -15,5 +15,6 @@ router.get('/fetch/favorites',isAuth, isClient, errorHandler(clientController.ge
 router.post('/add/favorite',isAuth, isClient, errorHandler(clientController.addToFavorites));
 router.delete('/remove/favorite',isAuth, isClient, errorHandler(clientController.removeFromFavorites));
 router.post('/reserve', isAuth, isClient, errorHandler(clientController.reserveProperty));
+router.post('/rent', isAuth, isClient, errorHandler(clientController.rentRequest));
 
 export default router;

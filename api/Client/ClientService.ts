@@ -1,6 +1,7 @@
-import { IClient, IProperty } from '../../database/models';
+import { IClient, IProperty, IRentBuyRequest } from '../../database/models';
 import repository from './ClientRepository';
 import propertyService from './../Property/PropertyService';
+import rentBuyRequestService from './../Request/RentBuyRequest/RentBuyRequestService';
 import NotFoundException from '../../exception/NotFoundException';
 import InvalidInputException from '../../exception/InvalidInputException';
 import ConflictException from '../../exception/ConflictException';
@@ -73,14 +74,30 @@ class ClientService {
     if(property.reservation.isReserved){
       throw new ConflictException('The property is already reserved');
     }
-    await propertyService.updateProperty(propId, {
+    return await propertyService.updateProperty(propId, {
       reservation: {
         isReserved: true,
         reservedBy: userId,
         reservedAt: new Date(),
       }
     } as IProperty);
-    return propId;
+  }
+
+  //{reqType ,ownerId, clientId, propertyId}: IRentBuyRequest
+  async newRentRequest(propId: string, clientId: string): Promise<any>{
+    let property: IProperty = await propertyService.getProperty(propId);
+    if(!property.reservation.isReserved){
+      throw new ConflictException('You must reserve the property first');
+    }
+    if(property.reservation.reservedBy !== clientId){
+      throw new ConflictException('The property is reserved by another person');
+    }
+    return await rentBuyRequestService.createRequest({
+      reqType: 'rent',
+      ownerId: property.owner,
+      clientId: clientId,
+      propertyId: propId
+    }as IRentBuyRequest);
   }
 }
 

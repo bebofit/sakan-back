@@ -86,7 +86,14 @@ class ClientController {
   async reserveProperty(request: IRequest, response: Response): Promise<any>{
     validation.validateBody(request.body, clientsValidations.PROPID);
     await clientService.reserveProperty(request.body.propId, request.user._id);
-    return Http.sendResponse(response, httpStatus.OK, null, 'property reserved');
+    return Http.sendResponse(response, httpStatus.OK, null, 'Property reserved');
+  }
+
+
+  async rentRequest(request: IRequest, response: Response): Promise<any>{
+    validation.validateBody(request.body, clientsValidations.PROPID);
+    await clientService.newRentRequest();
+    return Http.sendResponse(response, httpStatus.OK, null, 'Rent request is awaiting confirmation');
   }
   
 }

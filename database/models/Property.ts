@@ -33,6 +33,11 @@ const propertySchema = new Schema(
       required: true,
       enum: ['apartment', 'duplex', 'penthouse', 'villa', 'townhouse']
     },
+    currentContract: {
+      type: Schema.Types.ObjectId,
+      ref: 'Contact',
+      required: false
+    },
     address: {
       street: {
         type: String,
@@ -120,7 +125,7 @@ const propertySchema = new Schema(
     timestamps: true,
     toJSON: { virtuals: true },
     collection: 'properties'
-  }
+  },
 );
 
 propertySchema.plugin(mongooseLeanVirtuals);
