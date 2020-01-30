@@ -89,15 +89,31 @@ class ClientService {
     if(!property.reservation.isReserved){
       throw new ConflictException('You must reserve the property first');
     }
-    if(property.reservation.reservedBy !== clientId){
+    if(property.reservation.reservedBy != clientId){
       throw new ConflictException('The property is reserved by another person');
     }
+    const requests = await rentBuyRequestService.find({
+      reqType: 'rent',
+      propertyId: propId,
+      clientId: clientId
+    } as IRentBuyRequest);
+    if(requests.length > 0){
+      throw new InvalidInputException('You already have a rent request for that property');
+    }
+    // // Rejecting the rest of the rent requests on this property
+    // await rentBuyRequestService.updateMany({
+    //   reqType: 'rent',
+    //   propertyId: propId,
+    //   status: 'pending approval',
+    // } as IRentBuyRequest, {
+    //   status: 'rejected'
+    // });
     return await rentBuyRequestService.createRequest({
       reqType: 'rent',
       ownerId: property.owner,
       clientId: clientId,
       propertyId: propId
-    }as IRentBuyRequest);
+    } as IRentBuyRequest);
   }
 }
 

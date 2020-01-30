@@ -8,6 +8,10 @@ class IRentBuyRequestRepository extends MainRepository<IRentBuyRequest> {
     super(model);
   }
 
+  find(conditions: any = {}, options: QueryParams = {}): Promise<IRentBuyRequest[]> {
+    return super.find(conditions, options);
+  }
+
   create(body: any): Promise<IRentBuyRequest> {
     return super.create(body);
   }
@@ -26,6 +30,10 @@ class IRentBuyRequestRepository extends MainRepository<IRentBuyRequest> {
 
   softDeleteById(id: string): Promise<boolean> {
     return super.softDeleteById(id);
+  }
+
+  flexibleUpdateMany(conditions: any = {}, update: any): Promise<boolean>{
+    return super.flexibleUpdateMany(conditions, update);
   }
 
 }

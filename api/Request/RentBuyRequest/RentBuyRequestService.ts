@@ -6,6 +6,10 @@ class RentBuyRequestService {
 
   constructor(){}
 
+  async find(conditions: any = {}): Promise<IRentBuyRequest[]>{
+    return await repository.find(conditions);
+  }
+
   async createRequest(body: IRentBuyRequest): Promise<IRentBuyRequest> {
     return await repository.create(body);
   }
@@ -41,6 +45,10 @@ class RentBuyRequestService {
     }
     await repository.findByIdAndUpdate(id, { isDeleted: true });
     return isDeleted;
+  }
+
+  async updateMany(conditions: any, updates: any): Promise<boolean>{
+    return await repository.flexibleUpdateMany(conditions, updates);
   }
 }
 
