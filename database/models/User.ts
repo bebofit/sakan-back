@@ -1,6 +1,7 @@
 import { Document, model, Schema } from 'mongoose';
 // @ts-ignore
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
+import { UserType } from '../../enums';
 
 interface IUser extends Document {
   _id: string;
@@ -28,7 +29,7 @@ const userSchema = new Schema(
     // _id: Schema.Types.ObjectId,
     userType: {
       type: String,
-      enum: ['client', 'investor']
+      enum: Object.values(UserType)
     },
     firstName: {
       type: String,
@@ -71,7 +72,7 @@ const userSchema = new Schema(
       type: Boolean,
       default: false
     },
-    deletedAt:{
+    deletedAt: {
       type: Date
     },
     profileStatus: {

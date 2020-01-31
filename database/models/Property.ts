@@ -1,12 +1,13 @@
 import { Document, model, Schema } from 'mongoose';
 // @ts-ignore
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
+import { PropType } from '../../enums';
 
 interface IProperty extends Document {
   _id: string;
   propType: string;
   address: object;
-  currentContract?: string
+  currentContract?: string;
   description?: string;
   bedroomNum: string;
   bathroomNum: string;
@@ -20,9 +21,9 @@ interface IProperty extends Document {
   isDeleted?: boolean;
   deletedAt?: Date;
   reservation?: {
-    isReserved: boolean,
-    reservedBy?: string,
-    reservedAt?: Date
+    isReserved: boolean;
+    reservedBy?: string;
+    reservedAt?: Date;
   };
 }
 
@@ -32,7 +33,7 @@ const propertySchema = new Schema(
     propType: {
       type: String,
       required: true,
-      enum: ['apartment', 'duplex', 'penthouse', 'villa', 'townhouse']
+      enum: Object.values(PropType)
     },
     currentContract: {
       type: Schema.Types.ObjectId,
@@ -75,25 +76,31 @@ const propertySchema = new Schema(
       ref: 'Investor'
     },
     unitArea: {
-      type: String,
+      type: Number,
       required: true
     },
     rentValue: {
       type: Number,
-      required: function () { return this.buyValue === null; } // Only required if buyValue equals null
+      required: function() {
+        return this.buyValue === null;
+      } // Only required if buyValue equals null
     },
     buyValue: {
       type: Number,
-      required: function () { return this.rentValue === null; } // Only required if rentValue equals null
+      required: function() {
+        return this.rentValue === null;
+      } // Only required if rentValue equals null
     },
     geospace: {
       type: String,
       default: null
     },
-    photos: [{
-      type: String,
-      default: null
-    }],
+    photos: [
+      {
+        type: String,
+        default: null
+      }
+    ],
     isApproved: {
       type: Boolean,
       required: true,
@@ -126,13 +133,13 @@ const propertySchema = new Schema(
     timestamps: true,
     toJSON: { virtuals: true },
     collection: 'properties'
-  },
+  }
 );
 
 propertySchema.plugin(mongooseLeanVirtuals);
 
 propertySchema.index({
-  address: 'object',
+  address: 'object'
 });
 
 const Property = model<IProperty>('Property', propertySchema);

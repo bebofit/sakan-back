@@ -1,37 +1,42 @@
 import { Model } from 'mongoose';
 import { MainRepository } from '../../database/MainRepo';
 import { Property, IProperty } from '../../database/models';
-import { QueryParams } from '../../Interfaces';
+import { QueryParams, IPropertyFilter } from '../../Interfaces';
 
 class PropertyRepository extends MainRepository<IProperty> {
   constructor(protected model: Model<IProperty>) {
     super(model);
   }
 
-  create(body: any): Promise<IProperty> {
-    return super.create(body);
+  filterProperty(filters: IPropertyFilter) {
+    const conditions: any = {};
+    conditions.rentValue = {
+      $gte: filters.rentValueMin,
+      $lte: filters.rentValueMax
+    };
+    conditions.unitArea = {
+      $gte: filters.unitAreaMin,
+      $lte: filters.unitAreaMax
+    };
+    if (filters.bathroomNum) {
+      conditions.bathroomNum = { $gte: filters.bathroomNum };
+    }
+    if (filters.bedroomNum) {
+      conditions.bathroomNum = { $gte: filters.bedroomNum };
+    }
+    if (filters.propType) {
+      conditions.propType = filters.propType;
+    }
+    if (filters.city) {
+      conditions['address.city'] = filters.city;
+    }
+    return conditions;
   }
 
-  find(conditions: any = {}, options: QueryParams = {}): Promise<IProperty[]>{
-    return super.find(conditions, options);
+  getByFilter(filters: IPropertyFilter, options?: QueryParams) {
+    const conditions = this.filterProperty(filters);
+    return this.find(conditions, options);
   }
-
-  findAll(options?: QueryParams): Promise<IProperty[]> {
-    return super.find({}, options);
-  }
-
-  findById(id: string): Promise<IProperty> {
-    return super.findById(id);
-  }
-
-  findByIdAndUpdate(id: string, update: any): Promise<IProperty> {
-    return super.findByIdAndUpdate(id, update);
-  }
-
-  softDeleteById(id: string): Promise<boolean> {
-    return super.softDeleteById(id);
-  }
-
 }
 
 export default new PropertyRepository(Property);

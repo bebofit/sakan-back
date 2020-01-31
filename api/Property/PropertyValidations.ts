@@ -1,21 +1,17 @@
 import joi from '../../lib/joi';
+import { PropType } from '../../enums';
 
 const CREATE = joi.object({
   propType: joi
     .string()
-    .required()
-    .valid('apartment', 'duplex', 'penthouse', 'villa', 'townhouse'),
-  address: joi
-    .object({
-      street: joi
-        .string()
-        .required(),
-      city: joi
-        .string()
-        .required(),
-      country: joi
-        .string()
-    }),
+    .trim()
+    .valid(...Object.values(PropType))
+    .required(),
+  address: joi.object({
+    street: joi.string().required(),
+    city: joi.string().required(),
+    country: joi.string()
+  }),
   description: joi
     .string()
     .required()
@@ -28,43 +24,28 @@ const CREATE = joi.object({
     .string()
     .required()
     .regex(/^[0-9]*$/),
-  owner: (joi as any)
-    .objectId()
-    .required(),
+  owner: (joi as any).objectId().required(),
   unitArea: joi
     .string()
     .required()
     .max(5)
     .regex(/^[0-9]*$/),
-  rentValue: joi
-    .number()
-    .positive(),
-  buyValue: joi
-    .number()
-    .positive(),
-  geospace: joi
-    .string(),
-  photos: joi
-    .array()
-    .items(joi.string())
+  rentValue: joi.number().positive(),
+  buyValue: joi.number().positive(),
+  geospace: joi.string(),
+  photos: joi.array().items(joi.string())
 });
 
 const UPDATE = joi.object({
   propType: joi
     .string()
-    .required()
-    .valid('apartment', 'duplex', 'penthouse', 'villa', 'townhouse'),
-  address: joi
-    .object({
-      street: joi
-        .string()
-        .required(),
-      city: joi
-        .string()
-        .required(),
-      country: joi
-        .string()
-    }),
+    .trim()
+    .valid(...Object.values(PropType)),
+  address: joi.object({
+    street: joi.string().required(),
+    city: joi.string().required(),
+    country: joi.string()
+  }),
   description: joi
     .string()
     .required()
@@ -82,17 +63,10 @@ const UPDATE = joi.object({
     .required()
     .max(5)
     .regex(/^[0-9]*$/),
-  rentValue: joi
-    .number()
-    .positive(),
-  buyValue: joi
-    .number()
-    .positive(),
-  geospace: joi
-    .string(),
-  photos: joi
-    .array()
-    .items(joi.string())
+  rentValue: joi.number().positive(),
+  buyValue: joi.number().positive(),
+  geospace: joi.string(),
+  photos: joi.array().items(joi.string())
 });
 
 // fields
@@ -102,10 +76,20 @@ const FILTER = joi.object({
   city: joi.string(),
   bedroomNum: joi.number(),
   bathroomNum: joi.number(),
-  propType: joi.string().valid('apartment', 'duplex', 'penthouse', 'villa', 'townhouse'),
-  unitArea: joi.number(),
-  rentValue: joi.number(),
-  buyValue: joi.number()
+  propType: joi
+    .string()
+    .trim()
+    .valid(...Object.values(PropType)),
+  unitAreaMin: joi
+    .number()
+    .default(0)
+    .less(joi.ref('unitAreaMax')),
+  unitAreaMax: joi.number().default(Number.MAX_VALUE),
+  rentValueMin: joi
+    .number()
+    .default(0)
+    .less(joi.ref('rentValueMax')),
+  rentValueMax: joi.number().default(Number.MAX_VALUE)
 });
 
 export { CREATE, UPDATE, FILTER };
