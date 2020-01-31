@@ -1,5 +1,4 @@
 
-import Helpers from '../Utils/Helpers';
 import repo from './AdminRepository';
 import bcrypt from 'bcrypt';
 import NotFoundException from '../../exception/NotFoundException';
@@ -8,6 +7,11 @@ import Messages = require('../Constants/Messages');
 import jwt from 'jsonwebtoken';
 import { promises as fs } from 'fs';
 import path from 'path';
+import rentBuyRequestService from './../Request/RentBuyRequest/RentBuyRequestService';
+import { IRentBuyRequest, IContract, IProperty } from '../../database/models';
+import InvalidInputException from '../../exception/InvalidInputException';
+import contractService from './../Contract/ContractService';
+import PropertyService from '../Property/PropertyService';
 
 class AdminService {
     constructor() { }
@@ -28,6 +32,43 @@ class AdminService {
     async getAdmin(query: object): Promise<any> {
         let admin = await repo.findOne(query);
         return admin;
+    }
+
+    async respondToRentRequest(rentReqId: string, status: string): Promise<any> {
+        if (status === 'accepted') {
+            let rentReq: IRentBuyRequest = await rentBuyRequestService.findOne(rentReqId);
+            // Rejecting the rest of the rent requests on this property
+            await rentBuyRequestService.updateMany({
+                reqType: 'rent',
+                propertyId: rentReq.propertyId,
+                status: 'pending approval',
+            } as IRentBuyRequest, {
+                status: 'rejected'
+            });
+            //getting required property
+            let property: IProperty = await PropertyService.getProperty(rentReq.propertyId);
+            //creating a new contract
+            let now = new Date();
+            const contract: IContract = await contractService.createContract({
+                contractType: 'rent',
+                status: 'active',
+                propertyId: rentReq.propertyId,
+                ownerId: rentReq.ownerId,
+                clientId: rentReq.clientId,
+                invoice: [{
+                    invoiceNumber: 1,
+                    dueDate: now.setMonth(now.getDay() + 3),
+                    isPaid:false,
+                    value: property.rentValue,
+                    penaltyValue: 0
+                }]
+            } as IContract);
+            // updating property current current contract
+            await PropertyService.updateProperty(property._id, {
+                currentContract : contract._id 
+            } as IProperty);
+        }
+        await rentBuyRequestService.updateRequest(rentReqId, { status: status } as IRentBuyRequest);
     }
 }
 

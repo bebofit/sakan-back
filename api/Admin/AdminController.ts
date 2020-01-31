@@ -16,6 +16,12 @@ class AdminController {
         //sending response
         return Http.sendResponse(response, httpStatus.OK, token, "Login Successful");
     }
+
+    async respondToRentRequest(request: IRequest, response: Response): Promise<any>{
+        Validation.validateBody(request.body, adminValidations.RENTREQ);
+        await AdminService.respondToRentRequest(request.body.rentReqId, request.body.status);
+        return Http.sendResponse(response, httpStatus.OK, null, request.body.status);
+    }
 }
 
 export default new AdminController();

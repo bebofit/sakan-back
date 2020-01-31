@@ -6,6 +6,7 @@ interface IProperty extends Document {
   _id: string;
   propType: string;
   address: object;
+  currentContract: string
   description?: string;
   bedroomNum: string;
   bathroomNum: string;

@@ -50,6 +50,10 @@ class RentBuyRequestService {
   async updateMany(conditions: any, updates: any): Promise<boolean>{
     return await repository.flexibleUpdateMany(conditions, updates);
   }
+
+  async findOne(id: string): Promise<IRentBuyRequest>{
+    return repository.findOne(id);
+  }
 }
 
 export default new RentBuyRequestService();
