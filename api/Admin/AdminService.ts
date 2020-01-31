@@ -9,7 +9,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import rentBuyRequestService from './../Request/RentBuyRequest/RentBuyRequestService';
 import addRequestService from './../Request/AddPropertyRequest/AddPropertyRequestService';
-import { IRentBuyRequest, IContract, IProperty, IAddPropertyRequest, AddPropertyRequest } from '../../database/models';
+import { IRentBuyRequest, IContract, IProperty, IAddPropertyRequest, AddPropertyRequest, Property } from '../../database/models';
 import contractService from './../Contract/ContractService';
 import PropertyService from '../Property/PropertyService';
 
@@ -73,8 +73,9 @@ class AdminService {
 
     async respondToAddRequest(addReqId: string, status: string): Promise<any>{
         if(status === 'accepted'){
-            const addReq: IAddPropertyRequest = await AddPropertyRequest.findOne(addReqId);
-            await PropertyService.createProperty(addReq as IProperty);
+            const addReq: any = await AddPropertyRequest.findOne(addReqId);
+            let {status, isApproved, isDeleted, deletedAt, ...property} = addReq;
+            await PropertyService.createProperty(property as IProperty);
         }
         return addRequestService.updateRequest(addReqId, {status : status} as IAddPropertyRequest);
     }
