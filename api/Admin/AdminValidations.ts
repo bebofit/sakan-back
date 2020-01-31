@@ -13,10 +13,14 @@ const LOGIN = joi.object({
     .min(8)
 });
 
-
 const RENTREQ = joi.object({
   rentReqId: joi.string().required(),
   status: joi.string().valid('accepted', 'rejected').required()
 });
 
-export { LOGIN, RENTREQ };
+const ADDREQ = joi.object({
+  addReqId: joi.string().required(),
+  status: joi.string().valid('accepted', 'rejected').required()
+});
+
+export { LOGIN, RENTREQ, ADDREQ };

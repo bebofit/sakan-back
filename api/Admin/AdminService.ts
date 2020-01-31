@@ -8,8 +8,8 @@ import jwt from 'jsonwebtoken';
 import { promises as fs } from 'fs';
 import path from 'path';
 import rentBuyRequestService from './../Request/RentBuyRequest/RentBuyRequestService';
-import { IRentBuyRequest, IContract, IProperty } from '../../database/models';
-import InvalidInputException from '../../exception/InvalidInputException';
+import addRequestService from './../Request/AddPropertyRequest/AddPropertyRequestService';
+import { IRentBuyRequest, IContract, IProperty, IAddPropertyRequest, AddPropertyRequest } from '../../database/models';
 import contractService from './../Contract/ContractService';
 import PropertyService from '../Property/PropertyService';
 
@@ -68,7 +68,15 @@ class AdminService {
                 currentContract : contract._id 
             } as IProperty);
         }
-        await rentBuyRequestService.updateRequest(rentReqId, { status: status } as IRentBuyRequest);
+        return rentBuyRequestService.updateRequest(rentReqId, { status: status } as IRentBuyRequest);
+    }
+
+    async respondToAddRequest(addReqId: string, status: string): Promise<any>{
+        if(status === 'accepted'){
+            const addReq: IAddPropertyRequest = await AddPropertyRequest.findOne(addReqId);
+            await PropertyService.createProperty(addReq as IProperty);
+        }
+        return addRequestService.updateRequest(addReqId, {status : status} as IAddPropertyRequest);
     }
 }
 

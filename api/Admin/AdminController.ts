@@ -22,6 +22,12 @@ class AdminController {
         await AdminService.respondToRentRequest(request.body.rentReqId, request.body.status);
         return Http.sendResponse(response, httpStatus.OK, null, request.body.status);
     }
+
+    async respondToAddRequest(request: IRequest, response: Response): Promise<any>{
+        Validation.validateBody(request.body, adminValidations.ADDREQ);
+        await AdminService.respondToAddRequest(request.body.addReqId, request.body.status)
+        return Http.sendResponse(response, httpStatus.OK, null, request.body.status); 
+    }
 }
 
 export default new AdminController();
