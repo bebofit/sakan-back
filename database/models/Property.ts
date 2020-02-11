@@ -9,8 +9,8 @@ interface IProperty extends Document {
   address: object;
   currentContract?: string;
   description?: string;
-  bedroomNum: string;
-  bathroomNum: string;
+  bedroomNum: number;
+  bathroomNum: number;
   owner: string;
   unitArea: string;
   rentValue: number;
@@ -60,14 +60,14 @@ const propertySchema = new Schema(
       default: null
     },
     bedroomNum: {
-      type: String,
+      type: Number,
       required: true,
-      default: '0'
+      default: 0
     },
     bathroomNum: {
-      type: String,
+      type: Number,
       required: true,
-      default: '0'
+      default: 0
     },
     owner: {
       type: Schema.Types.ObjectId,

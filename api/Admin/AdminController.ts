@@ -24,9 +24,9 @@ class AdminController {
     }
 
     async respondToAddRequest(request: IRequest, response: Response): Promise<any>{
-        Validation.validateBody(request.body, adminValidations.ADDREQ);
-        await AdminService.respondToAddRequest(request.body.addReqId, request.body.status)
-        return Http.sendResponse(response, httpStatus.OK, null, request.body.status); 
+        const body = Validation.validateBody(request.body, adminValidations.ADDREQ);
+        await AdminService.respondToAddRequest(body.addReqId, request.body.status)
+        return Http.sendResponse(response, httpStatus.OK, null, request.body.status);  
     }
 }
 

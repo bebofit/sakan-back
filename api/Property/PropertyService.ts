@@ -44,7 +44,7 @@ class PropertyService {
   }
 
   async getByFilter(filterObject: IPropertyFilter) {
-    return await repository.find(filterObject);
+    return await repository.getByFilter(filterObject);
   }
 }
 
