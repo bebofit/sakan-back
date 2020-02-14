@@ -1,14 +1,14 @@
-import { Response } from 'express';
-import * as httpStatus from 'http-status';
-import { IRequest } from '../../Interfaces';
-import * as propertyValidations from './PropertyValidations';
-import propertyService from './PropertyService';
-import validation from '../Utils/Validation';
-import Codes = require('../Constants/Codes');
-import Messages = require('../Constants/Messages');
-import ConflictException from '../../exception/ConflictException';
-import Http from '../Utils/Http';
-import Email from '../Utils/Mail';
+import { Response } from "express";
+import * as httpStatus from "http-status";
+import { IRequest } from "../../Interfaces";
+import * as propertyValidations from "./PropertyValidations";
+import propertyService from "./PropertyService";
+import validation from "../Utils/Validation";
+import Codes = require("../Constants/Codes");
+import Messages = require("../Constants/Messages");
+import ConflictException from "../../exception/ConflictException";
+import Http from "../Utils/Http";
+import Email from "../Utils/Mail";
 
 class PropertyController {
   constructor() {}
@@ -38,7 +38,7 @@ class PropertyController {
       response,
       httpStatus.CREATED,
       property,
-      'Property Created Successfully'
+      "Property Created Successfully"
     );
   }
 
@@ -49,7 +49,7 @@ class PropertyController {
       response,
       httpStatus.OK,
       properties,
-      'Properties Found'
+      "Properties Found"
     );
   }
 
@@ -60,7 +60,7 @@ class PropertyController {
       response,
       httpStatus.OK,
       properties,
-      'Property Found'
+      "Property Found"
     );
   }
 
@@ -78,7 +78,7 @@ class PropertyController {
       response,
       httpStatus.OK,
       property,
-      'Property Data Updated Successfully'
+      "Property Data Updated Successfully"
     );
   }
 
@@ -89,7 +89,7 @@ class PropertyController {
       response,
       httpStatus.OK,
       property,
-      'Property Deleted Successfully'
+      "Property Deleted Successfully"
     );
   }
 
@@ -98,7 +98,7 @@ class PropertyController {
   async getByFilter(request: IRequest, response: Response): Promise<any> {
     validation.validateBody(request.body, propertyValidations.FILTER);
     let result = await propertyService.getByFilter(request.body);
-    return Http.sendResponse(response, httpStatus.OK, result, 'Properties');
+    return Http.sendResponse(response, httpStatus.OK, result, "Properties");
   }
 }
 

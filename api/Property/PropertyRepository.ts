@@ -1,7 +1,7 @@
-import { Model } from 'mongoose';
-import { MainRepository } from '../../database/MainRepo';
-import { Property, IProperty } from '../../database/models';
-import { QueryParams, IPropertyFilter } from '../../Interfaces';
+import { Model } from "mongoose";
+import { MainRepository } from "../../database/MainRepo";
+import { Property, IProperty } from "../../database/models";
+import { QueryParams, IPropertyFilter } from "../../Interfaces";
 
 class PropertyRepository extends MainRepository<IProperty> {
   constructor(protected model: Model<IProperty>) {
@@ -28,7 +28,7 @@ class PropertyRepository extends MainRepository<IProperty> {
       conditions.propType = filters.propType;
     }
     if (filters.city) {
-      conditions['address.city'] = filters.city;
+      conditions["address.city"] = filters.city;
     }
     return conditions;
   }
@@ -36,6 +36,21 @@ class PropertyRepository extends MainRepository<IProperty> {
   getByFilter(filters: IPropertyFilter, options?: QueryParams) {
     const conditions = this.filterProperty(filters);
     return this.find(conditions, options);
+  }
+
+  reserveProperty(propId: any, userId: string): Promise<boolean> {
+    return super.setUpdateOne(
+      { _id: propId, "reservation.isReserved": false },
+      {
+        reservation: {
+          isReserved: true,
+          reservedBy: userId,
+          reservedAt: new Date()
+        },
+        $pull: { favProps: propId },
+        reserveProperty: propId
+      }
+    );
   }
 }
 

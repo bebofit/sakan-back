@@ -1,5 +1,5 @@
-import joi from '../../lib/joi';
-import { PropType } from '../../enums';
+import joi from "../../lib/joi";
+import { PropType } from "../../enums";
 
 const CREATE = joi.object({
   propType: joi
@@ -16,20 +16,10 @@ const CREATE = joi.object({
     .string()
     .required()
     .max(200),
-  bedroomNum: joi
-    .string()
-    .required()
-    .regex(/^[0-9]*$/),
-  bathroomNum: joi
-    .string()
-    .required()
-    .regex(/^[0-9]*$/),
+  bedroomNum: joi.number().required(),
+  bathroomNum: joi.number().required(),
   owner: (joi as any).objectId().required(),
-  unitArea: joi
-    .string()
-    .required()
-    .max(5)
-    .regex(/^[0-9]*$/),
+  unitArea: joi.number().required(),
   rentValue: joi.number().positive(),
   buyValue: joi.number().positive(),
   geospace: joi.string(),
@@ -83,12 +73,12 @@ const FILTER = joi.object({
   unitAreaMin: joi
     .number()
     .default(0)
-    .less(joi.ref('unitAreaMax')),
+    .less(joi.ref("unitAreaMax")),
   unitAreaMax: joi.number().default(Number.MAX_VALUE),
   rentValueMin: joi
     .number()
     .default(0)
-    .less(joi.ref('rentValueMax')),
+    .less(joi.ref("rentValueMax")),
   rentValueMax: joi.number().default(Number.MAX_VALUE)
 });
 
