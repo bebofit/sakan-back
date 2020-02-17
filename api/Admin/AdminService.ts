@@ -12,6 +12,7 @@ import addRequestService from './../Request/AddPropertyRequest/AddPropertyReques
 import { IRentBuyRequest, IContract, IProperty, IAddPropertyRequest, AddPropertyRequest, Property } from '../../database/models';
 import contractService from './../Contract/ContractService';
 import PropertyService from '../Property/PropertyService';
+import repository from './AdminRepository';
 
 class AdminService {
     constructor() { }
@@ -72,12 +73,15 @@ class AdminService {
     }
 
     async respondToAddRequest(addReqId: string, status: string): Promise<any>{
+        let isApproved = false
         if(status === 'accepted'){
-            const addReq: any = await AddPropertyRequest.findOne(addReqId);
-            let {status, isApproved, isDeleted, deletedAt, ...property} = addReq;
+            let addReq: any = await addRequestService.getRequest(addReqId);
+            isApproved = true;
+            addReq.isApproved = true;
+            let { _id, status, isDeleted, ...property } = addReq.toObject();
             await PropertyService.createProperty(property as IProperty);
         }
-        return addRequestService.updateRequest(addReqId, {status : status} as IAddPropertyRequest);
+        return addRequestService.updateRequest(addReqId, {status : status, isApproved : isApproved} as IAddPropertyRequest);
     }
 }
 

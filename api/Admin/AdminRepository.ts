@@ -7,6 +7,10 @@ class AdminRepository extends MainRepository<IAdmin> {
   constructor(protected model: Model<IAdmin>) {
     super(model);
   }
+
+  findAddRequest(addReqId: any): Promise<any> {
+    return super.findById(addReqId)
+  }
 }
 
 export default new AdminRepository(Admin);

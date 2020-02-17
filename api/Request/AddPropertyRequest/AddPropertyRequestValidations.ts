@@ -30,8 +30,6 @@ const CREATE = joi.object({
     .string()
     .required()
     .regex(/^[0-9]*$/),
-  owner: (joi as any)
-    .objectId(),
   unitArea: joi
     .string()
     .required()

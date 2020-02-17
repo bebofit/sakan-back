@@ -32,7 +32,8 @@ const adminSchema = new Schema(
         },
         type: {
             type: String,
-            enum: ['admin', 'superAdmin']
+            enum: ['admin', 'superAdmin'],
+            required:true
         },
         isDeleted: {
             type: Boolean,

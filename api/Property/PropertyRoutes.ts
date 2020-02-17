@@ -1,8 +1,6 @@
 import { Router } from 'express';
 import errorHandler from 'express-async-handler';
 import propertyController from './PropertyController';
-import isAuthenticated from '../../middleware/isAuthenticated';
-import isClient from '../../middleware/isClient';
 
 const router = Router();
 

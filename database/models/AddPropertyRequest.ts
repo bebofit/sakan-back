@@ -61,7 +61,8 @@ const addPropertyRequestSchema = new Schema(
     },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'User',
+      required: true
     },
     unitArea: {
       type: String,

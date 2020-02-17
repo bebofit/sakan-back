@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import errorHandler from 'express-async-handler';
 import userController from './UserController';
-import isAuthenticated from '../../middleware/isAuthenticated';
+import IsAuth from '../../middleware/isAuthenticated';
 
 const router = Router();
 
@@ -10,6 +10,6 @@ router.post('/login', errorHandler(userController.login));
 router.post('/password/forget', errorHandler(userController.forgetPassword));
 router.post('/password/reset', errorHandler(userController.resetPassword));
 router.post('/email/verify', errorHandler(userController.verifyEmail));
-router.get('/wallet',isAuthenticated, errorHandler(userController.getWalletValue));
+router.get('/wallet',IsAuth, errorHandler(userController.getWalletValue));
 
 export default router;

@@ -2,7 +2,7 @@ import { Router } from "express";
 import errorHandler from "express-async-handler";
 import clientController from "./ClientController";
 import isClient from "../../middleware/isClient";
-import { isAuth } from "../../middleware";
+import { IsAuth } from "../../middleware";
 
 const router = Router();
 
@@ -13,31 +13,31 @@ router.patch("/:id", errorHandler(clientController.updateClient));
 router.delete("/:id", errorHandler(clientController.deleteClient));
 router.get(
   "/fetch/favorites",
-  isAuth,
+  IsAuth,
   isClient,
   errorHandler(clientController.getFavoriteProperties)
 );
 router.post(
   "/add/favorite",
-  isAuth,
+  IsAuth,
   isClient,
   errorHandler(clientController.addToFavorites)
 );
 router.delete(
   "/remove/favorite",
-  isAuth,
+  IsAuth,
   isClient,
   errorHandler(clientController.removeFromFavorites)
 );
 router.post(
   "/reserve",
-  isAuth,
+  IsAuth,
   isClient,
   errorHandler(clientController.reserveProperty)
 );
 router.post(
   "/rent",
-  isAuth,
+  IsAuth,
   isClient,
   errorHandler(clientController.rentRequest)
 );
