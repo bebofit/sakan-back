@@ -18,8 +18,8 @@ class AdminController {
     }
 
     async respondToRentRequest(request: IRequest, response: Response): Promise<any>{
-        Validation.validateBody(request.body, adminValidations.RENTREQ);
-        await AdminService.respondToRentRequest(request.body.rentReqId, request.body.status);
+        const body = Validation.validateBody(request.body, adminValidations.RENTREQ);
+        await AdminService.respondToRentRequest(body.rentReqId, request.body.status);
         return Http.sendResponse(response, httpStatus.OK, null, request.body.status);
     }
 

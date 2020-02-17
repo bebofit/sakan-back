@@ -36,16 +36,20 @@ class AdminService {
     }
 
     async respondToRentRequest(rentReqId: string, status: string): Promise<any> {
+        if (status === "rejected")
+            return rentBuyRequestService.updateRequest(rentReqId, { status: status } as IRentBuyRequest);
+
         if (status === 'accepted') {
-            let rentReq: IRentBuyRequest = await rentBuyRequestService.findOne(rentReqId);
+            let rentReq: IRentBuyRequest = await rentBuyRequestService.getRequest(rentReqId);
+            rentBuyRequestService.updateRequest(rentReqId, { status: status, isApproved: true } as IRentBuyRequest)
             // Rejecting the rest of the rent requests on this property
             await rentBuyRequestService.updateMany({
                 reqType: 'rent',
                 propertyId: rentReq.propertyId,
                 status: 'pending approval',
             } as IRentBuyRequest, {
-                status: 'rejected'
-            });
+                    status: 'rejected'
+                });
             //getting required property
             let property: IProperty = await PropertyService.getProperty(rentReq.propertyId);
             //creating a new contract
@@ -58,30 +62,30 @@ class AdminService {
                 clientId: rentReq.clientId,
                 invoice: [{
                     invoiceNumber: 1,
-                    dueDate: now.setMonth(now.getDay() + 3),
-                    isPaid:false,
+                    dueDate: now.setMonth(now.getMonth() + 1),
+                    isPaid: false,
                     value: property.rentValue,
                     penaltyValue: 0
                 }]
             } as IContract);
             // updating property current current contract
             await PropertyService.updateProperty(property._id, {
-                currentContract : contract._id 
+                currentContract: contract._id
             } as IProperty);
         }
-        return rentBuyRequestService.updateRequest(rentReqId, { status: status } as IRentBuyRequest);
+
     }
 
-    async respondToAddRequest(addReqId: string, status: string): Promise<any>{
+    async respondToAddRequest(addReqId: string, status: string): Promise<any> {
         let isApproved = false
-        if(status === 'accepted'){
+        if (status === 'accepted') {
             let addReq: any = await addRequestService.getRequest(addReqId);
             isApproved = true;
             addReq.isApproved = true;
             let { _id, status, isDeleted, ...property } = addReq.toObject();
             await PropertyService.createProperty(property as IProperty);
         }
-        return addRequestService.updateRequest(addReqId, {status : status, isApproved : isApproved} as IAddPropertyRequest);
+        return addRequestService.updateRequest(addReqId, { status: status, isApproved: isApproved } as IAddPropertyRequest);
     }
 }
 
