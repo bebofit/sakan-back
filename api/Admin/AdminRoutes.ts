@@ -19,5 +19,10 @@ router.post(
   isAdmin,
   errorHandler(AdminController.respondToAddRequest)
 );
-
+router.get(
+  "/property/requests",
+  IsAuth,
+  isAdmin,
+  errorHandler(AdminController.getAllRequests)
+);
 export default router;

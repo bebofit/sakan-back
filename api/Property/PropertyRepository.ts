@@ -46,9 +46,7 @@ class PropertyRepository extends MainRepository<IProperty> {
           isReserved: true,
           reservedBy: userId,
           reservedAt: new Date()
-        },
-        $pull: { favProps: propId },
-        reserveProperty: propId
+        }
       }
     );
   }

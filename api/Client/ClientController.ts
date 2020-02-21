@@ -10,6 +10,7 @@ import Codes = require("../Constants/Codes");
 import Messages = require("../Constants/Messages");
 import ConflictException from "../../exception/ConflictException";
 import Http from "../Utils/Http";
+import UserService from "../User/UserService";
 
 class ClientController {
   constructor() {}
@@ -153,6 +154,18 @@ class ClientController {
         httpStatus.OK,
         null,
         "Property already reserved"
+      );
+    }
+    const isClientUpdated = await UserService.reserveProperty(
+      request.user._id,
+      propertyId
+    );
+    if (!isClientUpdated) {
+      return Http.sendResponse(
+        response,
+        httpStatus.OK,
+        null,
+        "User cannot reserve Property"
       );
     }
     return Http.sendResponse(

@@ -1,5 +1,5 @@
-import { Document, Model } from 'mongoose';
-import { QueryParams } from '../../Interfaces';
+import { Document, Model } from "mongoose";
+import { QueryParams } from "../../Interfaces";
 
 abstract class MainRepository<modelType extends Document> {
   constructor(protected model: Model<modelType>) {}
@@ -32,7 +32,7 @@ abstract class MainRepository<modelType extends Document> {
 
   find(conditions: any = {}, options: QueryParams = {}): Promise<modelType[]> {
     if (!options.includeDeleted) {
-      conditions.deletedAt = null;
+      conditions.isDeleted = false;
     }
     const parsedOptions = options && this.parseQueryOptions(options);
     return this.model.find(conditions, null, parsedOptions).exec();
@@ -43,7 +43,7 @@ abstract class MainRepository<modelType extends Document> {
     options: QueryParams = {}
   ): Promise<modelType[]> {
     if (!options.includeDeleted) {
-      conditions.deletedAt = null;
+      conditions.isDeleted = false;
     }
     const parsedOptions = options && this.parseQueryOptions(options);
     return this.model.find(conditions, null, parsedOptions).exec();
@@ -56,7 +56,7 @@ abstract class MainRepository<modelType extends Document> {
 
   findOne(conditions: any, options: QueryParams = {}): Promise<modelType> {
     if (!options.includeDeleted) {
-      conditions.deletedAt = null;
+      conditions.isDeleted = false;
     }
     const parsedOptions = options && this.parseQueryOptions(options);
     return this.model.findOne(conditions, null, parsedOptions).exec();
@@ -88,7 +88,7 @@ abstract class MainRepository<modelType extends Document> {
     options: QueryParams = {}
   ): Promise<modelType> {
     if (!options.includeDeleted) {
-      conditions.deletedAt = null;
+      conditions.isDeleted = false;
     }
     const parsedOptions = options && this.parseQueryOptions(options);
     return this.model
@@ -102,7 +102,7 @@ abstract class MainRepository<modelType extends Document> {
     options: QueryParams = {}
   ): Promise<modelType> {
     if (!options.includeDeleted) {
-      conditions.deletedAt = null;
+      conditions.isDeleted = false;
     }
     const parsedOptions = options && this.parseQueryOptions(options);
     return this.model
@@ -111,7 +111,7 @@ abstract class MainRepository<modelType extends Document> {
   }
 
   setUpdateMany(conditions: any = {}, update: any): Promise<boolean> {
-    conditions.deletedAt = null;
+    conditions.isDeleted = false;
     return this.model
       .updateMany(conditions, { $set: update })
       .exec()
@@ -119,7 +119,7 @@ abstract class MainRepository<modelType extends Document> {
   }
 
   flexibleUpdateMany(conditions: any = {}, update: any): Promise<boolean> {
-    conditions.deletedAt = null;
+    conditions.isDeleted = false;
     return this.model
       .updateMany(conditions, update)
       .exec()
@@ -135,7 +135,7 @@ abstract class MainRepository<modelType extends Document> {
   }
 
   setUpdateOne(conditions: any, update: any): Promise<boolean> {
-    conditions.deletedAt = null;
+    conditions.isDeleted = false;
     return this.model
       .updateOne(conditions, { $set: update })
       .exec()
@@ -143,7 +143,7 @@ abstract class MainRepository<modelType extends Document> {
   }
 
   flexibleUpdateOne(conditions: any, update: any): Promise<boolean> {
-    conditions.deletedAt = null;
+    conditions.isDeleted = false;
     return this.model
       .updateOne(conditions, update)
       .exec()
@@ -151,11 +151,11 @@ abstract class MainRepository<modelType extends Document> {
   }
 
   softDeleteMany(conditions: any = {}): Promise<boolean> {
-    conditions.deletedAt = null;
+    conditions.isDeleted = false;
     return this.model
       .updateMany(conditions, {
         $set: {
-          deletedAt: new Date()
+          isDeleted: true
         }
       })
       .exec()
@@ -167,11 +167,11 @@ abstract class MainRepository<modelType extends Document> {
   }
 
   softDeleteOne(conditions: any): Promise<boolean> {
-    conditions.deletedAt = null;
+    conditions.isDeleted = false;
     return this.model
       .updateOne(conditions, {
         $set: {
-          deletedAt: new Date()
+          isDeleted: true
         }
       })
       .exec()
