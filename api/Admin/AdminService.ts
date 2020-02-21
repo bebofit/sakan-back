@@ -24,11 +24,11 @@ class AdminService {
   constructor() {}
 
   async login(email: string, password: string): Promise<any> {
-    let user = await this.getAdmin({ email: email });
-    if (!user) {
+    let admin = await this.getAdmin({ email });
+    if (!admin) {
       throw new NotFoundException(Messages.user.error.incorrectEmail);
     }
-    if (!(await bcrypt.compare(password, user.password))) {
+    if (!(await bcrypt.compare(password, admin.password))) {
       throw new UnauthorizedException(Messages.user.error.incorrectPassword);
     }
     //Generate JWT Token
@@ -36,10 +36,10 @@ class AdminService {
       path.join(__dirname, "../../keys/jwtRS256.key")
     );
     return await {
-      token: jwt.sign(JSON.parse(JSON.stringify(user)), privateKey, {
+      token: jwt.sign(JSON.parse(JSON.stringify(admin)), privateKey, {
         algorithm: "RS256"
       }),
-      userType: user.userType
+      userType: admin.userType
     };
   }
 
