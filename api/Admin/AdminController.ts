@@ -61,7 +61,7 @@ class AdminController {
 
   async getAllRequests(request: IRequest, response: Response): Promise<any> {
     const data = await AdminService.getAllRequests();
-    return Http.sendResponse(response, httpStatus.OK, null, data);
+    return Http.sendResponse(response, httpStatus.OK, data, "");
   }
 }
 
