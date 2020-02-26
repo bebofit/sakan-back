@@ -1,7 +1,7 @@
-import { Document, model, Schema } from 'mongoose';
+import { Document, model, Schema } from "mongoose";
 // @ts-ignore
-import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
-import { PropType } from '../../enums';
+import mongooseLeanVirtuals from "mongoose-lean-virtuals";
+import { PropType } from "../../enums";
 
 interface IProperty extends Document {
   _id: string;
@@ -37,7 +37,7 @@ const propertySchema = new Schema(
     },
     currentContract: {
       type: Schema.Types.ObjectId,
-      ref: 'Contact',
+      ref: "Contact",
       required: false
     },
     address: {
@@ -52,7 +52,7 @@ const propertySchema = new Schema(
       },
       country: {
         type: String,
-        default: 'Egypt'
+        default: "Egypt"
       }
     },
     description: {
@@ -73,7 +73,7 @@ const propertySchema = new Schema(
       type: Schema.Types.ObjectId,
       required: true,
       // unique: true, //implies that an investor can only have one property
-      ref: 'Investor'
+      ref: "Investor"
     },
     unitArea: {
       type: Number,
@@ -122,7 +122,7 @@ const propertySchema = new Schema(
         type: Schema.Types.ObjectId,
         unique: true,
         sparse: true,
-        ref: 'Client'
+        ref: "Client"
       },
       reservedAt: {
         type: Date
@@ -132,16 +132,16 @@ const propertySchema = new Schema(
   {
     timestamps: true,
     toJSON: { virtuals: true },
-    collection: 'properties'
+    collection: "properties"
   }
 );
 
 propertySchema.plugin(mongooseLeanVirtuals);
 
 propertySchema.index({
-  address: 'object'
+  address: "object"
 });
 
-const Property = model<IProperty>('Property', propertySchema);
+const Property = model<IProperty>("Property", propertySchema);
 
 export { Property, IProperty };

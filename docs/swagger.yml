@@ -1,0 +1,251 @@
+openapi: 3.0.0
+servers:
+  - url: 'localhost:3000'
+info:
+  version: '1.0'
+  title: Grok-Backend
+  description: '# These are Grok backend Webservice Endpoints'
+  contact:
+    name: Abdelrahman Soliman
+    email: bebofit@aucegypt.edu
+tags:
+  - name: Auth
+  - name: Users
+
+paths:
+  ##############################              Authentication Apis                 ################
+
+  /api/auth/v1/register-mobile:
+    post:
+      tags:
+        - Auth
+      description: Allow Users with correct credentials to sign-in into the application
+      operationId: userRegisterMobile
+      requestBody:
+        description: users's info needed to register Mobile
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                mobile:
+                  type: string
+                  example: '0111112312'
+      responses:
+        '201':
+          description: Created user and send otp
+        '409':
+          description: mobile number already exists
+
+  /api/auth/v1/verify-mobile:
+    post:
+      tags:
+        - Auth
+      description: verify mobile with otp sent
+      operationId: userVerifyMobile
+      requestBody:
+        description: users's info needed to verify Mobile
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserVerifyMobileRequest'
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Wrong otp or mobile number
+
+  /api/auth/v1/register-user:
+    post:
+      tags:
+        - Auth
+      description: Allow Users with verified mobile to register
+      operationId: userRegister
+      requestBody:
+        description: users's info needed to sign-in
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegisterRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLoginResponse'
+        '404':
+          description: Didn't find user
+
+  /api/auth/v1/login-user:
+    post:
+      tags:
+        - Auth
+      description: Allow Users with correct credentials to sign-in into the application
+      operationId: usersSignIn
+      requestBody:
+        description: users's info needed to sign-in
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLoginResponse'
+        '404':
+          description: Didn't find user
+
+  /api/users/v1/{userId}/change-password:
+    post:
+      tags:
+        - Users
+      description: Allow Users with correct credentials to change their passwords
+      operationId: userChangePassword
+      requestBody:
+        description: user can change his password
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/changePassword'
+      parameters:
+        - $ref: '#/components/parameters/userIdParam'
+        - in: header
+          name: Authorization
+          schema:
+            $ref: '#/components/securitySchemes/bearerAuth'
+            required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLoginResponse'
+        '404':
+          description: Didn't find user
+        '403':
+          description: current password is not equal to existing password
+        '500':
+          description: wasn't able to revoke all other refresh tokens
+
+components:
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    UserLoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          example: '0100213123'
+        password:
+          type: string
+          example: '0100213123'
+          minimum: 8
+      required:
+        - username
+        - password
+
+    UserVerifyMobileRequest:
+      type: object
+      properties:
+        mobile:
+          type: string
+          example: '0100213123'
+        otp:
+          type: number
+          example: 1234
+          description: '4 digit number'
+      required:
+        - mobile
+        - password
+
+    UserRegisterRequest:
+      $ref: '#/components/schemas/user'
+
+    UserLoginResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/user'
+        accessToken:
+          type: string
+          example: 'xaavassfassaasca$3'
+        refreshToken:
+          type: string
+          example: 'xaavassfassaasca$3'
+      required:
+        - refreshToken
+        - accessToken
+        - user
+
+    changePassword:
+      type: object
+      properties:
+        currentPassword:
+          type: string
+          example: '123124124124123'
+        password:
+          type: string
+          example: 'xaavassfassaasca$3'
+      required:
+        - refreshToken
+        - accessToken
+        - user
+      ############### Lookups schemas   ####################
+
+    user:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: 'John'
+        lastName:
+          type: string
+          example: 'Doo'
+        email:
+          type: string
+          example: 'john@doo.com'
+        username:
+          type: string
+          example: 'johndoo'
+        dob:
+          type: number
+          description: 'date of birth'
+          example: 'date number 23241241'
+        mobile:
+          type: string
+          example: '+2011112455'
+        gender:
+          type: string
+          enum: ['M', 'F']
+        clientLanguage:
+          type: string
+          enum: ['en', 'ar']
+        mobileVerified:
+          type: boolean
+          example: true
+        accountVerified:
+          type: boolean
+          example: true
+
+  parameters:
+    userIdParam:
+      in: path
+      name: userId
+      required: true
+      schema:
+        type: string
+      description: User Identification

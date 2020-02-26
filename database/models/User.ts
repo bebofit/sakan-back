@@ -1,7 +1,7 @@
-import { Document, model, Schema } from 'mongoose';
+import { Document, model, Schema } from "mongoose";
 // @ts-ignore
-import mongooseLeanVirtuals from 'mongoose-lean-virtuals';
-import { UserType } from '../../enums';
+import mongooseLeanVirtuals from "mongoose-lean-virtuals";
+import { UserType } from "../../enums";
 
 interface IUser extends Document {
   _id: string;
@@ -55,7 +55,7 @@ const userSchema = new Schema(
     },
     gender: {
       type: String,
-      enum: ['male', 'female']
+      enum: ["male", "female"]
     },
     birthDate: {
       type: Date
@@ -98,26 +98,26 @@ const userSchema = new Schema(
       },
       currency: {
         type: String,
-        default: 'EGP'
+        default: "EGP"
       }
     }
   },
   {
     timestamps: true,
     toJSON: { virtuals: true },
-    discriminatorKey: 'type',
-    collection: 'users'
+    discriminatorKey: "type",
+    collection: "users"
   }
 );
 
 userSchema.plugin(mongooseLeanVirtuals);
 
 userSchema.index({
-  firstName: 'text',
-  lastName: 'text',
-  email: 'text'
+  firstName: "text",
+  lastName: "text",
+  email: "text"
 });
 
-const User = model<IUser>('User', userSchema);
+const User = model<IUser>("User", userSchema);
 
 export { User, IUser };
