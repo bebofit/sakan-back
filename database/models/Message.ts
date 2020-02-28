@@ -40,7 +40,7 @@ const messageSchema = new Schema(
     timestamps: true,
     toJSON: { virtuals: true },
     discriminatorKey: "type",
-    collection: "admins"
+    collection: "messages"
   }
 );
 

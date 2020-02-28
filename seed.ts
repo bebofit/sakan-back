@@ -7,10 +7,11 @@ import investorRepo from "./api/Investor/InvestorRepository";
 import propertiesRepo from "./api/Property/PropertyRepository";
 import { startDB, stopDB } from "./database";
 import { UserType, PropType } from "./enums";
-import { IInvestor, IProperty, IClient, IRentBuyRequest, IAddPropertyRequest, IContract, Contract, RentBuyRequest } from "./database/models";
+import { IInvestor, IProperty, IClient, IRentBuyRequest, IAddPropertyRequest, IContract, Contract, RentBuyRequest, Message } from "./database/models";
 import faker from "./lib/faker";
 import AddPropertyRequestRepository from "./api/Request/AddPropertyRequest/AddPropertyRequestRepository";
 import RentBuyRequestRepository from "./api/Request/RentBuyRequest/RentBuyRequestRepository";
+import MessageRepository from "./api/Messages/MessageRepository";
 
 let investors: IInvestor[];
 let clients: IClient[];
@@ -329,6 +330,23 @@ async function seedRentRequests() {
   console.log('Seeded Rent Requests')
 }
 
+// async function seedMessage(senderId: string, receiverId: string) :Promise<any> {
+//   return MessageRepository.create({
+//     content: faker.lorem.paragraph(),
+//     sender: senderId,
+//     receiver: receiverId,
+//   });
+// }
+
+// async function seedMessages(){
+//   await Promise.all(
+//   Array(faker.random.number({min:1000, max:2000}))
+//   .fill(null)
+//   .map(() => seedMessage(clients[faker.random.number({min:0, max:3})].id, clients[faker.random.number({min:0, max:3})].id))
+//   );
+//   console.log('Seeded Messages');
+// }
+
 (async function seed() {
   try {
     await startDB();
@@ -339,6 +357,7 @@ async function seedRentRequests() {
     await seedAddRequests();
     await seedContracts();
     await seedRentRequests();
+    // await seedMessages();
     await stopDB();
   } catch (error) {
     console.log(error);
