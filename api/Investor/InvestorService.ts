@@ -1,10 +1,9 @@
-import { IInvestor } from '../../database/models';
-import repository from './InvestorRepository';
-import NotFoundException from '../../exception/NotFoundException';
+import { IInvestor } from "../../database/models";
+import repository from "./InvestorRepository";
+import NotFoundException from "../../exception/NotFoundException";
 
 class InvestorService {
-
-  constructor(){}
+  constructor() {}
 
   async create(body: IInvestor): Promise<IInvestor> {
     return await repository.create(body);
@@ -12,7 +11,7 @@ class InvestorService {
 
   async getAllInvestors(): Promise<IInvestor[]> {
     let investors = await repository.findAll();
-    if(investors.length === 0){
+    if (investors.length === 0) {
       throw new NotFoundException("No Investors Found");
     }
     return investors;
@@ -20,7 +19,7 @@ class InvestorService {
 
   async getInvestor(id: string): Promise<IInvestor> {
     let investor = await repository.findById(id);
-    if(!investor){
+    if (!investor) {
       throw new NotFoundException("Investor not found");
     }
     return investor;
@@ -28,7 +27,7 @@ class InvestorService {
 
   async updateInvestor(id: string, body: IInvestor): Promise<IInvestor> {
     let investor = await repository.findByIdAndUpdate(id, body);
-    if(!investor){
+    if (!investor) {
       throw new NotFoundException("Investor not found");
     }
     return investor;
@@ -36,10 +35,10 @@ class InvestorService {
 
   async deleteInvestor(id: string): Promise<boolean> {
     let isDeleted = await repository.softDeleteById(id);
-    if(!isDeleted){
+    if (!isDeleted) {
       throw new NotFoundException("Investor not found");
     }
-    await repository.findByIdAndUpdate(id, { isDeleted: true });
+    // await repository.findByIdAndUpdate(id, { isDeleted: true });
     return isDeleted;
   }
 }

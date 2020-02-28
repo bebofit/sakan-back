@@ -18,7 +18,6 @@ import {
 } from "../../database/models";
 import contractService from "./../Contract/ContractService";
 import PropertyService from "../Property/PropertyService";
-import repository from "./AdminRepository";
 
 class AdminService {
   constructor() {}

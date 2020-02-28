@@ -1,22 +1,23 @@
-import http from 'http';
-import { startDB, stopDB } from './database';
-import app from './app';
+import http from "http";
+import { startDB, stopDB } from "./database";
+import app from "./app";
+import { Socket } from "./common/services";
 
 const PORT = process.env.PORT || 3005;
-app.set('port', PORT);
+app.set("port", PORT);
 const server = http.createServer(app);
 
 function onError(error: any): void {
-  if (error.syscall !== 'listen') {
+  if (error.syscall !== "listen") {
     throw error;
   }
   // handle specific listen errors with friendly messages
   switch (error.code) {
-    case 'EACCES':
+    case "EACCES":
       console.error(`${PORT} requires elevated privileges`);
       process.exit(1);
       break;
-    case 'EADDRINUSE':
+    case "EADDRINUSE":
       console.error(`${PORT} is already in use`);
       process.exit(1);
       break;
@@ -29,8 +30,9 @@ function onError(error: any): void {
   try {
     await startDB();
     server.listen(PORT);
-    server.on('error', onError);
-    server.on('listening', () => console.log(`started on port ${PORT}`));
+    new Socket(server);
+    server.on("error", onError);
+    server.on("listening", () => console.log(`started on port ${PORT}`));
     //handle closing of server
     // process.on('SIGHUP', stopDB);
     // process.on('SIGTERM', stopDB);
