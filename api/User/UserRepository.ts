@@ -17,6 +17,12 @@ class UserRepository extends MainRepository<IUser> {
       }
     );
   }
+
+  updateChatList(userId: string, otherUserId: string): Promise<boolean> {
+    return super.setUpdateById(userId, {
+      $addToSet: { chatList: otherUserId }
+    });
+  }
 }
 
 export default new UserRepository(User);

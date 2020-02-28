@@ -68,6 +68,12 @@ const userSchema = new Schema(
       type: Boolean,
       default: false
     },
+    chatList: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+      }
+    ],
     isDeleted: {
       type: Boolean,
       default: false
