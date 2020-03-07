@@ -156,7 +156,7 @@ class ClientController {
         "Property already reserved"
       );
     }
-    const isClientUpdated = await UserService.reserveProperty(
+    const isClientUpdated = await clientService.reserveProperty(
       request.user._id,
       propertyId
     );

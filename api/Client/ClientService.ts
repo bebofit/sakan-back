@@ -5,6 +5,7 @@ import rentBuyRequestService from "./../Request/RentBuyRequest/RentBuyRequestSer
 import NotFoundException from "../../exception/NotFoundException";
 import InvalidInputException from "../../exception/InvalidInputException";
 import ConflictException from "../../exception/ConflictException";
+import ClientRepository from "./ClientRepository";
 
 class ClientService {
   constructor() {}
@@ -97,6 +98,10 @@ class ClientService {
       clientId: clientId,
       propertyId: propId
     } as IRentBuyRequest);
+  }
+
+  async reserveProperty(userId: any, propertyId: string): Promise<boolean> {
+    return ClientRepository.reserveProperty(userId, propertyId);
   }
 }
 

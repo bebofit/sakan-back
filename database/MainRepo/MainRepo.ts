@@ -142,7 +142,7 @@ abstract class MainRepository<modelType extends Document> {
       .then(result => result.nModified > 0);
   }
 
-  flexibleUpdateOne(conditions: any, update: any): Promise<boolean> {
+  flexibleUpdateOne(conditions: any, update: any): Promise<boolean> {    
     conditions.isDeleted = false;
     return this.model
       .updateOne(conditions, update)
