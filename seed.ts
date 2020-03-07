@@ -7,11 +7,10 @@ import investorRepo from "./api/Investor/InvestorRepository";
 import propertiesRepo from "./api/Property/PropertyRepository";
 import { startDB, stopDB } from "./database";
 import { UserType, PropType } from "./enums";
-import { IInvestor, IProperty, IClient, IRentBuyRequest, IAddPropertyRequest, IContract, Contract, RentBuyRequest, Message } from "./database/models";
+import { IInvestor, IProperty, IClient, IRentBuyRequest, IAddPropertyRequest, IContract, Contract, RentBuyRequest } from "./database/models";
 import faker from "./lib/faker";
 import AddPropertyRequestRepository from "./api/Request/AddPropertyRequest/AddPropertyRequestRepository";
 import RentBuyRequestRepository from "./api/Request/RentBuyRequest/RentBuyRequestRepository";
-import MessageRepository from "./api/Messages/MessageRepository";
 
 let investors: IInvestor[];
 let clients: IClient[];
@@ -46,7 +45,7 @@ async function seedInvestors(): Promise<void> {
       firstName: "Investor",
       lastName: "One",
       email: "investorone@sakan.me",
-      phoneNumber: "123456789",
+      phoneNumber: "123456781",
       gender: "male",
       isVerified: true
     }),
@@ -76,7 +75,7 @@ async function seedInvestors(): Promise<void> {
       firstName: "Investor",
       lastName: "Four",
       email: "investorfour@sakan.me",
-      phoneNumber: "123456788",
+      phoneNumber: "123456782",
       gender: "male",
       isVerified: true
     })
@@ -135,7 +134,7 @@ async function updateOwners(): Promise<void> {
   // To-do mesh rady ye addToSet ??
   await Promise.all(
     investorOneProperties.map(p =>
-      investorRepo.setUpdateById(investors[0].id, {
+      investorRepo.flexibleUpdateById(investors[0].id, {
         $addToSet: { ownedProps: p.id }
       })
     )

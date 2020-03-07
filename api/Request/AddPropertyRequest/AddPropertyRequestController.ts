@@ -23,7 +23,7 @@ class AddPropertyRequestController {
       addPropReq = await addPropReqService.createRequest(body);
     } catch (error) {
       if (Number(error.code) === Number(Codes.Error.Database.uniqueViolation)) {
-        throw new ConflictException(Messages.user.error.addressUnique);
+        throw new ConflictException(Messages.user.error.addressUnique, response);
       }
       throw error;
     }

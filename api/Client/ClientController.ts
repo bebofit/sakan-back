@@ -30,9 +30,11 @@ class ClientController {
     } catch (error) {
       if (Number(error.code) === Number(Codes.Error.Database.uniqueViolation)) {
         if (!error.keyPattern.email) {
-          throw new ConflictException(Messages.user.error.phoneUnique);
+          console.log("merw");
+          
+          throw new ConflictException(Messages.user.error.phoneUnique, response);
         }
-        throw new ConflictException(Messages.user.error.emailUnique);
+        throw new ConflictException(Messages.user.error.emailUnique, response);
       }
       throw error;
     }
