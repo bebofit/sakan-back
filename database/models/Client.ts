@@ -8,12 +8,15 @@ interface IClient extends IUser {
 }
 
 const clientSchema = new Schema({
-  favProps: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Property"
-    }
-  ],
+  favProps: {
+    type: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Property"
+      }
+    ],
+    default: []
+  },
   reservedProperty: {
     type: Schema.Types.ObjectId,
     ref: "Property"
