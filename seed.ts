@@ -7,7 +7,6 @@ import investorRepo from "./api/Investor/InvestorRepository";
 import propertiesRepo from "./api/Property/PropertyRepository";
 import { startDB, stopDB } from "./database";
 import { UserType, PropType } from "./enums";
-<<<<<<< HEAD
 import {
   IInvestor,
   IProperty,
@@ -23,12 +22,7 @@ import faker from "./lib/faker";
 import AddPropertyRequestRepository from "./api/Request/AddPropertyRequest/AddPropertyRequestRepository";
 import RentBuyRequestRepository from "./api/Request/RentBuyRequest/RentBuyRequestRepository";
 import MessageRepository from "./api/Chats/ChatRepository";
-=======
-import { IInvestor, IProperty, IClient, IRentBuyRequest, IAddPropertyRequest, IContract, Contract, RentBuyRequest } from "./database/models";
-import faker from "./lib/faker";
-import AddPropertyRequestRepository from "./api/Request/AddPropertyRequest/AddPropertyRequestRepository";
-import RentBuyRequestRepository from "./api/Request/RentBuyRequest/RentBuyRequestRepository";
->>>>>>> c81e335b2bbdb0901e9d25e327e045a59b879930
+import ClientRepository from "./api/Client/ClientRepository";
 
 let investors: IInvestor[];
 let clients: IClient[];
@@ -185,7 +179,7 @@ async function updateOwners(): Promise<void> {
 async function seedClients(): Promise<void> {
   const password = await bcrypt.hash("123123123", 10);
   clients = await Promise.all([
-    investorRepo.create({
+    ClientRepository.create({
       password,
       wallet: {
         value: 998,
@@ -199,7 +193,7 @@ async function seedClients(): Promise<void> {
       gender: "male",
       isVerified: true
     }),
-    investorRepo.create({
+    ClientRepository.create({
       password,
       wallet: {
         value: 13123,
@@ -213,7 +207,7 @@ async function seedClients(): Promise<void> {
       gender: "male",
       isVerified: true
     }),
-    investorRepo.create({
+    ClientRepository.create({
       password,
       wallet: {
         value: 10008899,
@@ -227,7 +221,7 @@ async function seedClients(): Promise<void> {
       gender: "male",
       isVerified: true
     }),
-    investorRepo.create({
+    ClientRepository.create({
       password,
       wallet: {
         value: 100000000,
