@@ -2,6 +2,7 @@ import { Document, model, Schema } from "mongoose";
 // @ts-ignore
 import mongooseLeanVirtuals from "mongoose-lean-virtuals";
 import { UserType } from "../../enums";
+import { IChat } from ".";
 
 interface IUser extends Document {
   _id: string;
@@ -11,6 +12,7 @@ interface IUser extends Document {
   email: string;
   password: string;
   phoneNumber: string;
+  chatList: IChat[];
   gender?: string;
   birthDate?: Date;
   governmentId?: string;

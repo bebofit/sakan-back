@@ -8,7 +8,7 @@ class ClientRepository extends MainRepository<IClient> {
   }
 
   addToFavorites(userId: any, propertyId: string): Promise<boolean> {
-    return super.setUpdateOne(
+    return super.flexibleUpdateOne(
       { _id: userId },
       {
         $addToSet: { favProps: propertyId }

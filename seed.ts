@@ -7,11 +7,21 @@ import investorRepo from "./api/Investor/InvestorRepository";
 import propertiesRepo from "./api/Property/PropertyRepository";
 import { startDB, stopDB } from "./database";
 import { UserType, PropType } from "./enums";
-import { IInvestor, IProperty, IClient, IRentBuyRequest, IAddPropertyRequest, IContract, Contract, RentBuyRequest, Message } from "./database/models";
+import {
+  IInvestor,
+  IProperty,
+  IClient,
+  IRentBuyRequest,
+  IAddPropertyRequest,
+  IContract,
+  Contract,
+  RentBuyRequest,
+  IChat
+} from "./database/models";
 import faker from "./lib/faker";
 import AddPropertyRequestRepository from "./api/Request/AddPropertyRequest/AddPropertyRequestRepository";
 import RentBuyRequestRepository from "./api/Request/RentBuyRequest/RentBuyRequestRepository";
-import MessageRepository from "./api/Messages/MessageRepository";
+import MessageRepository from "./api/Chats/ChatRepository";
 
 let investors: IInvestor[];
 let clients: IClient[];
@@ -24,7 +34,6 @@ let rentRequests: IRentBuyRequest[];
 let buyRequest: IRentBuyRequest[];
 let addPropertyRequests: IAddPropertyRequest[];
 let contracts: IContract[];
-
 
 async function seedAdmin(): Promise<void> {
   const password = await bcrypt.hash("123123123", 10);
@@ -255,21 +264,23 @@ async function seedAddRequests() {
       .fill(null)
       .map((value, index) => seedAddPropertyRequest(investors[index].id))
   );
-  console.log('Seeded Add Property Requests')
+  console.log("Seeded Add Property Requests");
 }
 
 async function invoices(property: IProperty) {
   // let startingDate = new Date(faker.date.future());
-  let paidInvoices = Array(faker.random.number(10)).fill(null).map((value, index) => {
-    return {
-      invoiceNumber: index + 1,
-      // dueDate: startingDate.setMonth(startingDate.getMonth() + index).toString(),
-      dueDate: faker.date.future(),
-      isPaid: true,
-      value: property.rentValue,
-      penaltyValue: 0
-    }
-  });
+  let paidInvoices = Array(faker.random.number(10))
+    .fill(null)
+    .map((value, index) => {
+      return {
+        invoiceNumber: index + 1,
+        // dueDate: startingDate.setMonth(startingDate.getMonth() + index).toString(),
+        dueDate: faker.date.future(),
+        isPaid: true,
+        value: property.rentValue,
+        penaltyValue: 0
+      };
+    });
   paidInvoices.push({
     invoiceNumber: paidInvoices.length + 1,
     dueDate: faker.date.future(),
@@ -286,8 +297,8 @@ async function seedContract(
 ): Promise<any> {
   let contractInvoices = await invoices(property);
   return Contract.create({
-    contractType: 'rent',
-    status: 'active',
+    contractType: "rent",
+    status: "active",
     propertyId: property.id,
     ownerId: property.owner,
     clientId: client.id,
@@ -299,25 +310,22 @@ async function seedContracts(): Promise<any> {
   await Promise.all(
     Array(4)
       .fill(null)
-      .map((value, index) =>
-        seedContract(properties[index], clients[index])
-      )
-  )
-  console.log('Seeded Contracts');
+      .map((value, index) => seedContract(properties[index], clients[index]))
+  );
+  console.log("Seeded Contracts");
 }
-
 
 async function seedRentRequest(
   clientId: string,
   property: IProperty
 ): Promise<any> {
   return RentBuyRequestRepository.create({
-    reqType: 'rent',
+    reqType: "rent",
     ownerId: property.owner,
     clientId: clientId,
     propertyId: property.id,
     isApproved: false,
-    status: 'pending approval'
+    status: "pending approval"
   });
 }
 
@@ -325,9 +333,11 @@ async function seedRentRequests() {
   rentRequests = await Promise.all(
     Array(4)
       .fill(null)
-      .map((value, index) => seedRentRequest(clients[index].id, properties[index]))
+      .map((value, index) =>
+        seedRentRequest(clients[index].id, properties[index])
+      )
   );
-  console.log('Seeded Rent Requests')
+  console.log("Seeded Rent Requests");
 }
 
 // async function seedMessage(senderId: string, receiverId: string) :Promise<any> {

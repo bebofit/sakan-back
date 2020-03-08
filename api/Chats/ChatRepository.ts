@@ -7,6 +7,7 @@ class MessageRepository extends MainRepository<IChat> {
   constructor(protected model: Model<IChat>) {
     super(model);
   }
+
   createOrUpdateChat(body: any) {
     return this.model.findOneAndUpdate(
       {

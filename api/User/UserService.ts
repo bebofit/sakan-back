@@ -1,4 +1,4 @@
-import { IUser } from "../../database/models";
+import { IUser, IChat } from "../../database/models";
 import userServiceFactory from "../Factories/UserServiceFactory";
 import userRepo from "./UserRepository";
 import Helpers from "../Utils/Helpers";
@@ -10,6 +10,7 @@ import jwt from "jsonwebtoken";
 import { promises as fs } from "fs";
 import path from "path";
 import CustomException from "../../exception/CustomException";
+import { QueryParams } from "../../Interfaces";
 
 class UserService {
   async createUser(body: IUser): Promise<IUser> {
@@ -105,6 +106,10 @@ class UserService {
 
   async updateChatList(userId: string, otherUserId: string): Promise<boolean> {
     return userRepo.updateChatList(userId, otherUserId);
+  }
+
+  async getChatList(userId: string, options?: QueryParams): Promise<IChat[]> {
+    return userRepo.getChatList(userId, options);
   }
 }
 
