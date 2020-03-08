@@ -100,10 +100,6 @@ class UserService {
     }
   }
 
-  async reserveProperty(userId: any, propertyId: string): Promise<boolean> {
-    return userRepo.reserveProperty(userId, propertyId);
-  }
-
   async updateChatList(userId: string, otherUserId: string): Promise<boolean> {
     return userRepo.updateChatList(userId, otherUserId);
   }

@@ -25,7 +25,7 @@ class PropertyController {
       property = await propertyService.createProperty(body);
     } catch (error) {
       if (Number(error.code) === Number(Codes.Error.Database.uniqueViolation)) {
-        throw new ConflictException(error);
+        throw new ConflictException(error, response);
         // if (!error.keyPattern.email) {
         //   throw new ConflictException(Messages.user.error.phoneUnique);
         // }

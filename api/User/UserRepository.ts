@@ -8,15 +8,6 @@ class UserRepository extends MainRepository<IUser> {
     super(model);
   }
 
-  reserveProperty(userId: string, propertyId: string): Promise<boolean> {
-    return super.setUpdateOne(
-      { _id: userId },
-      {
-        $pull: { favProps: propertyId },
-        reservedProperty: propertyId
-      }
-    );
-  }
 
   getChatList(userId: string, options?: QueryParams): Promise<IChat[]> {
     return this.model

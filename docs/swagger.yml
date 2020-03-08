@@ -3,90 +3,95 @@ servers:
   - url: 'localhost:3000'
 info:
   version: '1.0'
-  title: Grok-Backend
-  description: '# These are Grok backend Webservice Endpoints'
+  title: Sakan-Backend
+  description: '# These are SakanWallet backend Webservice Endpoints'
   contact:
     name: Abdelrahman Soliman
     email: bebofit@aucegypt.edu
 tags:
-  - name: Auth
-  - name: Users
+  - name: User
+  - name: Admin
+  - name: Client
+  - name: Investor
+  - name: Property
+  - name: Contract
+  - name: Add Property Request
+  - name: Rent/Buy Property Request
 
 paths:
-  ##############################              Authentication Apis                 ################
+  ##############################              User APIs                ##################
 
-  /api/auth/v1/register-mobile:
+  /api/user/signup:
     post:
       tags:
-        - Auth
-      description: Allow Users with correct credentials to sign-in into the application
-      operationId: userRegisterMobile
+        - User
+      description: Allows user to signup to app
+      operationId: userSignup
       requestBody:
-        description: users's info needed to register Mobile
+        description: user's info needed to sign-in
         required: true
         content:
           application/json:
             schema:
-              properties:
-                mobile:
-                  type: string
-                  example: '0111112312'
+              $ref: '#/components/schemas/UserSignupRequest'
       responses:
         '201':
-          description: Created user and send otp
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSignupResponse'
+        '422':
+          description: Missing required field(s)
         '409':
-          description: mobile number already exists
-
-  /api/auth/v1/verify-mobile:
+          description: Duplicate key
+          
+  /api/user/email/verify:
     post:
-      tags:
-        - Auth
-      description: verify mobile with otp sent
-      operationId: userVerifyMobile
+      tags: 
+        - User
+      description: User verifies email for registeration
+      operationId: userVerify
       requestBody:
-        description: users's info needed to verify Mobile
+        description: token needed to verify email
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserVerifyMobileRequest'
-      responses:
-        '200':
-          description: OK
-        '403':
-          description: Wrong otp or mobile number
-
-  /api/auth/v1/register-user:
-    post:
-      tags:
-        - Auth
-      description: Allow Users with verified mobile to register
-      operationId: userRegister
-      requestBody:
-        description: users's info needed to sign-in
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserRegisterRequest'
+              type: object
+              properties:
+                token:
+                  type: string
+                  example: '12cb2b7f30d1fc9139883d0039ecab3a35bb380c8db3841d4ec24273c89e67c0'
+              required: 
+                - token
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserLoginResponse'
+                type: object
+                properties:
+                  data:
+                    type: string
+                    example: null
+                  message:
+                    type: string
+                    example: 'Account Verified'
         '404':
-          description: Didn't find user
-
-  /api/auth/v1/login-user:
+          description: NOT FOUND
+        '422':
+          description: Token is required
+      
+  /api/user/login:
     post:
       tags:
-        - Auth
-      description: Allow Users with correct credentials to sign-in into the application
-      operationId: usersSignIn
+        - User
+      description: Allow User with correct credentials to login into the application
+      operationId: usersLogin
       requestBody:
-        description: users's info needed to sign-in
+        description: user's info needed to sign-in
         required: true
         content:
           application/json:
@@ -99,14 +104,52 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserLoginResponse'
+        '401':
+          description: Incorrect password
         '404':
-          description: Didn't find user
+          description: User not found
+        '422': 
+          description: required fields
 
-  /api/users/v1/{userId}/change-password:
+  /api/user/password/forget:
     post:
       tags:
-        - Users
+        - User
       description: Allow Users with correct credentials to change their passwords
+      operationId: userForgetPassword
+      requestBody:
+        description: user can forget his password
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: 'marwanamrhuss@gmail.com'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    example: 'null'
+                  message: 
+                    type: string
+                    example: "Please Check Your Email"
+        '404':
+          description: Didn't find user
+          
+  /api/user/password/reset:
+    post:
+      tags: 
+        - User
+      description: Allow Users with correct credentials to reset their passwords
       operationId: userChangePassword
       requestBody:
         description: user can change his password
@@ -114,9 +157,38 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/changePassword'
+              type: object
+              properties:
+                token:
+                  type: string
+                  example: 'b638b50b7a4f6282f68db4b072f42632ec0b6f84b5dc986b2a0e76df339a67a8'
+                password:
+                  type: string
+                  example: 'marwanamr3'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    example: 'null'
+                  message: 
+                    type: string
+                    example: "Password Changed Successfully"
+        '404':
+          description: Didn't find user
+          
+  /api/user/wallet:
+    get:
+      tags: 
+        - User
+      description: get user wallet data
+      operationId: userWallet
       parameters:
-        - $ref: '#/components/parameters/userIdParam'
         - in: header
           name: Authorization
           schema:
@@ -128,85 +200,325 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserLoginResponse'
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      value:
+                        type: number
+                        example: 1000
+                      currency:
+                        type: string
+                        example: 'EGP'
+                  message: 
+                    type: string
+                    example: "User wallet"
         '404':
           description: Didn't find user
-        '403':
-          description: current password is not equal to existing password
-        '500':
-          description: wasn't able to revoke all other refresh tokens
-
+          
+          
+  ##############################              Admin APIs                ##################
+  
+  /api/admin/login:
+    post:
+      tags:
+        - Admin
+      description: Allow Admin with correct credentials to login into the application
+      operationId: adminLogin
+      requestBody:
+        description: admin's info needed to sign-in
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                        example: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3'
+                  message: 
+                    type: string
+                    example: 'Login Successful'
+        '401':
+          description: Incorrect password
+        '404':
+          description: User not found
+        '422': 
+          description: required fields
+          
+  /api/admin/property/requests:
+    get:
+      tags: 
+        - Admin
+      description: get all add property requests
+      operationId: adminRequests
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            $ref: '#/components/securitySchemes/bearerAuth'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminPropReqs'
+        '401':
+          description: Unauthorized
+          
+  /api/admin/property/add/req:
+    post:
+      tags:
+        - Admin
+      description: Allow Admin to respond to add property request
+      operationId: adminRespondAdd
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            $ref: '#/components/securitySchemes/bearerAuth'
+      requestBody:
+        description: add property request id and status
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                addReqId:
+                  type: string
+                  example: '5e4b080e13ce055256008f37'
+                status:
+                  type: string
+                  example: 'accepted'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    example: null
+                  message: 
+                    type: string
+                    example: 'accepted'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Request not found
+        '422': 
+          description: required fields
+  
+  /api/admin/property/rent/req:
+    post:
+      tags:
+        - Admin
+      description: Allow Admin to respond to rent property request
+      operationId: adminRespondRent
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            $ref: '#/components/securitySchemes/bearerAuth'
+      requestBody:
+        description: rent property request id and status
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rentReqId:
+                  type: string
+                  example: '5e4b080e13ce055256008f37'
+                status:
+                  type: string
+                  example: 'accepted'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    example: null
+                  message: 
+                    type: string
+                    example: 'accepted'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Request not found
+        '422': 
+          description: required fields
+          
+  
+  ###############################             Client APIs               ##################
+  
+  /api/client/fetch/favorites:
+    get:
+      tags: 
+        - Client
+      description: Allow Client to get his favourite properties
+      operationId: clientGetFavs
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            $ref: '#/components/securitySchemes/bearerAuth'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      favorites:
+                        type: array
+                        items: 
+                          example: Property Id
+                  message: 
+                    type: string
+                    example: 'Favorite List'
+        '401':
+          description: Unauthorized
+          
+  /api/client/add/favorite:
+    post:
+      tags: 
+        - Client
+      description: Allow Client to add favourite property
+      operationId: clientAddFavs
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            $ref: '#/components/securitySchemes/bearerAuth'
+      requestBody:
+        description: rent property request id and status
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                propertyId: 
+                  type: string
+                  example: '5e24ff34336cda3598fdbb02'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    example: null
+                  message: 
+                    type: string
+                    example: 'property added'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Property not found
+        '422': 
+          description: required fields
+        
+  /api/client/remove/favorite:
+    delete:
+      tags: 
+        - Client
+      description: Allow Client to delete favourite property (Takes propertyId in request body)
+      operationId: clientDeleteFavs
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            $ref: '#/components/securitySchemes/bearerAuth'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    example: null
+                  message: 
+                    type: string
+                    example: 'property deleted'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Property not found
+        '422': 
+          description: required fields
+            
+  /api/client/reserve:
+    post:
+      tags: 
+        - Client
+      description: Allow Admin to respond to rent property request
+      operationId: adminRespondRent
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            $ref: '#/components/securitySchemes/bearerAuth'
+            
+  /api/client/rent:
+    post:
+      tags: 
+        - Client
+      description: Allow Admin to respond to rent property request
+      operationId: adminRespondRent
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            $ref: '#/components/securitySchemes/bearerAuth'
+            
+            
+            
 components:
   securitySchemes:
     bearerAuth: # arbitrary name for the security scheme
       type: http
       scheme: bearer
       bearerFormat: JWT
+      
+         ############### API schemas   ####################
 
   schemas:
-    UserLoginRequest:
-      type: object
-      properties:
-        username:
-          type: string
-          example: '0100213123'
-        password:
-          type: string
-          example: '0100213123'
-          minimum: 8
-      required:
-        - username
-        - password
-
-    UserVerifyMobileRequest:
-      type: object
-      properties:
-        mobile:
-          type: string
-          example: '0100213123'
-        otp:
-          type: number
-          example: 1234
-          description: '4 digit number'
-      required:
-        - mobile
-        - password
-
-    UserRegisterRequest:
-      $ref: '#/components/schemas/user'
-
-    UserLoginResponse:
-      type: object
-      properties:
-        user:
-          $ref: '#/components/schemas/user'
-        accessToken:
-          type: string
-          example: 'xaavassfassaasca$3'
-        refreshToken:
-          type: string
-          example: 'xaavassfassaasca$3'
-      required:
-        - refreshToken
-        - accessToken
-        - user
-
-    changePassword:
-      type: object
-      properties:
-        currentPassword:
-          type: string
-          example: '123124124124123'
-        password:
-          type: string
-          example: 'xaavassfassaasca$3'
-      required:
-        - refreshToken
-        - accessToken
-        - user
-      ############### Lookups schemas   ####################
-
-    user:
+  
+  ### SIGNUP ###
+    UserSignupRequest:
       type: object
       properties:
         firstName:
@@ -214,32 +526,183 @@ components:
           example: 'John'
         lastName:
           type: string
-          example: 'Doo'
+          example: 'Doe'
         email:
           type: string
-          example: 'john@doo.com'
-        username:
+          example: 'joehndoe@gmail.com'
+        password:
           type: string
-          example: 'johndoo'
-        dob:
-          type: number
-          description: 'date of birth'
-          example: 'date number 23241241'
-        mobile:
+          example: 'marwan123'
+        userType:
           type: string
-          example: '+2011112455'
+          example: 'client'
+        phoneNumber:
+          type: string
+          example: '01129000112'
+      required:
+        - firstName
+        - lastName
+        - email
+        - password
+        - phoneNumber
+        - userType
+        
+    UserSignupResponse:
+      type: object
+      properties: 
+        data: 
+          type: object
+          properties:
+            wallet:
+                type: object
+                properties:
+                  value: 
+                    type: number
+                    example: 0
+                  currency:
+                    type: string
+                    example: 'EGP'
+            favProps: 
+              type: array
+              items:
+                type: string
+            _id:
+              type: string
+              example: '5e63f1919f6b7c57b4909452'
+            governmentId:
+              type: string
+            isVerified:
+              type: boolean
+              example: false
+            chatList:
+              type: array
+              items:
+                type: string
+            isDeleted:
+              type: boolean
+              example: false
+            profileStatus:
+              type: number
+              example: 0
+            resetPasswordToken:
+              type: string
+            verificationToken:
+              type: string
+              example: 'f672c13ecc5efeed53e4bebe353fcf8daf1ac36066f987e5c974264e99e6a7d3'
+            type:
+              type: string
+              example: 'Client'
+            firstName:
+              type: string
+              example: 'John'
+            lastName:
+              type: string
+              example: 'Doe'
+            email:
+              type: string
+              example: 'joehndoe@gmail.com'
+            password:
+              type: string
+              example: '$2b$10$XhpSlUW5Cx6fFA7LykSCMOF3CTRvPwbTAKN6liqVnFLQHFVkaMWP6'
+            userType:
+              type: string
+              example: 'client'
+            phoneNumber:
+              type: string
+              example: '01129000112'
+        message:
+          type: string
+          example: 'User Created Successfully'
+            
+            
+  ### LOGIN ###  
+    UserLoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          example: 'adham.nabil@gmail.com'
+        password:
+          type: string
+          example: 'marwan444'
+      required:
+        - username
+        - password
+
+    UserLoginResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            token:
+              type: string
+              example: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3'
+            userType:
+              type: string
+              example: 'client'
+        message: 
+          type: string
+          example: 'Login Successful'
+  
+  ### ADMIN ###
+    AdminPropReqs:
+      type: object
+      properties:
+        data: 
+          type: array
+          items:
+            type: object
+            example: Add Property Request data
+        message: 
+          type: string
+          example: 'Add Property Requests'
+          
+    
+  
+    Property:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'asdasfasf'
+        
+      ############### Lookups schemas   ####################
+
+    user:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '5e63f1919f6b7c57b4909452'
+        userType:
+          type: string
+          example: 'client'
+        firstName:
+          type: string
+          example: 'John'
+        lastName:
+          type: string
+          example: 'Doe'
+        email:
+          type: string
+          example: 'joehndoe@gmail.com'
+        password:
+          type: string
+          example: '$2b$10$XhpSlUW5Cx6fFA7LykSCMOF3CTRvPwbTAKN6liqVnFLQHFVkaMWP6'
+        phoneNumber:
+          type: string
+          example: '01129000112'
         gender:
           type: string
-          enum: ['M', 'F']
-        clientLanguage:
-          type: string
-          enum: ['en', 'ar']
-        mobileVerified:
-          type: boolean
-          example: true
-        accountVerified:
-          type: boolean
-          example: true
+          example: 'male'
+      required:
+        - firstName
+        - lastName
+        - email
+        - password
+        - phoneNumber
+        - userType
 
   parameters:
     userIdParam:
