@@ -4,7 +4,7 @@ import NotFoundException from "../../exception/NotFoundException";
 import UnauthorizedException from "../../exception/UnauthorizedException";
 import Messages = require("../Constants/Messages");
 import jwt from "jsonwebtoken";
-import { promises as fs } from "fs";
+import { promises as fs, stat } from "fs";
 import path from "path";
 import rentBuyRequestService from "./../Request/RentBuyRequest/RentBuyRequestService";
 import addRequestService from "./../Request/AddPropertyRequest/AddPropertyRequestService";
@@ -116,8 +116,9 @@ class AdminService {
     } as IAddPropertyRequest);
   }
 
-  getAllRequests(): Promise<any> {
-    return addRequestService.getAllRequests();
+  getRequests(status: any): Promise<any> {
+    status = status || 'pending approval'
+    return addRequestService.getRequests(status);
   }
 }
 

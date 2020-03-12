@@ -10,8 +10,8 @@ class AddPropertyRequestService {
     return await repository.create(body);
   }
 
-  async getAllRequests(): Promise<IAddPropertyRequest[]> {
-    let addPropReqs = await repository.findAll();
+  async getRequests(status: any): Promise<IAddPropertyRequest[]> {
+    let addPropReqs = await repository.find({status: status});
     if(addPropReqs.length === 0){
       throw new NotFoundException("No Requests Found");
     }

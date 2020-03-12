@@ -60,7 +60,7 @@ class AdminController {
   }
 
   async getAllRequests(request: IRequest, response: Response): Promise<any> {
-    const data = await AdminService.getAllRequests();
+    const data = await AdminService.getRequests(request.body.status);
     return Http.sendResponse(response, httpStatus.OK, data, "Add Property Requests");
   }
 }
