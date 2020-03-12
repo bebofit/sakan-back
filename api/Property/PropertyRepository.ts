@@ -22,7 +22,7 @@ class PropertyRepository extends MainRepository<IProperty> {
       conditions.bathroomNum = { $gte: filters.bathroomNum };
     }
     if (filters.bedroomNum) {
-      conditions.bathroomNum = { $gte: filters.bedroomNum };
+      conditions.bedroomNum = { $gte: filters.bedroomNum };
     }
     if (filters.propType) {
       conditions.propType = filters.propType;
@@ -30,6 +30,7 @@ class PropertyRepository extends MainRepository<IProperty> {
     if (filters.city) {
       conditions["address.city"] = filters.city;
     }
+    conditions["reservation.isReserved"] = false;
     return conditions;
   }
 
