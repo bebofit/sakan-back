@@ -59,9 +59,14 @@ class AdminController {
     );
   }
 
-  async getAllRequests(request: IRequest, response: Response): Promise<any> {
-    const data = await AdminService.getRequests(request.body.status);
+  async getPropertyRequests(request: IRequest, response: Response): Promise<any> {
+    const data = await AdminService.getPropertyRequests(request.body.status);
     return Http.sendResponse(response, httpStatus.OK, data, "Add Property Requests");
+  }
+
+  async getRentBuyRequests(request: IRequest, response: Response): Promise<any> {
+    const data = await AdminService.getRentBuyRequests(request.body.status, request.body.reqType);
+    return Http.sendResponse(response, httpStatus.OK, data, "Rent/Buy Requests");
   }
 }
 

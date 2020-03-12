@@ -116,9 +116,15 @@ class AdminService {
     } as IAddPropertyRequest);
   }
 
-  getRequests(status: any): Promise<any> {
+  getPropertyRequests(status: any): Promise<any> {
     status = status || 'pending approval'
-    return addRequestService.getRequests(status);
+    return addRequestService.getPropertyRequests(status);
+  }
+
+  getRentBuyRequests(status: any, reqType: any): Promise<any> {
+    status = status || 'pending approval'
+    reqType = reqType || 'rent'
+    return rentBuyRequestService.getRentBuyRequests(status, reqType);
   }
 }
 

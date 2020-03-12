@@ -14,8 +14,8 @@ class RentBuyRequestService {
     return await repository.create(body);
   }
 
-  async getAllRequests(): Promise<IRentBuyRequest[]> {
-    let rentBuyReqs = await repository.findAll();
+  async getRentBuyRequests(status: any, reqType: any): Promise<IRentBuyRequest[]> {
+    let rentBuyReqs = await repository.find({status: status, reqType: reqType});
     if(rentBuyReqs.length === 0){
       throw new NotFoundException("No Requests Found");
     }

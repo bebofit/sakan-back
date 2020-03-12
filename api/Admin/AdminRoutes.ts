@@ -23,6 +23,12 @@ router.get(
   "/property/requests",
   IsAuth,
   isAdmin,
-  errorHandler(AdminController.getAllRequests)
+  errorHandler(AdminController.getPropertyRequests)
+);
+router.get(
+  "/rent/requests",
+  IsAuth,
+  isAdmin,
+  errorHandler(AdminController.getRentBuyRequests)
 );
 export default router;
