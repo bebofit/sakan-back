@@ -40,6 +40,10 @@ class PropertyRepository extends MainRepository<IProperty> {
   }
 
   reserveProperty(propId: any, userId: string): Promise<boolean> {
+    console.log("eh1", userId);
+    console.log("eh2", propId);
+
+    
     return super.setUpdateOne(
       { _id: propId, "reservation.isReserved": false },
       {
