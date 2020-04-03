@@ -22,7 +22,7 @@ export default class Unit {
 
     originalPrice: number;
     initMonthlyRent: number;
-    initAnnualRent = this.initMonthlyRent * 12;
+    initAnnualRent: number;
     upgradeFeePercentage: number;
     rentYears: number;
     unitPrice: number;
@@ -31,8 +31,16 @@ export default class Unit {
     
     isBought: boolean;
     
-    calcUnitPrice(){
-        this.unitPrice = this.originalPrice * Math.pow((1 + this.annualAppreciationPercentage), this.rentYears);
-        return this.unitPrice;
+    calcUnitPrice(cumYearsNum: number){
+        this.unitPrice = +((this.originalPrice * Math.pow((1 + this.annualAppreciationPercentage), cumYearsNum)).toFixed(2));
+    }
+
+    calcInitAnnualRent(cumYearsNum: number, index: any){
+        if(index == 0){
+            this.initAnnualRent = this.initMonthlyRent * 12;
+            return this.initAnnualRent;
+        }
+        let x = Math.pow(1 + this.annualRentIncreasePercentage , cumYearsNum - this.rentYears);
+        this.initAnnualRent = +((this.initMonthlyRent * x * 12).toFixed(2));
     }
 }
