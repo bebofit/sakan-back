@@ -1,32 +1,40 @@
 import Unit from "./Unit";
 import Globals from "./Globals";
-import SWCustomer from "./SWCustomer";
+import Units from "./Units";
 
 
 export default class SWInvestor {
 
-    rentCollection: number;
+    units: Units;
     cashRemaining: number;
+    rentCollections: Array<number>= [];
+    rentCollectionsCash: Array<number>= [];
 
-    constructor() {
+    constructor(units: Units) {
+        this.units = units;
     }
 
-    calcRentCollection(unit: Unit){
-        let totalPaid = Globals.calcTotalPaid(unit);
-        let swRentCommission = Globals.SwRentCommissionPercentage * totalPaid;
-        console.log(totalPaid, swRentCommission);
-        this.rentCollection = totalPaid - swRentCommission;
-        return this.rentCollection;
+    //swInvestor1
+    calcRentCollection(){
+        let rentCollection = 0;
+        this.units.objects.forEach((object)=>{
+            let totalPaid = Globals.calcTotalPaid(object);
+            let swRentCommission = Globals.SwRentCommissionPercentage * totalPaid;
+            rentCollection = totalPaid - swRentCommission;
+            //SW1
+            this.rentCollectionsCash.push(swRentCommission);
+            this.rentCollections.push(+(rentCollection.toFixed(2)));
+        })
+    }
+
+    //swInvestor2
+    calcCashRemaining(){
+        let unit = (this.units.objects.filter(unit => unit.isBought)[0]);
+        let unitIndex = this.units.objects.indexOf(unit);
+        this.cashRemaining = +((unit.unitPrice - this.calcInvestorBalance(unit.unitPrice,this.rentCollections[unitIndex])).toFixed(2));
+    }
+
+    private calcInvestorBalance(unitPrice: number, rentCollection: number): number{
+        return rentCollection + (Globals.InvestorSellCommissionPercentage * unitPrice);
     }
 }
-
-let units = [
-    new Unit(750000,1000,1,0.1),
-    new Unit(1000000,5500,1,0.1),
-    new Unit(1000000, 7500, 2, 0.2, true)
-];
-
-const swInvestor = new SWInvestor();
-let sw = swInvestor.calcRentCollection(new Unit(750000,1000,1,0.1));
-// console.log(units);
-console.log(sw);

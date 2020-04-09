@@ -1,23 +1,26 @@
 import Unit from "./Unit";
 import Globals from "./Globals";
+import Units from "./Units";
 
 export default class SWCustomer {
 
-    units: Array<Unit>;
+    units: Units;
     swCredit: number;
+    swCustomer:number;
 
-    constructor(units: Array<Unit>) {
+    constructor(units: Units) {
         this.units = units;
         this.calcSwCredit();
     }
 
     calcSwCustomer(sellingCommissionCustomer: number){
-        let unit = (units.filter(unit => unit.isBought)[0]);
+        let unit = (this.units.objects.filter(unit => unit.isBought)[0]);
         let sellingCommission = this.calcSellingCommission(unit, sellingCommissionCustomer);
-        return +((unit.unitPrice - (this.swCredit - sellingCommission)).toFixed(2));
+        this.swCustomer = +((unit.unitPrice - (this.swCredit - sellingCommission)).toFixed(2));
+        return this.swCustomer;
     }
 
-    calcSellingCommission(unit: Unit, sellingCommissionCustomer: number){
+    private calcSellingCommission(unit: Unit, sellingCommissionCustomer: number){
         return sellingCommissionCustomer * unit.unitPrice * Number(unit.isBought)
     }
 
@@ -25,10 +28,8 @@ export default class SWCustomer {
         let cumSafyPaid: number = 0;
         let cumYearsCount: number = 0;
         let swCredit: number = 0;
-        this.units.forEach((unit , index)=> {
+        this.units.objects.forEach((unit , index)=> {
             cumYearsCount += unit.rentYears;
-            unit.calcUnitPrice(cumYearsCount);
-            unit.calcInitAnnualRent(cumYearsCount, index);
             cumSafyPaid += this.calcSafyPaid(unit);
             swCredit += cumSafyPaid * Number(unit.isBought);
         });
@@ -44,14 +45,3 @@ export default class SWCustomer {
 
 
 }
-
-let units = [
-    new Unit(750000,1000,1,0.1),
-    new Unit(1000000,5500,1,0.1),
-    new Unit(1000000, 7500, 2, 0.2, true)
-];
-
-const swCustomer = new SWCustomer(units);
-let sw = swCustomer.calcSwCustomer(0.05);
-// console.log(units);
-console.log(sw);

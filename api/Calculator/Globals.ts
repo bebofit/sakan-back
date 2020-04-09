@@ -4,6 +4,7 @@ import Unit from "./Unit";
 export default class Globals {
 
     static SwRentCommissionPercentage: number = 0.6;
+    static InvestorSellCommissionPercentage: number = 0.05;
 
     static calcTotalPaid(unit: Unit): number{
         let annualInitRent = unit.initAnnualRent;

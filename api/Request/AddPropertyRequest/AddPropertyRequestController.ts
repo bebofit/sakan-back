@@ -32,9 +32,9 @@ class AddPropertyRequestController {
   }
 
   async getAllAddPropertyRequests(request: IRequest, response: Response): Promise<any> {
-    let  addPropReqs = await addPropReqService.getAllRequests();
+    // let  addPropReqs = await addPropReqService.getAllRequests();
     //sending response
-    return Http.sendResponse(response, httpStatus.OK, addPropReqs, "Add Property Requests Found");
+    // return Http.sendResponse(response, httpStatus.OK, addPropReqs, "Add Property Requests Found");
   }
 
   async getAddPropertyRequest(request: IRequest, response: Response): Promise<any> {
