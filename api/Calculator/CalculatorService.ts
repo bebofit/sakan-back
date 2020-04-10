@@ -1,16 +1,10 @@
 import Units from "./Units";
-import Unit from "./Unit";
 import SWCustomer from "./SWCustomer";
 import SWInvestor from "./SWInvestor";
 import Globals from "./Globals";
 
 export default class CalculatorService{
-    units = new Units([
-        new Unit(750000,1000,1,0.1),
-        new Unit(1000000,5500,1,0.1),
-        new Unit(1000000, 7500, 2, 0.2, true)
-    ]);
-
+    units: Units;
     swCustomer: SWCustomer;
     swInvestor: SWInvestor;
     //globals
