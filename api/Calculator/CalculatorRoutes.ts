@@ -8,8 +8,8 @@ const router = Router();
 
 router.post(
     "/calc",
-    IsAuth,
-    isAdmin,
+    // IsAuth,
+    // isAdmin,
     errorHandler(CalculatorController.calculate)
 );
 

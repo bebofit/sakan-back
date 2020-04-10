@@ -5,6 +5,7 @@ import investorRoutes from './Investor';
 import propertyRoutes from './Property';
 import contractRoutes from './Contract';
 import adminRoutes from './Admin';
+import calculatorRoutes from './Calculator';
 import addPropertyRequestRoutes from './Request/AddPropertyRequest';
 
 const router = Router();
@@ -15,6 +16,7 @@ router.use('/investor', investorRoutes);
 router.use('/property', propertyRoutes);
 router.use('/contract', contractRoutes);
 router.use('/request/addProperty', addPropertyRequestRoutes);
-router.use('/admin', adminRoutes)
+router.use('/admin', adminRoutes);
+router.use('/calculator', calculatorRoutes)
 
 export default router;
