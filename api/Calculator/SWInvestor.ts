@@ -5,13 +5,15 @@ import Units from "./Units";
 
 export default class SWInvestor {
 
+    globals: Globals;
     units: Units;
     cashRemaining: number;
     rentCollections: Array<number>= [];
     rentCollectionsCash: Array<number>= [];
 
-    constructor(units: Units) {
+    constructor(units: Units, globals: Globals) {
         this.units = units;
+        this.globals = globals;
     }
 
     //swInvestor1
@@ -19,7 +21,7 @@ export default class SWInvestor {
         let rentCollection = 0;
         this.units.objects.forEach((object)=>{
             let totalPaid = Globals.calcTotalPaid(object);
-            let swRentCommission = Globals.SwRentCommissionPercentage * totalPaid;
+            let swRentCommission = this.globals.SwRentCommissionPercentage * totalPaid;
             rentCollection = totalPaid - swRentCommission;
             //SW1
             this.rentCollectionsCash.push(swRentCommission);
@@ -35,6 +37,6 @@ export default class SWInvestor {
     }
 
     private calcInvestorBalance(unitPrice: number, rentCollection: number): number{
-        return rentCollection + (Globals.InvestorSellCommissionPercentage * unitPrice);
+        return rentCollection + (this.globals.InvestorSellCommissionPercentage * unitPrice);
     }
 }

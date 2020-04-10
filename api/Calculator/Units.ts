@@ -18,4 +18,11 @@ export default class Units{
             unit.calcInitAnnualRent(cumYearsCount, index);
         });
     }
+
+    getBoughtUnit(){
+        let unit = (this.objects.filter(unit => unit.isBought)[0]);
+        let unitIndex = this.objects.indexOf(unit);
+        return {unit, unitIndex};
+    }
+
 }

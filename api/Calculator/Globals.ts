@@ -3,8 +3,19 @@ import Unit from "./Unit";
 
 export default class Globals {
 
-    static SwRentCommissionPercentage: number = 0.6;
-    static InvestorSellCommissionPercentage: number = 0.05;
+    SwRentCommissionPercentage: number;
+    InvestorSellCommissionPercentage: number;
+    CustomerSellCommissionPercentage: number
+
+    constructor(
+        SwRentCommissionPercentage: number,
+        InvestorSellCommissionPercentage: number,
+        CustomerSellCommissionPercentage: number
+    ) {
+        this.SwRentCommissionPercentage = SwRentCommissionPercentage;
+        this.InvestorSellCommissionPercentage = InvestorSellCommissionPercentage;
+        this.CustomerSellCommissionPercentage = CustomerSellCommissionPercentage;
+    }
 
     static calcTotalPaid(unit: Unit): number{
         let annualInitRent = unit.initAnnualRent;
