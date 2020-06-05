@@ -1,7 +1,7 @@
 import http from "http";
 import { startDB, stopDB } from "./database";
 import app from "./app";
-import { Socket } from "./common/services";
+import socket from "./common/services/socket";
 
 const PORT = process.env.PORT || 3005;
 app.set("port", PORT);
@@ -30,7 +30,7 @@ function onError(error: any): void {
   try {
     await startDB();
     server.listen(PORT);
-    new Socket(server);
+    socket.init(server);
     server.on("error", onError);
     server.on("listening", () => console.log(`started on port ${PORT}`));
     //handle closing of server

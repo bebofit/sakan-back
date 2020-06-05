@@ -16,12 +16,12 @@ class ClientRepository extends MainRepository<IClient> {
     );
   }
 
-  reserveProperty(userId: string, propertyId: string): Promise<boolean> {    
+  reserveProperty(userId: string, propertyId: string): Promise<boolean> {
     return super.flexibleUpdateOne(
       { _id: userId },
       {
         $pull: { favProps: propertyId },
-        reservedProperty: propertyId  
+        reservedProperty: propertyId
       }
     );
   }

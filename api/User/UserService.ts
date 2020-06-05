@@ -10,7 +10,7 @@ import jwt from "jsonwebtoken";
 import { promises as fs } from "fs";
 import path from "path";
 import CustomException from "../../exception/CustomException";
-import { QueryParams } from "../../Interfaces";
+import { IDBQueryOptions } from "../../Interfaces";
 
 class UserService {
   async createUser(body: IUser): Promise<IUser> {
@@ -44,20 +44,25 @@ class UserService {
     let privateKey = await fs.readFile(
       path.join(__dirname, "../../keys/jwtRS256.key")
     );
-    return await {
+    return {
       token: jwt.sign(JSON.parse(JSON.stringify(user)), privateKey, {
         algorithm: "RS256"
       }),
-      userType: user.userType
+      userType: user.userType,
+      userId: user.id
     };
   }
 
-  async getUser(query: object): Promise<any> {
-    let user = await userRepo.findOne(query);
+  async getUser(query: object, options?: IDBQueryOptions): Promise<any> {
+    let user = await userRepo.findOne(query, options);
     if (!user) {
       throw new NotFoundException(Messages.user.error.userNotFound);
     }
     return user;
+  }
+
+  getUserById(id: string): Promise<IUser> {
+    return userRepo.findById(id);
   }
 
   async verifyEmail(token: string) {
@@ -98,14 +103,6 @@ class UserService {
     if (!reset) {
       throw new NotFoundException(Messages.user.error.userNotFound);
     }
-  }
-
-  async updateChatList(userId: string, otherUserId: string): Promise<boolean> {
-    return userRepo.updateChatList(userId, otherUserId);
-  }
-
-  async getChatList(userId: string, options?: QueryParams): Promise<IChat[]> {
-    return userRepo.getChatList(userId, options);
   }
 }
 

@@ -13,7 +13,7 @@ import Http from "../Utils/Http";
 import UserService from "../User/UserService";
 
 class ClientController {
-  constructor() { }
+  constructor() {}
 
   async createClient(request: IRequest, response: Response): Promise<any> {
     let client;
@@ -32,7 +32,10 @@ class ClientController {
         if (!error.keyPattern.email) {
           console.log("merw");
 
-          throw new ConflictException(Messages.user.error.phoneUnique, response);
+          throw new ConflictException(
+            Messages.user.error.phoneUnique,
+            response
+          );
         }
         throw new ConflictException(Messages.user.error.emailUnique, response);
       }
@@ -108,8 +111,6 @@ class ClientController {
       request.user.id,
       request.body.propertyId
     );
-    console.log(isUpdated);
-
     if (!isUpdated) {
       return Http.sendResponse(
         response,
@@ -144,31 +145,45 @@ class ClientController {
   }
 
   async reserveProperty(request: IRequest, response: Response): Promise<any> {
-    validation.validateBody(
-      request.body,
-      clientsValidations.PROPID
-    );
+    validation.validateBody(request.body, clientsValidations.PROPID);
     try {
       const isReserved = await propertiesService.reserveProperty(
         request.body.propId,
         request.user._id
       );
       if (!isReserved) {
-        return Http.sendResponse(response, httpStatus.BAD_REQUEST, null, "Property already reserved"
+        return Http.sendResponse(
+          response,
+          httpStatus.BAD_REQUEST,
+          null,
+          "Property already reserved"
         );
       }
     } catch (error) {
-      return Http.sendResponse(response, httpStatus.CONFLICT, null, 'Cannot reserve another property');
+      return Http.sendResponse(
+        response,
+        httpStatus.CONFLICT,
+        null,
+        "Cannot reserve another property"
+      );
     }
     const isClientUpdated = await clientService.reserveProperty(
       request.user._id,
       request.body.propId
     );
     if (!isClientUpdated) {
-      return Http.sendResponse(response, httpStatus.OK, null, "User cannot reserve Property"
+      return Http.sendResponse(
+        response,
+        httpStatus.OK,
+        null,
+        "User cannot reserve Property"
       );
     }
-    return Http.sendResponse(response, httpStatus.OK, null, "Property reserved"
+    return Http.sendResponse(
+      response,
+      httpStatus.OK,
+      null,
+      "Property reserved"
     );
   }
 

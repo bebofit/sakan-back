@@ -11,6 +11,5 @@ router.post("/password/forget", errorHandler(userController.forgetPassword));
 router.post("/password/reset", errorHandler(userController.resetPassword));
 router.post("/email/verify", errorHandler(userController.verifyEmail));
 router.get("/wallet", IsAuth, errorHandler(userController.getWalletValue));
-router.get("/chatList", IsAuth, errorHandler(userController.getChatList));
 
 export default router;

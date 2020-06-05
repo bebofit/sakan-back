@@ -1,79 +1,88 @@
 import { Document, model, Schema } from "mongoose";
-// @ts-ignore
-
-interface IChat extends Document {
-  _id: string;
-  messages: [IMessage];
-  userOne: string;
-  userTwo: string;
-  type: string;
-  isDeleted?: boolean;
-}
+import { IUser } from "./User";
 
 interface IMessage extends Document {
+  id: string;
   sender: string;
   receiver: string;
   content: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: string;
 }
 
-const chatSchema = new Schema(
+interface IChat extends Document {
+  id: string;
+  userOne: IUser;
+  userTwo: IUser;
+  isPrivate: boolean;
+  createdAt: string;
+  messages: IMessage[];
+  deletedAt?: string;
+}
+
+const messageSchema = new Schema(
   {
-    userTwo: {
+    to: {
       type: Schema.Types.ObjectId,
-      required: true,
-      ref: "User"
+      ref: "AuthUser",
+      required: true
     },
-    userOne: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "User"
-    },
-    type: {
+    read: { type: Boolean, default: false },
+    content: {
       type: String,
-      enum: ["chat"],
-      default: "chat"
+      required: true
     },
-    messages: [
-      {
-        type: new Schema(
-          {
-            sender: {
-              type: Schema.Types.ObjectId,
-              ref: "User"
-            },
-            receiver: {
-              type: Schema.Types.ObjectId,
-              ref: "User"
-            },
-            content: String
-          },
-          {
-            timestamps: true
-          }
-        ),
-        required: true
-      }
-    ],
-    isDeleted: {
-      type: Boolean,
-      default: false
-    }
+    createdAt: { type: String, required: true },
+    deletedAt: Date
   },
   {
-    timestamps: true,
-    toJSON: { virtuals: true },
-    discriminatorKey: "type",
-    collection: "admins"
+    id: false,
+    _id: false,
+    toJSON: {
+      transform: (doc, ret) => {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.deletedAt;
+        delete ret.lock;
+        delete ret.__v;
+      }
+    }
   }
 );
 
-chatSchema.index({
-  userOne: 1,
-  userTwo: 1
-});
+const chatSchema = new Schema(
+  {
+    userOne: {
+      id: { type: Schema.Types.ObjectId, ref: "AuthUser", required: true },
+      name: { type: String, required: true },
+      photoUrl: { type: String, required: true }
+    },
+    userTwo: {
+      id: { type: Schema.Types.ObjectId, ref: "AuthUser", required: true },
+      name: { type: String, required: true },
+      photoUrl: { type: String, required: true }
+    },
+    isPrivate: {
+      type: Boolean,
+      default: true
+    },
+    messages: [{ type: messageSchema, required: true }],
+    deletedAt: Date
+  },
+  {
+    timestamps: true,
+    toJSON: {
+      transform: (doc, ret) => {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.deletedAt;
+        delete ret.lock;
+        delete ret.__v;
+      }
+    }
+  }
+);
 
-const Chat = model<IChat>("chat", chatSchema);
+// tslint:disable-next-line: variable-name
+const Chat = model<IChat>("Chat", chatSchema);
 
 export { Chat, IChat, IMessage };

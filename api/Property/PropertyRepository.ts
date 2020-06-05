@@ -1,7 +1,7 @@
 import { Model } from "mongoose";
 import { MainRepository } from "../../database/MainRepo";
 import { Property, IProperty } from "../../database/models";
-import { QueryParams, IPropertyFilter } from "../../Interfaces";
+import { IDBQueryOptions, IPropertyFilter } from "../../Interfaces";
 
 class PropertyRepository extends MainRepository<IProperty> {
   constructor(protected model: Model<IProperty>) {
@@ -34,7 +34,7 @@ class PropertyRepository extends MainRepository<IProperty> {
     return conditions;
   }
 
-  getByFilter(filters: IPropertyFilter, options?: QueryParams) {
+  getByFilter(filters: IPropertyFilter, options?: IDBQueryOptions) {
     const conditions = this.filterProperty(filters);
     return this.find(conditions, options);
   }

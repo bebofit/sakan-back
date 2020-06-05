@@ -21,7 +21,6 @@ import {
 import faker from "./lib/faker";
 import AddPropertyRequestRepository from "./api/Request/AddPropertyRequest/AddPropertyRequestRepository";
 import RentBuyRequestRepository from "./api/Request/RentBuyRequest/RentBuyRequestRepository";
-import MessageRepository from "./api/Chats/ChatRepository";
 import ClientRepository from "./api/Client/ClientRepository";
 
 let investors: IInvestor[];

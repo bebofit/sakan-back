@@ -56,17 +56,12 @@ class UserController {
   async login(request: IRequest, response: Response): Promise<any> {
     //validate email and password
     validation.validateBody(request.body, userValidations.LOGIN);
-    let token = await userService.login(
+    let data = await userService.login(
       request.body.email.toLowerCase(),
       request.body.password
     );
     //sending response
-    return Http.sendResponse(
-      response,
-      httpStatus.OK,
-      token,
-      "Login Successful"
-    );
+    return Http.sendResponse(response, httpStatus.OK, data, "Login Successful");
   }
 
   async forgetPassword(request: IRequest, response: Response): Promise<any> {
@@ -113,16 +108,6 @@ class UserController {
       httpStatus.OK,
       user.wallet,
       "User wallet"
-    );
-  }
-
-  async getChatList(request: IRequest, response: Response): Promise<any> {
-    let chatList: IChat[] = await userService.getChatList(request.user._id);
-    return Http.sendResponse(
-      response,
-      httpStatus.OK,
-      chatList,
-      "User ChatList"
     );
   }
 }

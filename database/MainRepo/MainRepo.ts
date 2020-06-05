@@ -1,23 +1,32 @@
 import { Document, Model } from "mongoose";
-import { QueryParams } from "../../Interfaces";
+import { IDBQueryOptions } from "../../Interfaces";
 
 abstract class MainRepository<modelType extends Document> {
   constructor(protected model: Model<modelType>) {}
 
-  protected parseQueryOptions(options: QueryParams): any {
-    const result: any = { new: true };
-    if (options.pojo) {
-      result.lean = true;
+  protected parseQueryOptions(options: IDBQueryOptions): any {
+    const result: any = {};
+    // if (options.pojo == null) {
+    //   result.lean = true;
+    // }
+    if (options?.new == null) {
+      result.new = true;
     }
-    if (options.page && options.pageSize) {
+    if (options?.page != null) {
       result.skip = options.page * options.pageSize;
       result.limit = options.pageSize;
     }
-    if (options.sort) {
+    if (options?.search) {
+      result.search = options.search;
+    }
+    if (options?.sort) {
       result.sort = options.sort;
     }
-    if (options.includeDeleted) {
+    if (options?.includeDeleted) {
       result.includeDeleted = options.includeDeleted;
+    }
+    if (options?.trx) {
+      result.session = options.trx;
     }
     return result;
   }
@@ -26,12 +35,12 @@ abstract class MainRepository<modelType extends Document> {
     return this.model.create(body);
   }
 
-  findAll(options?: QueryParams): Promise<modelType[]> {
+  findAll(options?: IDBQueryOptions): Promise<modelType[]> {
     return this.find({}, options);
   }
 
-  find(conditions: any = {}, options: QueryParams = {}): Promise<modelType[]> {
-    if (!options.includeDeleted) {
+  find(conditions: any = {}, options?: IDBQueryOptions): Promise<modelType[]> {
+    if (!options?.includeDeleted) {
       conditions.isDeleted = false;
     }
     const parsedOptions = options && this.parseQueryOptions(options);
@@ -40,22 +49,22 @@ abstract class MainRepository<modelType extends Document> {
 
   findPaginated(
     conditions: any = {},
-    options: QueryParams = {}
+    options?: IDBQueryOptions
   ): Promise<modelType[]> {
-    if (!options.includeDeleted) {
+    if (!options?.includeDeleted) {
       conditions.isDeleted = false;
     }
     const parsedOptions = options && this.parseQueryOptions(options);
     return this.model.find(conditions, null, parsedOptions).exec();
   }
 
-  findById(id: string, options: QueryParams = {}): Promise<modelType> {
+  findById(id: string, options?: IDBQueryOptions): Promise<modelType> {
     const parsedOptions = options && this.parseQueryOptions(options);
     return this.model.findById(id, null, parsedOptions).exec();
   }
 
-  findOne(conditions: any, options: QueryParams = {}): Promise<modelType> {
-    if (!options.includeDeleted) {
+  findOne(conditions: any, options?: IDBQueryOptions): Promise<modelType> {
+    if (!options?.includeDeleted) {
       conditions.isDeleted = false;
     }
     const parsedOptions = options && this.parseQueryOptions(options);
@@ -65,7 +74,7 @@ abstract class MainRepository<modelType extends Document> {
   findByIdAndUpdate(
     id: string,
     update: any,
-    options: QueryParams = {}
+    options?: IDBQueryOptions
   ): Promise<modelType> {
     const parsedOptions = options && this.parseQueryOptions(options);
     return this.model
@@ -76,7 +85,7 @@ abstract class MainRepository<modelType extends Document> {
   flexibleFindByIdAndUpdate(
     id: string,
     update: any,
-    options: QueryParams = {}
+    options?: IDBQueryOptions
   ): Promise<modelType> {
     const parsedOptions = options && this.parseQueryOptions(options);
     return this.model.findByIdAndUpdate(id, update, parsedOptions).exec();
@@ -85,9 +94,9 @@ abstract class MainRepository<modelType extends Document> {
   findOneAndUpdate(
     conditions: any,
     update: any,
-    options: QueryParams = {}
+    options?: IDBQueryOptions
   ): Promise<modelType> {
-    if (!options.includeDeleted) {
+    if (!options?.includeDeleted) {
       conditions.isDeleted = false;
     }
     const parsedOptions = options && this.parseQueryOptions(options);
@@ -99,9 +108,9 @@ abstract class MainRepository<modelType extends Document> {
   flexibleFindOneAndUpdate(
     conditions: any,
     update: any,
-    options: QueryParams = {}
+    options?: IDBQueryOptions
   ): Promise<modelType> {
-    if (!options.includeDeleted) {
+    if (!options?.includeDeleted) {
       conditions.isDeleted = false;
     }
     const parsedOptions = options && this.parseQueryOptions(options);
@@ -110,12 +119,19 @@ abstract class MainRepository<modelType extends Document> {
       .exec();
   }
 
-  setUpdateMany(conditions: any = {}, update: any): Promise<boolean> {
-    conditions.isDeleted = false;
+  setUpdateMany(
+    conditions: any,
+    update: any,
+    options?: IDBQueryOptions
+  ): Promise<boolean> {
+    const parsedOptions = this.parseQueryOptions(options);
+    if (!parsedOptions?.includeDeleted) {
+      conditions.isDeleted = false;
+    }
     return this.model
-      .updateMany(conditions, { $set: update })
+      .updateMany(conditions, { $set: update }, parsedOptions)
       .exec()
-      .then(result => result.nModified > 0);
+      .then(result => true);
   }
 
   flexibleUpdateMany(conditions: any = {}, update: any): Promise<boolean> {
@@ -142,22 +158,12 @@ abstract class MainRepository<modelType extends Document> {
       .then(result => result.nModified > 0);
   }
 
-  flexibleUpdateOne(conditions: any, update: any): Promise<boolean> {    
+  flexibleUpdateOne(conditions: any, update: any): Promise<boolean> {
     conditions.isDeleted = false;
+    console.log(conditions, update);
+
     return this.model
       .updateOne(conditions, update)
-      .exec()
-      .then(result => result.nModified > 0);
-  }
-
-  softDeleteMany(conditions: any = {}): Promise<boolean> {
-    conditions.isDeleted = false;
-    return this.model
-      .updateMany(conditions, {
-        $set: {
-          isDeleted: true
-        }
-      })
       .exec()
       .then(result => result.nModified > 0);
   }
@@ -176,6 +182,54 @@ abstract class MainRepository<modelType extends Document> {
       })
       .exec()
       .then(result => result.nModified > 0);
+  }
+
+  softDeleteMany(conditions: any, options?: IDBQueryOptions): Promise<boolean> {
+    const parsedOptions = this.parseQueryOptions(options);
+    conditions.isDeleted = false;
+    return this.model
+      .updateMany(
+        conditions,
+        {
+          $currentDate: {
+            deletedAt: true
+          }
+        },
+        parsedOptions
+      )
+      .exec()
+      .then(result => true);
+  }
+
+  softDeleteAll(options?: IDBQueryOptions): Promise<boolean> {
+    return this.softDeleteMany({}, options);
+  }
+
+  deleteById(id: string, options?: IDBQueryOptions): Promise<boolean> {
+    return this.deleteOne({ _id: id }, options);
+  }
+
+  deleteOne(conditions: any, options?: IDBQueryOptions): Promise<boolean> {
+    // To-do: clean this when @types/mongoose is updated
+    return (this.model.deleteOne as any)(conditions, options)
+      .exec()
+      .then(
+        (result: { ok?: number; n?: number; deletedCount?: number }) =>
+          result.n === 1
+      );
+  }
+
+  deleteMany(conditions: any, options?: IDBQueryOptions): Promise<boolean> {
+    // To-do: clean this when @types/mongoose is updated
+    return (this.model.deleteMany as any)(conditions, options)
+      .exec()
+      .then(
+        (result: { ok?: number; n?: number; deletedCount?: number }) => true
+      );
+  }
+
+  deleteAll(options?: IDBQueryOptions): Promise<boolean> {
+    return this.deleteMany({}, options);
   }
 }
 

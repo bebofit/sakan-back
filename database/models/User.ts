@@ -4,6 +4,13 @@ import mongooseLeanVirtuals from "mongoose-lean-virtuals";
 import { UserType } from "../../enums";
 import { IChat } from ".";
 
+interface IFileUpload {
+  type: string;
+  size: number;
+  path: string;
+  url: string;
+}
+
 interface IUser extends Document {
   _id: string;
   userType: string;
@@ -20,11 +27,21 @@ interface IUser extends Document {
   isDeleted?: boolean;
   deletedAt?: Date;
   profileStatus: number;
-  profilePic?: string;
+  photo: IFileUpload;
   resetPasswordToken?: string;
   verificationToken?: string;
   wallet: object;
 }
+
+const fileUploadSchema = new Schema(
+  {
+    type: { type: String, required: true },
+    size: { type: Number, required: true },
+    path: { type: String, required: true },
+    url: { type: String, required: true }
+  },
+  { _id: false, id: false }
+);
 
 const userSchema = new Schema(
   {
@@ -70,12 +87,6 @@ const userSchema = new Schema(
       type: Boolean,
       default: false
     },
-    chatList: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "User"
-      }
-    ],
     isDeleted: {
       type: Boolean,
       default: false
@@ -87,8 +98,15 @@ const userSchema = new Schema(
       type: Number,
       default: 0
     },
-    profilePic: {
-      type: String
+    photo: {
+      type: fileUploadSchema,
+      default: () => ({
+        type: "Image",
+        size: "18",
+        path: "misc/default-profile.png",
+        url:
+          "https://test-21222.s3.us-east-2.amazonaws.com/misc/default-profile.png"
+      })
     },
     resetPasswordToken: {
       type: String,

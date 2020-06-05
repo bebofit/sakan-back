@@ -4,7 +4,7 @@ import {
   AddPropertyRequest,
   IAddPropertyRequest
 } from '../../../database/models';
-import { QueryParams } from '../../../Interfaces';
+import { IDBQueryOptions } from '../../../Interfaces';
 
 class IAddPropertyRequestRepository extends MainRepository<
   IAddPropertyRequest
