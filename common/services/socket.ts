@@ -1,12 +1,13 @@
+import jwt, { VerifyErrors } from 'jsonwebtoken';
 import * as socketio from 'socket.io';
 import * as chatsService from '../../api/chats/service';
 import * as chatsValidations from '../../api/chats/validations';
 import usersService from '../../api/User/UserService';
 import validation from '../../api/Utils/Validation';
-import jwt, { VerifyErrors } from 'jsonwebtoken';
-import { promises as fs } from 'fs';
-import path from 'path';
+import config from '../../config';
 import { ISocket } from '../../Interfaces/ISocket';
+
+const { JWT_SECRET } = config;
 
 class Socket {
   io: socketio.Server;
@@ -16,15 +17,12 @@ class Socket {
     this.io = socketio.listen(server);
     this.io.use(async (socket: any, next) => {
       if (socket.handshake.query && socket.handshake.query.token) {
-        const publicKey = await fs.readFile(
-          path.join(__dirname, '../../keys/jwtRS256.key.pub')
-        );
         jwt.verify(
           socket.handshake.query.token,
-          publicKey,
+          JWT_SECRET,
           (err: VerifyErrors, decoded: string | object) => {
             if (err) return next(new Error('Authentication error'));
-            socket.user = decoded;
+            socket.authInfo = decoded;
             next();
           }
         );

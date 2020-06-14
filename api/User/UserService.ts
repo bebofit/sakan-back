@@ -1,15 +1,12 @@
-import { IUser } from "../../database/models";
-import userServiceFactory from "../Factories/UserServiceFactory";
-import userRepo from "./UserRepository";
-import Helpers from "../Utils/Helpers";
-import NotFoundException from "../../exception/NotFoundException";
-import UnauthorizedException from "../../exception/UnauthorizedException";
-import Messages = require("../Constants/Messages");
-import jwt from "jsonwebtoken";
-import { promises as fs } from "fs";
-import path from "path";
-import CustomException from "../../exception/CustomException";
-import { IDBQueryOptions } from "../../Interfaces";
+import { IUser } from '../../database/models';
+import userServiceFactory from '../Factories/UserServiceFactory';
+import userRepo from './UserRepository';
+import Helpers from '../Utils/Helpers';
+import NotFoundException from '../../exception/NotFoundException';
+import UnauthorizedException from '../../exception/UnauthorizedException';
+import Messages = require('../Constants/Messages');
+import CustomException from '../../exception/CustomException';
+import { IDBQueryOptions } from '../../Interfaces';
 
 class UserService {
   async createUser(body: IUser): Promise<IUser> {
@@ -39,14 +36,8 @@ class UserService {
     if (!Helpers.comparePasswordToHash(password, user.password)) {
       throw new UnauthorizedException(Messages.user.error.incorrectPassword);
     }
-    //Generate JWT Token
-    let privateKey = await fs.readFile(
-      path.join(__dirname, "../../keys/jwtRS256.key")
-    );
     return {
-      token: jwt.sign(JSON.parse(JSON.stringify(user)), privateKey, {
-        algorithm: "RS256"
-      }),
+      token: await Helpers.signJWT(JSON.parse(JSON.stringify(user))),
       userType: user.userType,
       userId: user.id
     };
@@ -68,7 +59,7 @@ class UserService {
     //getting saved verification token
     let user = await this.getUser({ verificationToken: token });
     //checking if the 2 token matched
-    if (!user) throw new CustomException("Invalid Token", 400);
+    if (!user) throw new CustomException('Invalid Token', 400);
     //updating the user to be verified and deleting verification token
     await userRepo.findByIdAndUpdate(user.id, {
       isVerified: true,
@@ -92,7 +83,7 @@ class UserService {
   async resetPassword(user: IUser, token: string, password: string) {
     //check if the two tokens matches
     if (token !== user.resetPasswordToken) {
-      throw new CustomException("Invalid Token", 400);
+      throw new CustomException('Invalid Token', 400);
     }
     //updating new password and destroying the token
     let reset = await userRepo.findByIdAndUpdate(user.id, {

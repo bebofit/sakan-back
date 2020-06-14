@@ -1,23 +1,18 @@
-import repo from "./AdminRepository";
-import Helpers from "../Utils/Helpers";
-import NotFoundException from "../../exception/NotFoundException";
-import UnauthorizedException from "../../exception/UnauthorizedException";
-import Messages = require("../Constants/Messages");
-import jwt from "jsonwebtoken";
-import { promises as fs, stat } from "fs";
-import path from "path";
-import rentBuyRequestService from "./../Request/RentBuyRequest/RentBuyRequestService";
-import addRequestService from "./../Request/AddPropertyRequest/AddPropertyRequestService";
+import repo from './AdminRepository';
+import Helpers from '../Utils/Helpers';
+import NotFoundException from '../../exception/NotFoundException';
+import UnauthorizedException from '../../exception/UnauthorizedException';
+import Messages = require('../Constants/Messages');
+import rentBuyRequestService from './../Request/RentBuyRequest/RentBuyRequestService';
+import addRequestService from './../Request/AddPropertyRequest/AddPropertyRequestService';
 import {
   IRentBuyRequest,
   IContract,
   IProperty,
-  IAddPropertyRequest,
-  AddPropertyRequest,
-  Property
-} from "../../database/models";
-import contractService from "./../Contract/ContractService";
-import PropertyService from "../Property/PropertyService";
+  IAddPropertyRequest
+} from '../../database/models';
+import contractService from './../Contract/ContractService';
+import PropertyService from '../Property/PropertyService';
 
 class AdminService {
   constructor() {}
@@ -30,14 +25,8 @@ class AdminService {
     if (!Helpers.comparePasswordToHash(password, admin.password)) {
       throw new UnauthorizedException(Messages.user.error.incorrectPassword);
     }
-    //Generate JWT Token
-    let privateKey = await fs.readFile(
-      path.join(__dirname, "../../keys/jwtRS256.key")
-    );
-    return await {
-      token: jwt.sign(JSON.parse(JSON.stringify(admin)), privateKey, {
-        algorithm: "RS256"
-      }),
+    return {
+      token: await Helpers.signJWT(JSON.parse(JSON.stringify(admin))),
       userType: admin.userType
     };
   }
@@ -48,12 +37,12 @@ class AdminService {
   }
 
   async respondToRentRequest(rentReqId: string, status: string): Promise<any> {
-    if (status === "rejected")
+    if (status === 'rejected')
       return rentBuyRequestService.updateRequest(rentReqId, {
         status: status
       } as IRentBuyRequest);
 
-    if (status === "accepted") {
+    if (status === 'accepted') {
       let rentReq: IRentBuyRequest = await rentBuyRequestService.getRequest(
         rentReqId
       );
@@ -64,12 +53,12 @@ class AdminService {
       // Rejecting the rest of the rent requests on this property
       await rentBuyRequestService.updateMany(
         {
-          reqType: "rent",
+          reqType: 'rent',
           propertyId: rentReq.propertyId,
-          status: "pending approval"
+          status: 'pending approval'
         } as IRentBuyRequest,
         {
-          status: "rejected"
+          status: 'rejected'
         }
       );
       //getting required property
@@ -79,8 +68,8 @@ class AdminService {
       //creating a new contract
       let now = new Date();
       const contract: IContract = await contractService.createContract({
-        contractType: "rent",
-        status: "active",
+        contractType: 'rent',
+        status: 'active',
         propertyId: rentReq.propertyId,
         ownerId: rentReq.ownerId,
         clientId: rentReq.clientId,
@@ -103,7 +92,7 @@ class AdminService {
 
   async respondToAddRequest(addReqId: string, status: string): Promise<any> {
     let isApproved = false;
-    if (status === "accepted") {
+    if (status === 'accepted') {
       let addReq: any = await addRequestService.getRequest(addReqId);
       isApproved = true;
       addReq.isApproved = true;
@@ -117,13 +106,13 @@ class AdminService {
   }
 
   getPropertyRequests(status: any): Promise<any> {
-    status = status || "pending approval";
+    status = status || 'pending approval';
     return addRequestService.getPropertyRequests(status);
   }
 
   getRentBuyRequests(status: any, reqType: any): Promise<any> {
-    status = status || "pending approval";
-    reqType = reqType || "rent";
+    status = status || 'pending approval';
+    reqType = reqType || 'rent';
     return rentBuyRequestService.getRentBuyRequests(status, reqType);
   }
 }
