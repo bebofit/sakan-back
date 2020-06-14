@@ -1,8 +1,7 @@
-import { IUser, IChat } from "../../database/models";
+import { IUser } from "../../database/models";
 import userServiceFactory from "../Factories/UserServiceFactory";
 import userRepo from "./UserRepository";
 import Helpers from "../Utils/Helpers";
-import bcrypt from "bcrypt";
 import NotFoundException from "../../exception/NotFoundException";
 import UnauthorizedException from "../../exception/UnauthorizedException";
 import Messages = require("../Constants/Messages");
@@ -19,7 +18,7 @@ class UserService {
     //lowercase email
     body.email = body.email.toLowerCase();
     //hash password
-    let hash = await bcrypt.hash(body.password, 10);
+    let hash = Helpers.hashPassword(body.password);
     body.password = hash;
     //making a unique hash for email verification
     let verificationToken = await Helpers.generateToken();
@@ -37,7 +36,7 @@ class UserService {
     if (!user) {
       throw new NotFoundException(Messages.user.error.incorrectEmail);
     }
-    if (!(await bcrypt.compare(password, user.password))) {
+    if (!Helpers.comparePasswordToHash(password, user.password)) {
       throw new UnauthorizedException(Messages.user.error.incorrectPassword);
     }
     //Generate JWT Token
@@ -97,7 +96,7 @@ class UserService {
     }
     //updating new password and destroying the token
     let reset = await userRepo.findByIdAndUpdate(user.id, {
-      password: await await bcrypt.hash(password, 10),
+      password: Helpers.hashPassword(password),
       resetPasswordToken: null
     });
     if (!reset) {

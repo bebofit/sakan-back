@@ -5,11 +5,17 @@ import logger from "morgan";
 import routes from "./api";
 import { IRequest } from "./Interfaces";
 import tasks from "./tasks/base/TaskBootstrap";
-require("dotenv").config();
+import { isDeployed, isTesting, isProduction } from "./config";
 
 const app = express();
 //configure app
-app.use(logger(process.env.NODE_ENV === "production" ? "combined" : "dev"));
+if (isDeployed) {
+  // Trust the proxy to give us the correct client IP address as we are behind AWS ELB not front facing the client
+  app.set("trust proxy", true);
+}
+if (!isTesting) {
+  app.use(logger(isDeployed ? "combined" : "dev"));
+}
 app.use(
   cors({
     origin: "*"
@@ -26,7 +32,7 @@ app.use("/api", routes);
 
 app.use((err: any, req: IRequest, res: Response, next: NextFunction) => {
   console.log("error express middleware block reached");
-  if (process.env.NODE_ENV !== "production") {
+  if (!isProduction) {
     console.error(err);
   }
   if (err.validationError) {

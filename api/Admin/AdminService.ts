@@ -1,5 +1,5 @@
 import repo from "./AdminRepository";
-import bcrypt from "bcrypt";
+import Helpers from "../Utils/Helpers";
 import NotFoundException from "../../exception/NotFoundException";
 import UnauthorizedException from "../../exception/UnauthorizedException";
 import Messages = require("../Constants/Messages");
@@ -27,7 +27,7 @@ class AdminService {
     if (!admin) {
       throw new NotFoundException(Messages.user.error.incorrectEmail);
     }
-    if (!(await bcrypt.compare(password, admin.password))) {
+    if (!Helpers.comparePasswordToHash(password, admin.password)) {
       throw new UnauthorizedException(Messages.user.error.incorrectPassword);
     }
     //Generate JWT Token
@@ -117,13 +117,13 @@ class AdminService {
   }
 
   getPropertyRequests(status: any): Promise<any> {
-    status = status || 'pending approval'
+    status = status || "pending approval";
     return addRequestService.getPropertyRequests(status);
   }
 
   getRentBuyRequests(status: any, reqType: any): Promise<any> {
-    status = status || 'pending approval'
-    reqType = reqType || 'rent'
+    status = status || "pending approval";
+    reqType = reqType || "rent";
     return rentBuyRequestService.getRentBuyRequests(status, reqType);
   }
 }

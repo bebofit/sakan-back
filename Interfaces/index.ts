@@ -1,5 +1,5 @@
 export * from "./IRequest";
-export * from "./config";
+export * from "./IConfig";
 export * from "./IPaginationOptions";
 export * from "./IPropertyFilter";
 export * from "./IDBQueryOptions";

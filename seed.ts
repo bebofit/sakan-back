@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import bcrypt from "bcrypt";
+import Helpers from "./api/Utils/Helpers";
 import adminsRepo from "./api/Admin/AdminRepository";
 import investorRepo from "./api/Investor/InvestorRepository";
 import propertiesRepo from "./api/Property/PropertyRepository";
@@ -36,7 +36,7 @@ let addPropertyRequests: IAddPropertyRequest[];
 let contracts: IContract[];
 
 async function seedAdmin(): Promise<void> {
-  const password = await bcrypt.hash("123123123", 10);
+  const password = Helpers.hashPassword("123123123");
   await adminsRepo.create({
     password,
     type: "superAdmin",
@@ -47,7 +47,7 @@ async function seedAdmin(): Promise<void> {
 }
 
 async function seedInvestors(): Promise<void> {
-  const password = await bcrypt.hash("123123123", 10);
+  const password = Helpers.hashPassword("123123123");
   investors = await Promise.all([
     investorRepo.create({
       password,
@@ -176,7 +176,7 @@ async function updateOwners(): Promise<void> {
 }
 
 async function seedClients(): Promise<void> {
-  const password = await bcrypt.hash("123123123", 10);
+  const password = Helpers.hashPassword("123123123");
   clients = await Promise.all([
     ClientRepository.create({
       password,
