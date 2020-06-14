@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import config from '../../config';
 import cryptojs from 'crypto-js';
 import jwt, { VerifyErrors } from 'jsonwebtoken';
+import { isString } from 'util';
 const { CRYPTO_SECRET, JWT_SECRET } = config;
 
 class Helpers {
@@ -23,6 +24,17 @@ class Helpers {
     const exisitngPassword = bytes.toString(cryptojs.enc.Utf8);
     return candidatePassword === exisitngPassword;
   };
+
+  extractToken(authHeader: string): string {
+    if (!isString(authHeader)) {
+      return null;
+    }
+    const headerParts = authHeader.trim().split(' ');
+    if (!(headerParts.length === 2 && headerParts[0] === 'Bearer')) {
+      return null;
+    }
+    return headerParts[1];
+  }
 
   verifyToken = (token: string): Promise<any> =>
     new Promise((resolve, reject) => {
